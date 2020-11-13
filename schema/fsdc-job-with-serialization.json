@@ -1,0 +1,96 @@
+[
+    {
+        "data": {
+            "modules": [
+                {
+                    "data": {
+                        "qinfos": [
+                            {
+                                "dir": "output",
+                                "inst": "hose2",
+                                "name": "output"
+                            }
+                        ]
+                    },
+                    "inst": "ntoq",
+                    "plugin": "NetworkToQueueAdapterDAQModuleOfFakeData"
+                },
+
+                {
+                    "data": {
+                        "qinfos": [
+                            {
+                                "dir": "input",
+                                "inst": "hose2",
+                                "name": "input"
+                            }
+                        ]
+                    },
+                    "inst": "fsdc",
+                    "plugin": "FakeSerializableDataConsumerDAQModule"
+                }
+            ],
+            "queues": [
+                {
+                    "capacity": 10000,
+                    "inst": "hose2",
+                    "kind": "FollySPSCQueue"
+                }
+            ]
+        },
+        "id": "init"
+    },
+    {
+        "data": {
+            "modules": [
+                {
+                    "data": {
+                        "queue_timeout_ms": 100,
+                        "connection_info": {"connection_string": "tcp://127.0.0.1:12345"}
+                    },
+                    "match": "ntoq"
+                },
+                {
+                    "data": {
+                        "ending_int": 14,
+                        "nIntsPerVector": 10,
+                        "queue_timeout_ms": 100,
+                        "starting_int": -4
+                    },
+                    "match": "fsdc"
+                }
+            ]
+        },
+        "id": "conf"
+    },
+    {
+        "data": {
+            "modules": [
+                {
+                    "data": {
+                        "run": 42
+                    },
+                    "match": ""
+                }
+            ]
+        },
+        "id": "start"
+    },
+    {
+        "data": {
+            "modules": [
+                {
+                    "data": {},
+                    "match": "fsdc"
+                },
+                {
+                    "data": {},
+                    "match": "ntoq"
+                }
+
+               
+            ]
+        },
+        "id": "stop"
+    }
+]

@@ -1,0 +1,153 @@
+[
+    {
+        "data": {
+            "modules": [
+                {
+                    "data": {
+                        "qinfos": [
+                            {
+                                "dir": "input",
+                                "inst": "hose1",
+                                "name": "input"
+                            }
+                        ]
+                    },
+                    "inst": "qton",
+                    "plugin": "QueueToNetworkAdapterDAQModuleOfFakeData"
+                },
+                {
+                    "data": {
+                        "qinfos": [
+                            {
+                                "dir": "output",
+                                "inst": "hose2",
+                                "name": "output"
+                            }
+                        ]
+                    },
+                    "inst": "ntoq",
+                    "plugin": "NetworkToQueueAdapterDAQModuleOfFakeData"
+                },
+
+                {
+                    "data": {
+                        "qinfos": [
+                            {
+                                "dir": "output",
+                                "inst": "hose1",
+                                "name": "output"
+                            }
+                        ]
+                    },
+                    "inst": "fsdp",
+                    "plugin": "FakeSerializableDataProducerDAQModule"
+                },
+                {
+                    "data": {
+                        "qinfos": [
+                            {
+                                "dir": "input",
+                                "inst": "hose2",
+                                "name": "input"
+                            }
+                        ]
+                    },
+                    "inst": "fsdc",
+                    "plugin": "FakeSerializableDataConsumerDAQModule"
+                }
+            ],
+            "queues": [
+                {
+                    "capacity": 100,
+                    "inst": "hose1",
+                    "kind": "StdDeQueue"
+                },
+                {
+                    "capacity": 100,
+                    "inst": "hose2",
+                    "kind": "StdDeQueue"
+                }
+            ]
+        },
+        "id": "init"
+    },
+    {
+        "data": {
+            "modules": [
+                {
+                    "data": {
+                        "queue_timeout_ms": 100,
+                        "connection_info": {"connection_string": "inproc://default"}
+                    },
+                    "match": "qton"
+                },
+                {
+                    "data": {
+                        "queue_timeout_ms": 100,
+                        "connection_info": {"connection_string": "inproc://default"}
+                    },
+                    "match": "ntoq"
+                },
+
+                {
+                    "data": {
+                        "ending_int": 14,
+                        "nIntsPerVector": 10,
+                        "queue_timeout_ms": 100,
+                        "starting_int": -4,
+                        "wait_between_sends_ms": 1000
+                    },
+                    "match": "fsdp"
+                },
+                {
+                    "data": {
+                        "ending_int": 14,
+                        "nIntsPerVector": 10,
+                        "queue_timeout_ms": 100,
+                        "starting_int": -4
+                    },
+                    "match": "fsdc"
+                }
+            ]
+        },
+        "id": "conf"
+    },
+    {
+        "data": {
+            "modules": [
+                {
+                    "data": {
+                        "run": 42
+                    },
+                    "match": ""
+                }
+            ]
+        },
+        "id": "start"
+    },
+    {
+        "data": {
+            "modules": [
+                {
+                    "data": {},
+                    "match": "fsdp"
+                },
+                {
+                    "data": {},
+                    "match": "fsdc"
+                },
+                {
+                    "data": {},
+                    "match": "qton"
+                },
+                {
+                    "data": {},
+                    "match": "ntoq"
+                }
+
+               
+            ]
+        },
+        "id": "stop"
+    }
+]

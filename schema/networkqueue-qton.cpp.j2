@@ -1,0 +1,24 @@
+{% import 'networkqueue-cpp.hpp.j2' as cpp %}
+/*
+ * This file is 100% generated.  Any manual edits will likely be lost.
+ *
+ */
+
+{% set tcname = "QToN" %}
+
+#include "{{model.relpath|replace(".","/")}}/Structs.hpp"
+#include "{{model.relpath|replace(".","/")}}/Nljs.hpp"
+
+#include "networkqueue/QueueToNetworkAdapterDAQModule.hpp"
+
+
+{% for fqn in model.byscn.record %}    
+  {% set r = model.byref[fqn] %}
+  {% set n = fqn.replace(model.nspre,"") %}
+  {% set modname = "QueueToNetworkAdapterDAQModuleOf" ~ n %}
+typedef dunedaq::QueueToNetworkAdapterDAQModule<{{ fqn|replace(".","::") }}> {{modname}};
+DEFINE_DUNE_DAQ_MODULE({{modname}})
+{% endfor %}
+
+
+
