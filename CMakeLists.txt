@@ -23,8 +23,8 @@ daq_add_library(dummy.cpp LINK_LIBRARIES ipm::ipm)
 daq_add_plugin( FakeSerializableDataConsumerDAQModule duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk )
 daq_add_plugin( FakeSerializableDataProducerDAQModule duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk )
 
-daq_add_plugin( QueueToNetworkAdapterDAQModuleOfFakeData duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)
-daq_add_plugin( NetworkToQueueAdapterDAQModuleOfFakeData duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)
+#daq_add_plugin( QueueToNetworkAdapterDAQModuleOfFakeData duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)
+#daq_add_plugin( NetworkToQueueAdapterDAQModuleOfFakeData duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)
 
 ##############################################################################
 

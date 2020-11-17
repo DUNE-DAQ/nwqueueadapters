@@ -5,6 +5,8 @@
  * received with this code.
  */
 
+#include "networkqueue/QueueToNetworkAdapterDAQModule.hpp"
+
 #include <ers/ers.h>
 
 #include <chrono>
@@ -13,15 +15,17 @@
 #include <thread>
 #include <vector>
 
-#include "appfwk/cmd/Nljs.hpp"
-
 #include "networkqueue/nq/Structs.hpp"
 #include "networkqueue/nq/Nljs.hpp"
 
+// TODO: Fix paths
+#include "/home/rodrigues/dune/daq/appfwk-buildtools-nov-2020-release/testrel/sourcecode/networkqueue/test/src/networkqueue/fsd/Structs.hpp"
+#include "/home/rodrigues/dune/daq/appfwk-buildtools-nov-2020-release/testrel/sourcecode/networkqueue/test/src/networkqueue/fsd/Nljs.hpp"
+
+
 namespace dunedaq {
 
-template<class T>
-QueueToNetworkAdapterDAQModule<T>::QueueToNetworkAdapterDAQModule(const std::string& name)
+QueueToNetworkAdapterDAQModule::QueueToNetworkAdapterDAQModule(const std::string& name)
   : appfwk::DAQModule(name)
   , thread_(std::bind(&QueueToNetworkAdapterDAQModule::do_work, this, std::placeholders::_1))
   , inputQueue_(nullptr)
@@ -32,21 +36,17 @@ QueueToNetworkAdapterDAQModule<T>::QueueToNetworkAdapterDAQModule(const std::str
   register_command("stop",      &QueueToNetworkAdapterDAQModule::do_stop);
 }
 
-template<class T>
 void
-QueueToNetworkAdapterDAQModule<T>::init(const data_t& init_data)
+QueueToNetworkAdapterDAQModule::init(const data_t& init_data)
 {
-  auto ini = init_data.get<appfwk::cmd::ModInit>();
-  for (const auto& qi : ini.qinfos) {
-    if (qi.name == "input") {
-      inputQueue_.reset(new appfwk::DAQSource<T>(qi.inst));
-    }
-  }
+  auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
+  // TODO: This line to be replaced with fancy codegen bit
+  impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>());
+  impl_->init(mod_init_data);
 }
 
-template<class T>
 void
-QueueToNetworkAdapterDAQModule<T>::do_configure(const data_t& config_data)
+QueueToNetworkAdapterDAQModule::do_configure(const data_t& config_data)
 {
   auto cfg = config_data.get<networkqueue::nq::QueueToNetworkAdapterConf>();
   output_=dunedaq::ipm::makeIPMSender("ZmqSender");
@@ -54,36 +54,30 @@ QueueToNetworkAdapterDAQModule<T>::do_configure(const data_t& config_data)
   output_->connect_for_sends(cfg.connection_info);
 }
 
-template<class T>
 void
-QueueToNetworkAdapterDAQModule<T>::do_start(const data_t& /*args*/)
+QueueToNetworkAdapterDAQModule::do_start(const data_t& /*args*/)
 {
   thread_.start_working_thread();
 }
 
-template<class T>
 void
-QueueToNetworkAdapterDAQModule<T>::do_stop(const data_t& /*args*/)
+QueueToNetworkAdapterDAQModule::do_stop(const data_t& /*args*/)
 {
   thread_.stop_working_thread();
 }
 
-template<class T>
 void
-QueueToNetworkAdapterDAQModule<T>::do_work(std::atomic<bool>& running_flag)
+QueueToNetworkAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
 {
   using json=nlohmann::json;
   
   while (running_flag.load()) {
-    T t;
-    try {
-      inputQueue_->pop(t, std::chrono::milliseconds(10));
+    // TODO: Proper handling of "stop"
+    try{
+      json::string_t s=impl_->get();
     } catch (const dunedaq::appfwk::QueueTimeoutExpired&) {
       continue;
     }
-
-    json j = t;
-    json::string_t s=j.dump();
     ERS_DEBUG(0, "Sending " << s);
     try{
       output_->send(s.c_str(), s.size(), std::chrono::milliseconds(100));
