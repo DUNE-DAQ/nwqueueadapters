@@ -18,9 +18,8 @@
 #include "networkqueue/nq/Structs.hpp"
 #include "networkqueue/nq/Nljs.hpp"
 
-// TODO: Fix paths
-#include "/home/rodrigues/dune/daq/appfwk-buildtools-nov-2020-release/testrel/sourcecode/networkqueue/test/src/networkqueue/fsd/Structs.hpp"
-#include "/home/rodrigues/dune/daq/appfwk-buildtools-nov-2020-release/testrel/sourcecode/networkqueue/test/src/networkqueue/fsd/Nljs.hpp"
+#include "networkqueue/fsd/Structs.hpp"
+#include "networkqueue/fsd/Nljs.hpp"
 
 
 namespace dunedaq {
@@ -28,7 +27,7 @@ namespace dunedaq {
 QueueToNetworkAdapterDAQModule::QueueToNetworkAdapterDAQModule(const std::string& name)
   : appfwk::DAQModule(name)
   , thread_(std::bind(&QueueToNetworkAdapterDAQModule::do_work, this, std::placeholders::_1))
-  , inputQueue_(nullptr)
+  , impl_(nullptr)
 {
 
   register_command("conf",      &QueueToNetworkAdapterDAQModule::do_configure);
@@ -41,8 +40,7 @@ QueueToNetworkAdapterDAQModule::init(const data_t& init_data)
 {
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
   // TODO: This line to be replaced with fancy codegen bit
-  impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>());
-  impl_->init(mod_init_data);
+  impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>(mod_init_data));
 }
 
 void
@@ -73,12 +71,14 @@ QueueToNetworkAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
   
   while (running_flag.load()) {
     // TODO: Proper handling of "stop"
+    json::string_t s;
     try{
-      json::string_t s=impl_->get();
+      s=impl_->get();
+      ERS_DEBUG(0, "Sending " << s);
     } catch (const dunedaq::appfwk::QueueTimeoutExpired&) {
       continue;
     }
-    ERS_DEBUG(0, "Sending " << s);
+
     try{
       output_->send(s.c_str(), s.size(), std::chrono::milliseconds(100));
     } catch(const dunedaq::ipm::SendTimeoutExpired& e) {
