@@ -5,11 +5,9 @@ find_package(daq-cmake 1.0.0 REQUIRED)
 
 daq_setup_environment()
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../ipm/cmake ${CMAKE_MODULE_PATH})
 find_package(appfwk REQUIRED)
 find_package(ipm REQUIRED)
 find_package(nlohmann_json REQUIRED)
-find_package(cppzmq REQUIRED)
 
 ##############################################################################
 # Main library
