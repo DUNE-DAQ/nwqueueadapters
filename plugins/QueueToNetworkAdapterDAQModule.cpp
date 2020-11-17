@@ -40,7 +40,13 @@ QueueToNetworkAdapterDAQModule::init(const data_t& init_data)
 {
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
   // TODO: This line to be replaced with fancy codegen bit
-  impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>(mod_init_data));
+  std::string msg_type_name=init_data.at("msg_type");
+  if(msg_type_name=="FakeData"){
+    impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>(mod_init_data));
+  }
+  else{
+    throw std::runtime_error("Foo");
+  }
 }
 
 void

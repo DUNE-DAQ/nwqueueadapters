@@ -4,6 +4,7 @@
             "modules": [
                 {
                     "data": {
+                        "msg_type": "FakeData",
                         "qinfos": [
                             {
                                 "dir": "input",
