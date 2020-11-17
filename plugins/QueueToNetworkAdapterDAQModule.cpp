@@ -88,6 +88,7 @@ QueueToNetworkAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
   }
 }
 
+DEFINE_DUNE_DAQ_MODULE(QueueToNetworkAdapterDAQModule)
 } // namespace dunedaq::ipm
 
 
