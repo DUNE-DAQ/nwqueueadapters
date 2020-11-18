@@ -14,17 +14,17 @@
 
 namespace dunedaq{
 
-std::unique_ptr<QueueToNetworkBase> QueueToNetworkBaseMaker(std::string msg_type_name,const appfwk::cmd::ModInit& mod_init_data)
+std::unique_ptr<NetworkToQueueBase> NetworkToQueueBaseMaker(std::string msg_type_name,const appfwk::cmd::ModInit& mod_init_data)
 {
     
 
   if(msg_type_name=="AnotherFakeData"){
-    return std::make_unique<QueueToNetworkImpl<dunedaq::networkqueue::fsd::AnotherFakeData>>(mod_init_data);
+    return std::make_unique<NetworkToQueueImpl<dunedaq::networkqueue::fsd::AnotherFakeData>>(mod_init_data);
   }
     
 
   if(msg_type_name=="FakeData"){
-    return std::make_unique<QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>>(mod_init_data);
+    return std::make_unique<NetworkToQueueImpl<dunedaq::networkqueue::fsd::FakeData>>(mod_init_data);
   }
   return nullptr;
 }

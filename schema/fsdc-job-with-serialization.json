@@ -4,6 +4,7 @@
             "modules": [
                 {
                     "data": {
+                        "msg_type": "FakeData",
                         "qinfos": [
                             {
                                 "dir": "output",
@@ -13,7 +14,7 @@
                         ]
                     },
                     "inst": "ntoq",
-                    "plugin": "NetworkToQueueAdapterDAQModuleOfFakeData"
+                    "plugin": "NetworkToQueueAdapterDAQModule"
                 },
 
                 {

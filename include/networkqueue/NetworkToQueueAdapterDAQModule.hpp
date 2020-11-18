@@ -21,12 +21,46 @@
 #include <string>
 #include <vector>
 
+#include "appfwk/cmd/Nljs.hpp"
+
 namespace dunedaq {
+
+class NetworkToQueueBase
+{
+public:
+  virtual void push(const std::vector<char>& msg) = 0;
+};
+
+template<typename T>
+class NetworkToQueueImpl : public NetworkToQueueBase
+{
+public:
+  NetworkToQueueImpl(const appfwk::cmd::ModInit& mod_init_data)
+  {
+    for (const auto& qi : mod_init_data.qinfos) {
+      if (qi.name == "output") {
+        outputQueue_.reset(new appfwk::DAQSink<T>(qi.inst));
+      }
+    }
+  }
+  
+  virtual void push(const std::vector<char>& msg)
+  {
+    using json=nlohmann::json;
+    json j=json::parse(msg);
+    ERS_DEBUG(0, "Got " << j.dump());
+    T t=j.get<T>();
+    outputQueue_->push(t, std::chrono::milliseconds(10));
+  }
+  
+private:
+  std::unique_ptr<appfwk::DAQSink<T>> outputQueue_;
+};
+
 /**
  * @brief NetworkToQueueAdapterDAQModule creates vectors of ints and sends them
  * downstream
  */
-template<class T>
 class NetworkToQueueAdapterDAQModule : public appfwk::DAQModule
 {
 public:
@@ -59,12 +93,10 @@ private:
 
   // Configuration
   std::shared_ptr<ipm::Receiver> input_;
-  std::unique_ptr<appfwk::DAQSink<T>> outputQueue_;
+  std::unique_ptr<NetworkToQueueBase> impl_;
 
 };
 
 } // namespace dunedaq
-
-#include "detail/NetworkToQueueAdapterDAQModule.hxx"
 
 #endif // NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUEADAPTERDAQMODULE_HPP_

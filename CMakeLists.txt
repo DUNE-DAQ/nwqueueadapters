@@ -24,7 +24,7 @@ daq_add_plugin( FakeSerializableDataConsumerDAQModule duneDAQModule TEST LINK_LI
 daq_add_plugin( FakeSerializableDataProducerDAQModule duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk )
 
 daq_add_plugin( QueueToNetworkAdapterDAQModule duneDAQModule LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)
-daq_add_plugin( NetworkToQueueAdapterDAQModuleOfFakeData duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)
+daq_add_plugin( NetworkToQueueAdapterDAQModule duneDAQModule LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)
 
 ##############################################################################
 
