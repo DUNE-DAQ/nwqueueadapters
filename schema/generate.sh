@@ -50,21 +50,13 @@ render () {
 render nq Structs
 render nq Nljs
 
-render fsd Structs   $srcdir/test/include/networkqueue/fsd
-render fsd Nljs      $srcdir/test/include/networkqueue/fsd
+render fsd Structs   $srcdir/include/networkqueue/fsd
+render fsd Nljs      $srcdir/include/networkqueue/fsd
+
 render fsd NToQ      $srcdir/test/include/networkqueue/fsd  cpp
-# TODO: We're manually setting the output name of the queue adapter
-# specialization files here, because cetlib requires that the filename
-# matches the class name. But the class name here is typedef'ed, with
-# the typedef being defined within the template that moo uses. Somehow
-# this all has to become automatic. There's also the problem that the
-# template that generates the typedef file will make a typedef for
-# every type in the schema file. But cetlib requires that there's only
-# *one* DAQModule defined in each library, so this will break when
-# there's more than one type in the schema file
 mv "${srcdir}/test/include/networkqueue/fsd/NToQ.cpp" "${srcdir}/test/plugins/NetworkToQueueAdapterDAQModuleOfFakeData.cpp"
-render fsd QToN      $srcdir/test/include/networkqueue/fsd  cpp
-mv "${srcdir}/test/include/networkqueue/fsd/QToN.cpp" "${srcdir}/test/plugins/QueueToNetworkAdapterDAQModuleOfFakeData.cpp"
+# render fsd QToN      $srcdir/test/include/networkqueue/fsd  cpp
+# mv "${srcdir}/test/include/networkqueue/fsd/QToN.cpp" "${srcdir}/test/plugins/QueueToNetworkAdapterDAQModuleOfFakeData.cpp"
 
 render fsdp Structs  $srcdir/test/include/networkqueue/fsdp
 render fsdp Nljs     $srcdir/test/include/networkqueue/fsdp

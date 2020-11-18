@@ -44,6 +44,9 @@ QueueToNetworkAdapterDAQModule::init(const data_t& init_data)
   if(msg_type_name=="FakeData"){
     impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>(mod_init_data));
   }
+  else if(msg_type_name=="AnotherFakeData"){
+    impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::AnotherFakeData>(mod_init_data));
+  }
   else{
     throw std::runtime_error("Foo");
   }

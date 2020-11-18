@@ -11,6 +11,9 @@
 
 
     
+typedef dunedaq::NetworkToQueueAdapterDAQModule<dunedaq::networkqueue::fsd::AnotherFakeData> NetworkToQueueAdapterDAQModuleOfAnotherFakeData;
+//DEFINE_DUNE_DAQ_MODULE(NetworkToQueueAdapterDAQModuleOfAnotherFakeData)
+    
 typedef dunedaq::NetworkToQueueAdapterDAQModule<dunedaq::networkqueue::fsd::FakeData> NetworkToQueueAdapterDAQModuleOfFakeData;
 DEFINE_DUNE_DAQ_MODULE(NetworkToQueueAdapterDAQModuleOfFakeData)
 

@@ -16,6 +16,20 @@ namespace dunedaq::networkqueue::fsd {
     using Count = int32_t;
 
 
+    // @brief A fake timestamp
+    using Timestamp = int64_t;
+
+
+    // @brief Another fake Serializable data
+    struct AnotherFakeData {
+
+        // @brief A fake count of something
+        Count fake_count;
+
+        // @brief A fake timestamp for the data
+        Timestamp fake_timestamp;
+    };
+
     // @brief Fake Serializable data
     struct FakeData {
 

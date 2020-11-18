@@ -19,6 +19,18 @@ namespace dunedaq::networkqueue::fsd {
 
 
     
+    inline void to_json(data_t& j, const AnotherFakeData& obj) {
+        j["fake_count"] = obj.fake_count;
+        j["fake_timestamp"] = obj.fake_timestamp;
+    }
+    
+    inline void from_json(const data_t& j, AnotherFakeData& obj) {
+        if (j.contains("fake_count"))
+            j.at("fake_count").get_to(obj.fake_count);    
+        if (j.contains("fake_timestamp"))
+            j.at("fake_timestamp").get_to(obj.fake_timestamp);    
+    }
+    
     inline void to_json(data_t& j, const FakeData& obj) {
         j["fake_count"] = obj.fake_count;
     }
