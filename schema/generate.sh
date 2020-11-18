@@ -55,7 +55,7 @@ render fsd Nljs      $srcdir/include/networkqueue/fsd
 
 render fsd NToQ      $srcdir/test/include/networkqueue/fsd  cpp
 mv "${srcdir}/test/include/networkqueue/fsd/NToQ.cpp" "${srcdir}/test/plugins/NetworkToQueueAdapterDAQModuleOfFakeData.cpp"
-# render fsd QToN      $srcdir/test/include/networkqueue/fsd  cpp
+render fsd QToNMaker      $srcdir/include/networkqueue/fsd
 # mv "${srcdir}/test/include/networkqueue/fsd/QToN.cpp" "${srcdir}/test/plugins/QueueToNetworkAdapterDAQModuleOfFakeData.cpp"
 
 render fsdp Structs  $srcdir/test/include/networkqueue/fsdp

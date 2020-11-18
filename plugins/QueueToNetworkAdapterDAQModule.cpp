@@ -18,9 +18,7 @@
 #include "networkqueue/nq/Structs.hpp"
 #include "networkqueue/nq/Nljs.hpp"
 
-#include "networkqueue/fsd/Structs.hpp"
-#include "networkqueue/fsd/Nljs.hpp"
-
+#include "networkqueue/fsd/QToNMaker.hpp"
 
 namespace dunedaq {
 
@@ -39,16 +37,10 @@ void
 QueueToNetworkAdapterDAQModule::init(const data_t& init_data)
 {
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
-  // TODO: This line to be replaced with fancy codegen bit
   std::string msg_type_name=init_data.at("msg_type");
-  if(msg_type_name=="FakeData"){
-    impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>(mod_init_data));
-  }
-  else if(msg_type_name=="AnotherFakeData"){
-    impl_.reset(new QueueToNetworkImpl<dunedaq::networkqueue::fsd::AnotherFakeData>(mod_init_data));
-  }
-  else{
-    throw std::runtime_error("Foo");
+  impl_=QueueToNetworkBaseMaker(msg_type_name, mod_init_data);
+  if(impl_.get()==nullptr){
+    throw std::runtime_error("No QToN for requested msg_type");
   }
 }
 
