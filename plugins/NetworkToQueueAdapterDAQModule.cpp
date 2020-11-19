@@ -38,7 +38,8 @@ NetworkToQueueAdapterDAQModule::init(const data_t& init_data)
 {
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
   std::string msg_type_name=init_data.at("msg_type");
-  impl_=NetworkToQueueBaseMaker(msg_type_name, mod_init_data);
+  serialization::SerializationType stype=serialization::fromString(init_data.value("serialization_type", "json"));
+  impl_=NetworkToQueueBaseMaker(msg_type_name, stype, mod_init_data);
   if(impl_.get()==nullptr){
     throw std::runtime_error("No NToQ for requested msg_type");
   }

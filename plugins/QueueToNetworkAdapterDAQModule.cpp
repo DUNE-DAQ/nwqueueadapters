@@ -15,6 +15,7 @@
 #include <thread>
 #include <vector>
 
+#include "networkqueue/Serialization.hpp"
 #include "networkqueue/nq/Structs.hpp"
 #include "networkqueue/nq/Nljs.hpp"
 
@@ -37,8 +38,10 @@ void
 QueueToNetworkAdapterDAQModule::init(const data_t& init_data)
 {
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
+  // TODO: Should get these values safely via codegen/schema
   std::string msg_type_name=init_data.at("msg_type");
-  impl_=QueueToNetworkBaseMaker(msg_type_name, mod_init_data);
+  serialization::SerializationType stype=serialization::fromString(init_data.value("serialization_type", "json"));
+  impl_=QueueToNetworkBaseMaker(msg_type_name, stype, mod_init_data);
   if(impl_.get()==nullptr){
     throw std::runtime_error("No QToN for requested msg_type");
   }
@@ -68,24 +71,20 @@ QueueToNetworkAdapterDAQModule::do_stop(const data_t& /*args*/)
 void
 QueueToNetworkAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
 {
-  using json=nlohmann::json;
-  
   while (running_flag.load()) {
     // TODO: Proper handling of "stop"
-    json::string_t s;
+    std::vector<uint8_t> s;
     try{
       s=impl_->get();
-      ERS_DEBUG(0, "Sending " << s);
     } catch (const dunedaq::appfwk::QueueTimeoutExpired&) {
       continue;
     }
 
     try{
-      output_->send(s.c_str(), s.size(), std::chrono::milliseconds(100));
+      output_->send(s.data(), s.size(), std::chrono::milliseconds(100));
     } catch(const dunedaq::ipm::SendTimeoutExpired& e) {
       continue;
     }
-     
   }
 }
 

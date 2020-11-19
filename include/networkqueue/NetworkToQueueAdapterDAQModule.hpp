@@ -23,6 +23,8 @@
 
 #include "appfwk/cmd/Nljs.hpp"
 
+#include "networkqueue/Serialization.hpp"
+
 namespace dunedaq {
 
 class NetworkToQueueBase
@@ -35,7 +37,8 @@ template<typename T>
 class NetworkToQueueImpl : public NetworkToQueueBase
 {
 public:
-  NetworkToQueueImpl(const appfwk::cmd::ModInit& mod_init_data)
+  NetworkToQueueImpl(const serialization::SerializationType stype, const appfwk::cmd::ModInit& mod_init_data)
+    : stype_(stype)
   {
     for (const auto& qi : mod_init_data.qinfos) {
       if (qi.name == "output") {
@@ -46,15 +49,12 @@ public:
   
   virtual void push(const std::vector<char>& msg)
   {
-    using json=nlohmann::json;
-    json j=json::parse(msg);
-    ERS_DEBUG(0, "Got " << j.dump());
-    T t=j.get<T>();
-    outputQueue_->push(t, std::chrono::milliseconds(10));
+    outputQueue_->push(serialization::deserialize<T>(msg, stype_), std::chrono::milliseconds(10));
   }
   
 private:
   std::unique_ptr<appfwk::DAQSink<T>> outputQueue_;
+  serialization::SerializationType stype_;
 };
 
 /**

@@ -5,6 +5,7 @@
                 {
                     "data": {
                         "msg_type": "FakeData",
+                        "serialization_type": "msgpack",
                         "qinfos": [
                             {
                                 "dir": "input",
