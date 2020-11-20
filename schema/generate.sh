@@ -62,10 +62,10 @@ render nor Nljs      $srcdir/include/networkqueue/nor
 render fsd NToQMaker      $srcdir/include/networkqueue/fsd
 render fsd QToNMaker      $srcdir/include/networkqueue/fsd
 
-render fsdp Structs  $srcdir/test/include/networkqueue/fsdp
-render fsdp Nljs     $srcdir/test/include/networkqueue/fsdp
+render fsdp Structs  $srcdir/test/src/networkqueue/fsdp
+render fsdp Nljs     $srcdir/test/src/networkqueue/fsdp
 
-render fsdc Structs  $srcdir/test/include/networkqueue/fsdc
-render fsdc Nljs     $srcdir/test/include/networkqueue/fsdc
+render fsdc Structs  $srcdir/test/src/networkqueue/fsdc
+render fsdc Nljs     $srcdir/test/src/networkqueue/fsdc
 
 
