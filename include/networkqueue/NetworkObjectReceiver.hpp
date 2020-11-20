@@ -14,17 +14,21 @@
 #include "ipm/Receiver.hpp"
 #include "networkqueue/Serialization.hpp"
 
+#include "networkqueue/nor/Structs.hpp"
+#include "networkqueue/nor/Nljs.hpp"
+
 namespace dunedaq {
 
   template<class T>
   class NetworkObjectReceiver
   {
   public:
-    NetworkObjectReceiver(const serialization::SerializationType stype)
-      : receiver_(dunedaq::ipm::makeIPMReceiver("ZmqReceiver"))
-      , stype_(stype)
+    NetworkObjectReceiver(const dunedaq::networkqueue::nor::Conf& conf)
+      : receiver_(dunedaq::ipm::makeIPMReceiver(conf.ipm_plugin_type))
+      , stype_(dunedaq::serialization::fromString(conf.stype))
     {
-      receiver_->connect_for_receives({ {"connection_string", "tcp://127.0.0.1:12345"} });
+      // TODO: We should get a moo.any object from the conf and just pass it straight through
+      receiver_->connect_for_receives({ {"connection_string", conf.address} });
     }
 
     T recv(const dunedaq::ipm::Receiver::duration_type& timeout)

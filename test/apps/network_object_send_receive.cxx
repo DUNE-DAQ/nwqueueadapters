@@ -8,8 +8,19 @@
 int main()
 {
   using FakeData=dunedaq::networkqueue::fsd::FakeData;
-  dunedaq::NetworkObjectSender<FakeData> sender(dunedaq::serialization::CBOR);
-  dunedaq::NetworkObjectReceiver<FakeData> receiver(dunedaq::serialization::CBOR);
+
+  dunedaq::networkqueue::nos::Conf sender_conf;
+  sender_conf.ipm_plugin_type="ZmqSender";
+  sender_conf.stype="cbor";
+  sender_conf.address="inproc://foo";
+  
+  dunedaq::networkqueue::nor::Conf receiver_conf;
+  receiver_conf.ipm_plugin_type="ZmqReceiver";
+  receiver_conf.stype="cbor";
+  receiver_conf.address="inproc://foo";
+  
+  dunedaq::NetworkObjectSender<FakeData> sender(sender_conf);
+  dunedaq::NetworkObjectReceiver<FakeData> receiver(receiver_conf);
 
   FakeData fd;
   fd.fake_count=25;

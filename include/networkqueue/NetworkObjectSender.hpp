@@ -14,17 +14,21 @@
 #include "ipm/Sender.hpp"
 #include "networkqueue/Serialization.hpp"
 
+#include "networkqueue/nos/Structs.hpp"
+#include "networkqueue/nos/Nljs.hpp"
+
 namespace dunedaq {
 
   template<class T>
   class NetworkObjectSender
   {
   public:
-    NetworkObjectSender(const serialization::SerializationType stype)
-      : sender_(dunedaq::ipm::makeIPMSender("ZmqSender"))
-      , stype_(stype)
+    NetworkObjectSender(const dunedaq::networkqueue::nos::Conf& conf)
+      : sender_(dunedaq::ipm::makeIPMSender(conf.ipm_plugin_type))
+      , stype_(dunedaq::serialization::fromString(conf.stype))
     {
-      sender_->connect_for_sends({ {"connection_string", "tcp://127.0.0.1:12345"} });
+      // TODO: We should get a moo.any object from the conf and just pass it straight through
+      sender_->connect_for_sends({ {"connection_string", conf.address} });
     }
 
     void send(const T& obj, const dunedaq::ipm::Sender::duration_type& timeout)

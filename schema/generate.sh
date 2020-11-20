@@ -53,6 +53,12 @@ render nq Nljs
 render fsd Structs   $srcdir/include/networkqueue/fsd
 render fsd Nljs      $srcdir/include/networkqueue/fsd
 
+render nos Structs   $srcdir/include/networkqueue/nos
+render nos Nljs      $srcdir/include/networkqueue/nos
+
+render nor Structs   $srcdir/include/networkqueue/nor
+render nor Nljs      $srcdir/include/networkqueue/nor
+
 render fsd NToQMaker      $srcdir/include/networkqueue/fsd
 render fsd QToNMaker      $srcdir/include/networkqueue/fsd
 
