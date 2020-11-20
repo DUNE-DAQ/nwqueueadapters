@@ -12,20 +12,21 @@
 
 #include "networkqueue/NetworkToQueueAdapterDAQModule.hpp"
 #include "networkqueue/Serialization.hpp"
+#include "networkqueue/NetworkObjectSender.hpp"
 
 namespace dunedaq{
 
-std::unique_ptr<QueueToNetworkBase> QueueToNetworkBaseMaker(std::string msg_type_name, serialization::SerializationType stype, const appfwk::cmd::ModInit& mod_init_data)
+std::unique_ptr<QueueToNetworkBase> QueueToNetworkBaseMaker(std::string msg_type_name, const appfwk::cmd::ModInit& mod_init_data, const dunedaq::networkqueue::nos::Conf& sender_conf)
 {
     
 
   if(msg_type_name=="AnotherFakeData"){
-    return std::make_unique<QueueToNetworkImpl<dunedaq::networkqueue::fsd::AnotherFakeData>>(stype, mod_init_data);
+    return std::make_unique<QueueToNetworkImpl<dunedaq::networkqueue::fsd::AnotherFakeData>>(mod_init_data, sender_conf);
   }
     
 
   if(msg_type_name=="FakeData"){
-    return std::make_unique<QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>>(stype, mod_init_data);
+    return std::make_unique<QueueToNetworkImpl<dunedaq::networkqueue::fsd::FakeData>>(mod_init_data, sender_conf);
   }
   return nullptr;
 }

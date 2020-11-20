@@ -14,17 +14,18 @@
 
 #include "networkqueue/NetworkToQueueAdapterDAQModule.hpp"
 #include "networkqueue/Serialization.hpp"
+#include "networkqueue/NetworkObjectSender.hpp"
 
 namespace dunedaq{
 
-std::unique_ptr<QueueToNetworkBase> QueueToNetworkBaseMaker(std::string msg_type_name, serialization::SerializationType stype, const appfwk::cmd::ModInit& mod_init_data)
+std::unique_ptr<QueueToNetworkBase> QueueToNetworkBaseMaker(std::string msg_type_name, const appfwk::cmd::ModInit& mod_init_data, const dunedaq::networkqueue::nos::Conf& sender_conf)
 {
 {% for fqn in model.byscn.record %}    
   {% set r = model.byref[fqn] %}
   {% set n = fqn.replace(model.nspre,"") %}
 
   if(msg_type_name=="{{n}}"){
-    return std::make_unique<QueueToNetworkImpl<{{ fqn|replace(".","::") }}>>(stype, mod_init_data);
+    return std::make_unique<QueueToNetworkImpl<{{ fqn|replace(".","::") }}>>(mod_init_data, sender_conf);
   }
 {% endfor %}
   return nullptr;

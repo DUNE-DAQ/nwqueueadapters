@@ -38,19 +38,17 @@ NetworkToQueueAdapterDAQModule::init(const data_t& init_data)
 {
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
   std::string msg_type_name=init_data.at("msg_type");
-  serialization::SerializationType stype=serialization::fromString(init_data.value("serialization_type", "json"));
-  impl_=NetworkToQueueBaseMaker(msg_type_name, stype, mod_init_data);
+  auto receiver_conf=init_data.at("receiver_config").get<dunedaq::networkqueue::nor::Conf>();
+
+  impl_=NetworkToQueueBaseMaker(msg_type_name, mod_init_data, receiver_conf);
   if(impl_.get()==nullptr){
     throw std::runtime_error("No NToQ for requested msg_type");
   }
 }
 
 void
-NetworkToQueueAdapterDAQModule::do_configure(const data_t& config_data)
+NetworkToQueueAdapterDAQModule::do_configure(const data_t& /* config_data */)
 {
-  auto cfg = config_data.get<networkqueue::nq::NetworkToQueueAdapterConf>();
-  input_=dunedaq::ipm::makeIPMReceiver("ZmqReceiver");
-  input_->connect_for_receives(cfg.connection_info);
 }
 
 void
@@ -70,18 +68,14 @@ NetworkToQueueAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
 {
   static int recv_counter=0;
   while (running_flag.load()) {
-    dunedaq::ipm::Receiver::Response recvd;
     try{
-      recvd = input_->receive(std::chrono::milliseconds(10));
+      impl_->push();
       ++recv_counter;
     }
     catch(ipm::ReceiveTimeoutExpired&){
       // It's not a problem if the receive times out
       continue;
     }
-    // push() might throw if the queue is full. We leave the exception
-    // to propagate up so someone else can DTRT
-    impl_->push(recvd.data);
   }
   ERS_INFO("Did " << recv_counter << " receives");
 }

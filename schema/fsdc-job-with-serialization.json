@@ -5,6 +5,11 @@
                 {
                     "data": {
                         "msg_type": "FakeData",
+                        "receiver_config":{
+                            "stype": "cbor",
+                            "ipm_plugin_type": "ZmqReceiver",
+                            "address": "tcp://127.0.0.1:12345"
+                        },
                         "serialization_type": "msgpack",
                         "qinfos": [
                             {

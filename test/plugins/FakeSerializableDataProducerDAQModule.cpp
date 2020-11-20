@@ -59,7 +59,6 @@ void
 FakeSerializableDataProducerDAQModule::do_configure(const data_t& data)
 {
   std::cerr << "**********************************" << data.dump(4) << std::endl;
-
   cfg_ = data.get<fsdp::Conf>();
 
   queueTimeout_ = std::chrono::milliseconds(cfg_.queue_timeout_ms);

@@ -40,20 +40,17 @@ QueueToNetworkAdapterDAQModule::init(const data_t& init_data)
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
   // TODO: Should get these values safely via codegen/schema
   std::string msg_type_name=init_data.at("msg_type");
-  serialization::SerializationType stype=serialization::fromString(init_data.value("serialization_type", "json"));
-  impl_=QueueToNetworkBaseMaker(msg_type_name, stype, mod_init_data);
+  auto sender_conf=init_data.at("sender_config").get<dunedaq::networkqueue::nos::Conf>();
+
+  impl_=QueueToNetworkBaseMaker(msg_type_name, mod_init_data, sender_conf);
   if(impl_.get()==nullptr){
     throw std::runtime_error("No QToN for requested msg_type");
   }
 }
 
 void
-QueueToNetworkAdapterDAQModule::do_configure(const data_t& config_data)
+QueueToNetworkAdapterDAQModule::do_configure(const data_t& /* config_data */)
 {
-  auto cfg = config_data.get<networkqueue::nq::QueueToNetworkAdapterConf>();
-  output_=dunedaq::ipm::makeIPMSender("ZmqSender");
-  ERS_INFO("Output is " << output_.get());
-  output_->connect_for_sends(cfg.connection_info);
 }
 
 void
@@ -73,18 +70,19 @@ QueueToNetworkAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
 {
   while (running_flag.load()) {
     // TODO: Proper handling of "stop"
-    std::vector<uint8_t> s;
     try{
-      s=impl_->get();
+      impl_->get();
     } catch (const dunedaq::appfwk::QueueTimeoutExpired&) {
+      continue;
+    } catch (const dunedaq::ipm::SendTimeoutExpired&) {
       continue;
     }
 
-    try{
-      output_->send(s.data(), s.size(), std::chrono::milliseconds(100));
-    } catch(const dunedaq::ipm::SendTimeoutExpired& e) {
-      continue;
-    }
+    // try{
+    //   output_->send(s.data(), s.size(), std::chrono::milliseconds(100));
+    // } catch(const dunedaq::ipm::SendTimeoutExpired& e) {
+    //   continue;
+    // }
   }
 }
 

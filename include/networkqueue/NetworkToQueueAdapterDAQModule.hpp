@@ -14,7 +14,6 @@
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
 #include "appfwk/ThreadHelper.hpp"
-#include "ipm/Receiver.hpp"
 
 #include <future>
 #include <memory>
@@ -24,21 +23,22 @@
 #include "appfwk/cmd/Nljs.hpp"
 
 #include "networkqueue/Serialization.hpp"
+#include "networkqueue/NetworkObjectReceiver.hpp"
 
 namespace dunedaq {
 
 class NetworkToQueueBase
 {
 public:
-  virtual void push(const std::vector<char>& msg) = 0;
+  virtual void push() = 0;
 };
 
 template<typename T>
 class NetworkToQueueImpl : public NetworkToQueueBase
 {
 public:
-  NetworkToQueueImpl(const serialization::SerializationType stype, const appfwk::cmd::ModInit& mod_init_data)
-    : stype_(stype)
+  NetworkToQueueImpl(const appfwk::cmd::ModInit& mod_init_data, const dunedaq::networkqueue::nor::Conf& receiver_conf)
+    : receiver_(receiver_conf)
   {
     for (const auto& qi : mod_init_data.qinfos) {
       if (qi.name == "output") {
@@ -47,14 +47,15 @@ public:
     }
   }
   
-  virtual void push(const std::vector<char>& msg)
+  virtual void push()
   {
-    outputQueue_->push(serialization::deserialize<T>(msg, stype_), std::chrono::milliseconds(10));
+    outputQueue_->push(receiver_.recv(std::chrono::milliseconds(10)),
+                       std::chrono::milliseconds(10));
   }
   
 private:
   std::unique_ptr<appfwk::DAQSink<T>> outputQueue_;
-  serialization::SerializationType stype_;
+  NetworkObjectReceiver<T> receiver_;
 };
 
 /**
@@ -91,8 +92,6 @@ private:
   appfwk::ThreadHelper thread_;
   void do_work(std::atomic<bool>& running_flag);
 
-  // Configuration
-  std::shared_ptr<ipm::Receiver> input_;
   std::unique_ptr<NetworkToQueueBase> impl_;
 
 };

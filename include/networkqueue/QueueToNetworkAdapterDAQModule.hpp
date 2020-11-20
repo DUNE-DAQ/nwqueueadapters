@@ -26,21 +26,23 @@
 #include "appfwk/cmd/Nljs.hpp"
 
 #include "networkqueue/Serialization.hpp"
+#include "networkqueue/NetworkObjectSender.hpp"
 
 namespace dunedaq {
   
 class QueueToNetworkBase
 {
 public:
-  virtual std::vector<uint8_t> get() = 0;
+  virtual void get() = 0;
 };
 
 template<typename MsgType>
 class QueueToNetworkImpl : public QueueToNetworkBase
 {
 public:
-  QueueToNetworkImpl(const serialization::SerializationType stype, const appfwk::cmd::ModInit& mod_init_data)
-    : stype_(stype)
+  QueueToNetworkImpl(const appfwk::cmd::ModInit& mod_init_data,
+                     const dunedaq::networkqueue::nos::Conf& sender_conf)
+    : sender_(sender_conf)
   {
     for (const auto& qi : mod_init_data.qinfos) {
       if (qi.name == "input") {
@@ -49,19 +51,16 @@ public:
     }
   }
   
-  virtual std::vector<uint8_t> get()
+  virtual void get()
   {
-    using json=nlohmann::json;
-
     MsgType msg;
     inputQueue_->pop(msg, std::chrono::milliseconds(10));
-    json j = msg;
-    return serialization::serialize(j, stype_);
+    sender_.send(msg, std::chrono::milliseconds(10));
   }
   
 private:
   std::unique_ptr<appfwk::DAQSource<MsgType>> inputQueue_;
-  serialization::SerializationType stype_;
+  NetworkObjectSender<MsgType> sender_;
 };
   
 /**
@@ -99,7 +98,6 @@ private:
   appfwk::ThreadHelper thread_;
 
   std::unique_ptr<QueueToNetworkBase> impl_;
-  std::shared_ptr<ipm::Sender> output_;
 };
 
 } // namespace dunedaq
