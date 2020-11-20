@@ -21,13 +21,13 @@ namespace dunedaq {
   {
   public:
     NetworkObjectSender(const serialization::SerializationType stype)
-      : sender_(nullptr)
+      : sender_(dunedaq::ipm::makeIPMSender("ZmqSender"))
       , stype_(stype)
     {
-      sender_->connect_for_sends("tcp://127.0.0.1:12345");
+      sender_->connect_for_sends({ {"connection_string", "tcp://127.0.0.1:12345"} });
     }
 
-    void send(const T& obj, const std::chrono::duration& timeout)
+    void send(const T& obj, const dunedaq::ipm::Sender::duration_type& timeout)
     {
       nlohmann::json j = obj;
       auto s=serialization::serialize(j, stype_);
@@ -35,7 +35,7 @@ namespace dunedaq {
     }
     
   protected:
-    std::unique_ptr<ipm::Sender> sender_;
+    std::shared_ptr<ipm::Sender> sender_;
     serialization::SerializationType stype_;
   };
 }

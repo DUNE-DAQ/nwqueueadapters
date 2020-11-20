@@ -21,20 +21,20 @@ namespace dunedaq {
   {
   public:
     NetworkObjectReceiver(const serialization::SerializationType stype)
-      : receiver_(nullptr)
+      : receiver_(dunedaq::ipm::makeIPMReceiver("ZmqReceiver"))
       , stype_(stype)
     {
-      receiver_->connect_for_receives("tcp://127.0.0.1:12345");
+      receiver_->connect_for_receives({ {"connection_string", "tcp://127.0.0.1:12345"} });
     }
 
-    T recv(const T& obj, const std::chrono::duration& timeout)
+    T recv(const dunedaq::ipm::Receiver::duration_type& timeout)
     {
       dunedaq::ipm::Receiver::Response recvd=receiver_->receive(timeout);
-      return serialization::deserialize<T>(recvd.data, stype_)
+      return serialization::deserialize<T>(recvd.data, stype_);
     }
     
   protected:
-    std::unique_ptr<ipm::Receiver> receiver_;
+    std::shared_ptr<ipm::Receiver> receiver_;
     serialization::SerializationType stype_;
   };
 }
