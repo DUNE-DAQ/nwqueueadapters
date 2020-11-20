@@ -22,9 +22,7 @@
 #define TRACE_NAME "FakeSerializableDataConsumer" // NOLINT
 
 #include <chrono>
-#include <functional>
 #include <string>
-#include <thread>
 #include <vector>
 
 namespace dunedaq::networkqueue {
@@ -69,26 +67,6 @@ void
 FakeSerializableDataConsumerDAQModule::do_stop(const data_t& /*data*/)
 {
   thread_.stop_working_thread();
-}
-
-/**
- * @brief Format a std::vector<int> to a stream
- * @param t ostream Instance
- * @param ints Vector to format
- * @return ostream Instance
- */
-std::ostream&
-operator<<(std::ostream& t, std::vector<int> ints)
-{
-  t << "{";
-  bool first = true;
-  for (auto& i : ints) {
-    if (!first)
-      t << ", ";
-    first = false;
-    t << i;
-  }
-  return t << "}";
 }
 
 void

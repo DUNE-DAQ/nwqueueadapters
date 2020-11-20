@@ -35,7 +35,6 @@ FakeSerializableDataProducerDAQModule::FakeSerializableDataProducerDAQModule(con
   , outputQueue_(nullptr)
   , queueTimeout_(100)
 {
-  std::cerr << "********************************** FSDP ctor" << std::endl;
   register_command("conf", &FakeSerializableDataProducerDAQModule::do_configure);
   register_command("start", &FakeSerializableDataProducerDAQModule::do_start);
   register_command("stop", &FakeSerializableDataProducerDAQModule::do_stop);
@@ -53,12 +52,9 @@ FakeSerializableDataProducerDAQModule::init(const nlohmann::json& init_data)
   }
 }
 
-#include <iostream>
-
 void
 FakeSerializableDataProducerDAQModule::do_configure(const data_t& data)
 {
-  std::cerr << "**********************************" << data.dump(4) << std::endl;
   cfg_ = data.get<fsdp::Conf>();
 
   queueTimeout_ = std::chrono::milliseconds(cfg_.queue_timeout_ms);
@@ -67,7 +63,6 @@ FakeSerializableDataProducerDAQModule::do_configure(const data_t& data)
 void
 FakeSerializableDataProducerDAQModule::do_start(const data_t& /*data*/)
 {
-  std::cout << "********************************** start" << std::endl;
   thread_.start_working_thread();
 }
 
@@ -75,26 +70,6 @@ void
 FakeSerializableDataProducerDAQModule::do_stop(const data_t& /*data*/)
 {
   thread_.stop_working_thread();
-}
-
-/**
- * @brief Format a std::vector<int> to a stream
- * @param t ostream Instance
- * @param ints Vector to format
- * @return ostream Instance
- */
-std::ostream&
-operator<<(std::ostream& t, std::vector<int> ints)
-{
-  t << "{";
-  bool first = true;
-  for (auto& i : ints) {
-    if (!first)
-      t << ", ";
-    first = false;
-    t << i;
-  }
-  return t << "}";
 }
 
 void

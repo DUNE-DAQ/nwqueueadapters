@@ -10,9 +10,7 @@
 #include <ers/ers.h>
 
 #include <chrono>
-#include <functional>
 #include <string>
-#include <thread>
 #include <vector>
 
 #include "networkqueue/Serialization.hpp"
@@ -77,16 +75,10 @@ QueueToNetworkAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
     } catch (const dunedaq::ipm::SendTimeoutExpired&) {
       continue;
     }
-
-    // try{
-    //   output_->send(s.data(), s.size(), std::chrono::milliseconds(100));
-    // } catch(const dunedaq::ipm::SendTimeoutExpired& e) {
-    //   continue;
-    // }
   }
 }
 
 DEFINE_DUNE_DAQ_MODULE(QueueToNetworkAdapterDAQModule)
-} // namespace dunedaq::ipm
+} // namespace dunedaq
 
 

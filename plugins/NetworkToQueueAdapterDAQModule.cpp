@@ -10,8 +10,6 @@
 
 #include <chrono>
 #include <string>
-#include <thread>
-#include <utility>
 #include <vector>
 
 #include "appfwk/cmd/Nljs.hpp"

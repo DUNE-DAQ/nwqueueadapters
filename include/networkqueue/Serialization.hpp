@@ -1,5 +1,5 @@
 /**
- * @file SerializationType.hpp
+ * @file Serialization.hpp
  *
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
@@ -18,13 +18,19 @@ namespace dunedaq {
 
   namespace serialization {
 
+    /**
+     * @brief Serialization methods that are available
+     */
     enum SerializationType
     {
       JSON,
       MsgPack,
       CBOR
     };
-    
+
+    /**
+     * @brief Convert string to SerializationType
+     */
     SerializationType fromString(const std::string s)
     {
       if(s=="json")    return JSON;
@@ -33,6 +39,9 @@ namespace dunedaq {
       throw std::runtime_error("Unknown serialization type");
     }
 
+    /**
+     * @brief Serialize json object @p j using serialization method @p stype
+     */
     std::vector<uint8_t> serialize(const nlohmann::json& j, SerializationType stype)
     {
       switch(stype){
@@ -51,6 +60,9 @@ namespace dunedaq {
       }
     }
 
+    /**
+     * @brief Deserialize vector of bytes @p v into an instance of class @p T
+     */
     template<class T>
     T deserialize(const std::vector<char>& v, SerializationType stype)
     {

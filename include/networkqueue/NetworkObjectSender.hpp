@@ -1,8 +1,7 @@
 /**
  * @file NetworkObjectSender.hpp
  *
- * Based on VectorIntIPMSenderDAQModule from IPM
- *
+ * 
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
  * received with this code.
@@ -19,6 +18,26 @@
 
 namespace dunedaq {
 
+  /**
+   * @brief NetworkObjectSender sends objects over IPM connections
+   *
+   * NetworkObjectSender and its counterpart NetworkObjectReceiver
+   * provide a convenient interface to object serialization and
+   * sending and receiving over network connections. Any class which
+   * can be converted to/from an @c nlohmann::json object can be used;
+   * in particular, all classes generated with moo schema are suitable
+   * for use with NetworkObjectSender/Receiver
+   *
+   * Typical usage:
+   *
+   * @code
+   * NetworkObjectSender<MyClass> sender(conf_object);
+   * MyClass m;
+   * // Set some fields of m...
+   * sender.send(m, std::chrono::milliseconds(2));
+   * @endcode
+   *
+   */
   template<class T>
   class NetworkObjectSender
   {
@@ -31,6 +50,9 @@ namespace dunedaq {
       sender_->connect_for_sends({ {"connection_string", conf.address} });
     }
 
+    /**
+     * @brief Send object @p obj with timeout @p timeout
+     */
     void send(const T& obj, const dunedaq::ipm::Sender::duration_type& timeout)
     {
       nlohmann::json j = obj;

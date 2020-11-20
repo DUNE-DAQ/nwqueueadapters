@@ -1,9 +1,11 @@
 /**
  * @file FakeSerializableDataProducerDAQModule.hpp
  *
- * FakeSerializableDataProducerDAQModule creates vectors of integers of a given length, starting with the given start integer and
- * counting up to the given ending integer. Its current position is persisted between generated vectors, so if the
- * parameters are chosen correctly, the generated vectors will "walk" through the valid range.
+ * FakeSerializableDataProducerDAQModule, based on
+ * FakeDataProducerDAQModule from appfwk, pushes
+ * networkqueue::fsd::FakeData objects onto a queue. It exists to
+ * allow testing of QueueToNetworkAdapterDAQModule, which takes the
+ * FakeData items off the queue and serializes them onto the network
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
@@ -21,17 +23,12 @@
 #include "networkqueue/fsdp/Structs.hpp"
 #include "networkqueue/fsd/Structs.hpp"
 
-#include <future>
 #include <memory>
 #include <string>
 #include <vector>
 
 namespace dunedaq {
 namespace networkqueue {
-/**
- * @brief FakeSerializableDataProducerDAQModule creates vectors of ints and sends them
- * downstream
- */
 class FakeSerializableDataProducerDAQModule : public ::dunedaq::appfwk::DAQModule
 {
 public:
@@ -67,11 +64,6 @@ private:
   std::chrono::milliseconds queueTimeout_;
 
   fsdp::Conf cfg_;
-
-  // size_t nIntsPerVector_ = 999;
-  // int starting_int_ = -999;
-  // int ending_int_ = -999;
-  // size_t wait_between_sends_ms_ = 999;
 };
 
 } // namespace networkqueue

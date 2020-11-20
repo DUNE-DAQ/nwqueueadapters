@@ -1,7 +1,6 @@
 /**
  * @file NetworkObjectReceiver.hpp
  *
- * Based on VectorIntIPMReceiverDAQModule from IPM
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
@@ -19,6 +18,24 @@
 
 namespace dunedaq {
 
+  /**
+   * @brief NetworkObjectReceiver receives objects over IPM connections
+   *
+   * NetworkObjectReceiver and its counterpart NetworkObjectSender
+   * provide a convenient interface to object serialization/sending
+   * and receiving/deserialization over network connections. Any class
+   * which can be converted to/from an @c nlohmann::json object can be
+   * used; in particular, all classes generated with moo schema are
+   * suitable for use with NetworkObjectSender/Receiver
+   *
+   * Typical usage:
+   *
+   * @code
+   * NetworkObjectReceiver<MyClass> receiver(conf_object);
+   * MyClass m = receiver.recv(m, std::chrono::milliseconds(200));
+   * @endcode
+   *
+   */
   template<class T>
   class NetworkObjectReceiver
   {
