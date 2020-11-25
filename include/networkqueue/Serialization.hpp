@@ -40,10 +40,12 @@ namespace dunedaq {
     }
 
     /**
-     * @brief Serialize json object @p j using serialization method @p stype
+     * @brief Serialize object @p obj using serialization method @p stype
      */
-    std::vector<uint8_t> serialize(const nlohmann::json& j, SerializationType stype)
+    template<class T>
+    std::vector<uint8_t> serialize(const T& obj, SerializationType stype)
     {
+      nlohmann::json j = obj;
       switch(stype){
       case JSON:
         {

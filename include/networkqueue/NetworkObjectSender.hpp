@@ -55,8 +55,7 @@ namespace dunedaq {
      */
     void send(const T& obj, const dunedaq::ipm::Sender::duration_type& timeout)
     {
-      nlohmann::json j = obj;
-      auto s=serialization::serialize(j, stype_);
+      auto s=serialization::serialize(obj, stype_);
       sender_->send(s.data(), s.size(), timeout);
     }
     
