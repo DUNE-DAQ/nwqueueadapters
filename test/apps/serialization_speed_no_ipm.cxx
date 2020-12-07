@@ -46,12 +46,6 @@ int main()
 {
   printf("MsgPack:\n");
   time_serialization(dunedaq::serialization::MsgPack);
-  printf("CBOR:\n");
-  time_serialization(dunedaq::serialization::CBOR);
   printf("JSON:\n");
   time_serialization(dunedaq::serialization::JSON);
-  printf("UBJSON:\n");
-  time_serialization(dunedaq::serialization::UBJSON);
-  printf("BSON:\n");
-  time_serialization(dunedaq::serialization::BSON);  
 }

@@ -25,10 +25,7 @@ namespace dunedaq {
     enum SerializationType
     {
       JSON,
-      MsgPack,
-      CBOR,
-      UBJSON,
-      BSON
+      MsgPack
     };
 
     /**
@@ -38,9 +35,6 @@ namespace dunedaq {
     {
       if(s=="json")    return JSON;
       if(s=="msgpack") return MsgPack;
-      if(s=="cbor")    return CBOR;
-      if(s=="ubjson")  return UBJSON;
-      if(s=="bson")    return BSON;
       throw std::runtime_error("Unknown serialization type");
     }
 
@@ -70,21 +64,6 @@ namespace dunedaq {
           std::vector<uint8_t> v(buf.data(), buf.data()+buf.size());
           return v;
         }
-      case CBOR:
-        {
-          nlohmann::json j = obj;
-          return nlohmann::json::to_cbor(j);
-        }
-      case UBJSON:
-        {
-          nlohmann::json j = obj;
-          return nlohmann::json::to_ubjson(j);
-        }
-      case BSON:
-        {
-          nlohmann::json j = obj;
-          return nlohmann::json::to_bson(j);
-        }
       default:
         throw std::runtime_error("Unknown serialization type");
       }
@@ -110,21 +89,6 @@ namespace dunedaq {
             msgpack::unpack((char*)v.data(), v.size());
           msgpack::object obj = oh.get();
           return obj.as<T>();
-        }
-      case CBOR:
-        {
-          json j=json::from_cbor(v);
-          return j.get<T>();
-        }
-      case UBJSON:
-        {
-          json j=json::from_ubjson(v);
-          return j.get<T>();
-        }
-      case BSON:
-        {
-          json j=json::from_bson(v);
-          return j.get<T>();
         }
       default:
         throw std::runtime_error("Unknown serialization type");
