@@ -60,7 +60,11 @@ namespace dunedaq {
         }
       case MsgPack:
         {
-          // Feels like there should be a nicer way to do this...
+          // Serialize into the sbuffer and then copy to a
+          // std::vector. Seems like it would be more efficient to
+          // write directly to the vector (by creating a class that
+          // implements `void write(char* buf, size_t len)`), but my
+          // tests aren't any faster than this
           msgpack::sbuffer buf;
           msgpack::pack(buf, obj);
           std::vector<uint8_t> v(buf.data(), buf.data()+buf.size());
