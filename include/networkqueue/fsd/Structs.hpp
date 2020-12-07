@@ -31,6 +31,13 @@ namespace dunedaq::networkqueue::fsd {
     // @brief A sequence of FakeData
     using FakeDatas = std::vector<dunedaq::networkqueue::fsd::FakeData>;
 
+    // @brief The amount of fakeness
+    enum class Fakeness: unsigned {
+        Unknown,
+        Fake,
+        SuperFake,
+    };
+
     // @brief Another fake Serializable data
     struct AnotherFakeData {
 
@@ -42,6 +49,9 @@ namespace dunedaq::networkqueue::fsd {
 
         // @brief 
         FakeDatas fake_datas;
+
+        // @brief 
+        Fakeness fakeness;
     };
 
 } // namespace dunedaq::networkqueue::fsd

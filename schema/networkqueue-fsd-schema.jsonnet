@@ -13,6 +13,11 @@ local s = moo.oschema.schema(ns);
 
 // Object structure used by the test/fake producer module
 local fsd = {
+
+  fakeness: s.enum("Fakeness",
+    ["Unknown", "Fake", "SuperFake"],
+    doc="The amount of fakeness"),
+
   count : s.number("Count", "i4",
     doc="A count of not too many things"),
 
@@ -33,6 +38,7 @@ local fsd = {
     s.field("fake_timestamp", self.timestamp, 0,
       doc="A fake timestamp for the data"),
     s.field("fake_datas", self.fakedatas),
+    s.field("fakeness", self.fakeness)
   ], doc="Another fake Serializable data"),
 
 };

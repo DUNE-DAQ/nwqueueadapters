@@ -29,6 +29,7 @@ void time_serialization(dunedaq::serialization::SerializationType stype)
   }
   for(int i=0; i<N; ++i){
     fd.fake_count=i;
+    fd.fakeness=dunedaq::networkqueue::fsd::Fakeness::SuperFake;
     std::vector<uint8_t> bytes=dunedaq::serialization::serialize(fd, stype);
     AnotherFakeData fd_recv=dunedaq::serialization::deserialize<AnotherFakeData>(bytes, stype);
     total+=fd_recv.fake_count;
