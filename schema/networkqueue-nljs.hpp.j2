@@ -64,6 +64,9 @@
 
 } // {{ cpp.ns(model) }}
 
+{% for fqn in model.byscn.enum %}
+MSGPACK_ADD_ENUM({{fqn|replace(".","::")}})
+{% endfor %}
 
 // MsgPack serialization/deserialization functions
 namespace msgpack {
