@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 project(networkqueue VERSION 0.0.0)
 
-find_package(daq-cmake 1.0.0 REQUIRED)
+find_package(daq-cmake 1.1.0 REQUIRED)
 
 daq_setup_environment()
 
@@ -28,6 +28,8 @@ daq_add_plugin( NetworkToQueueAdapterDAQModule duneDAQModule LINK_LIBRARIES netw
 
 # Test applications
 daq_add_application( network_object_send_receive network_object_send_receive.cxx TEST LINK_LIBRARIES ipm )
+daq_add_application( serialization_speed serialization_speed.cxx TEST LINK_LIBRARIES ipm )
+daq_add_application( serialization_speed_no_ipm serialization_speed_no_ipm.cxx TEST LINK_LIBRARIES nlohmann_json::nlohmann_json)
 
 ##############################################################################
 
