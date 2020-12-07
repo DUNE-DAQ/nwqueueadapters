@@ -11,6 +11,7 @@
 #define NETWORKQUEUE_INCLUDE_NETWORKQUEUE_SERIALIZATIONTYPE_HPP_
 
 #include <nlohmann/json.hpp>
+#include <msgpack.hpp>
 
 #include <string>
 
@@ -25,7 +26,9 @@ namespace dunedaq {
     {
       JSON,
       MsgPack,
-      CBOR
+      CBOR,
+      UBJSON,
+      BSON
     };
 
     /**
@@ -36,6 +39,8 @@ namespace dunedaq {
       if(s=="json")    return JSON;
       if(s=="msgpack") return MsgPack;
       if(s=="cbor")    return CBOR;
+      if(s=="ubjson")  return UBJSON;
+      if(s=="bson")    return BSON;
       throw std::runtime_error("Unknown serialization type");
     }
 
@@ -45,18 +50,37 @@ namespace dunedaq {
     template<class T>
     std::vector<uint8_t> serialize(const T& obj, SerializationType stype)
     {
-      nlohmann::json j = obj;
       switch(stype){
       case JSON:
         {
+          nlohmann::json j = obj;
           nlohmann::json::string_t s=j.dump();
           std::vector<uint8_t> ret(s.begin(), s.end());
           return ret;
         }
       case MsgPack:
-        return nlohmann::json::to_msgpack(j);
+        {
+          // Feels like there should be a nicer way to do this...
+          msgpack::sbuffer buf;
+          msgpack::pack(buf, obj);
+          std::vector<uint8_t> v(buf.data(), buf.data()+buf.size());
+          return v;
+        }
       case CBOR:
-        return nlohmann::json::to_cbor(j);
+        {
+          nlohmann::json j = obj;
+          return nlohmann::json::to_cbor(j);
+        }
+      case UBJSON:
+        {
+          nlohmann::json j = obj;
+          return nlohmann::json::to_ubjson(j);
+        }
+      case BSON:
+        {
+          nlohmann::json j = obj;
+          return nlohmann::json::to_bson(j);
+        }
       default:
         throw std::runtime_error("Unknown serialization type");
       }
@@ -65,25 +89,43 @@ namespace dunedaq {
     /**
      * @brief Deserialize vector of bytes @p v into an instance of class @p T
      */
-    template<class T>
-    T deserialize(const std::vector<char>& v, SerializationType stype)
+    template<class T, typename CharType=unsigned char>
+    T deserialize(const std::vector<CharType>& v, SerializationType stype)
     {
       using json=nlohmann::json;
-      json j;
+
       switch(stype){
       case JSON:
-        j=json::parse(v);
-        break;
+        {
+          json j=json::parse(v);
+          return j.get<T>();
+        }
       case MsgPack:
-        j=json::from_msgpack(v);
-        break;
+        {
+          msgpack::object_handle oh =
+            msgpack::unpack((char*)v.data(), v.size());
+          msgpack::object obj = oh.get();
+          return obj.as<T>();
+        }
       case CBOR:
-        j=json::from_cbor(v);
-        break;
+        {
+          json j=json::from_cbor(v);
+          return j.get<T>();
+        }
+      case UBJSON:
+        {
+          json j=json::from_ubjson(v);
+          return j.get<T>();
+        }
+      case BSON:
+        {
+          json j=json::from_bson(v);
+          return j.get<T>();
+        }
       default:
         throw std::runtime_error("Unknown serialization type");
       }
-      return j.get<T>();
+
     }
 
   } // namespace serialization
