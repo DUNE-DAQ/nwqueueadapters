@@ -9,6 +9,7 @@
 
 #include <cstdint>
 
+#include <vector>
 
 namespace dunedaq::networkqueue::fsd {
 
@@ -20,6 +21,16 @@ namespace dunedaq::networkqueue::fsd {
     using Timestamp = int64_t;
 
 
+    // @brief Fake Serializable data
+    struct FakeData {
+
+        // @brief A fake count of something
+        Count fake_count;
+    };
+
+    // @brief A sequence of FakeData
+    using FakeDatas = std::vector<dunedaq::networkqueue::fsd::FakeData>;
+
     // @brief Another fake Serializable data
     struct AnotherFakeData {
 
@@ -28,13 +39,9 @@ namespace dunedaq::networkqueue::fsd {
 
         // @brief A fake timestamp for the data
         Timestamp fake_timestamp;
-    };
 
-    // @brief Fake Serializable data
-    struct FakeData {
-
-        // @brief A fake count of something
-        Count fake_count;
+        // @brief 
+        FakeDatas fake_datas;
     };
 
 } // namespace dunedaq::networkqueue::fsd

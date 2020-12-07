@@ -23,12 +23,16 @@ local fsd = {
     s.field("fake_count", self.count, -4,
       doc="A fake count of something"),
   ], doc="Fake Serializable data"),
+
+  fakedatas: s.sequence("FakeDatas", self.fakedata,
+    doc="A sequence of FakeData"),
   
   fakedata2: s.record("AnotherFakeData", [
     s.field("fake_count", self.count, -4,
       doc="A fake count of something"),
     s.field("fake_timestamp", self.timestamp, 0,
       doc="A fake timestamp for the data"),
+    s.field("fake_datas", self.fakedatas),
   ], doc="Another fake Serializable data"),
 
 };

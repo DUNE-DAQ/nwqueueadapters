@@ -20,13 +20,13 @@ std::unique_ptr<NetworkToQueueBase> NetworkToQueueBaseMaker(std::string msg_type
 {
     
 
-  if(msg_type_name=="AnotherFakeData"){
-    return std::make_unique<NetworkToQueueImpl<dunedaq::networkqueue::fsd::AnotherFakeData>>(mod_init_data, receiver_conf);
+  if(msg_type_name=="FakeData"){
+    return std::make_unique<NetworkToQueueImpl<dunedaq::networkqueue::fsd::FakeData>>(mod_init_data, receiver_conf);
   }
     
 
-  if(msg_type_name=="FakeData"){
-    return std::make_unique<NetworkToQueueImpl<dunedaq::networkqueue::fsd::FakeData>>(mod_init_data, receiver_conf);
+  if(msg_type_name=="AnotherFakeData"){
+    return std::make_unique<NetworkToQueueImpl<dunedaq::networkqueue::fsd::AnotherFakeData>>(mod_init_data, receiver_conf);
   }
   return nullptr;
 }
