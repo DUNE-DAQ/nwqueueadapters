@@ -12,6 +12,7 @@
 #include "appfwk/cmd/Nljs.hpp"
 #include "networkqueue/fsdp/Nljs.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
+#include "networkqueue/fsd/MsgPack.hpp"
 
 #include <chrono>
 #include <string>

@@ -52,6 +52,7 @@ render nq Nljs
 
 render fsd Structs   $srcdir/include/networkqueue/fsd
 render fsd Nljs      $srcdir/include/networkqueue/fsd
+render fsd MsgPack   $srcdir/include/networkqueue/fsd
 
 render nos Structs   $srcdir/include/networkqueue/nos
 render nos Nljs      $srcdir/include/networkqueue/nos

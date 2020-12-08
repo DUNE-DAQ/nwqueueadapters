@@ -18,8 +18,6 @@
 {% endfor %}
 
 #include <nlohmann/json.hpp>
-#include <msgpack.hpp>
-#include <networkqueue/msgpack_json.hpp>
 
 {{ cpp.ns(model) }} {
 
@@ -64,49 +62,5 @@
 
 } // {{ cpp.ns(model) }}
 
-{% for fqn in model.byscn.enum %}
-MSGPACK_ADD_ENUM({{fqn|replace(".","::")}})
-{% endfor %}
-
-// MsgPack serialization/deserialization functions
-namespace msgpack {
-MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
-namespace adaptor {
-
-{% for fqn in model.byscn.record %}
-{% set r = model.byref[fqn] %}
-{% set n = fqn.replace(model.nspre,"") %}
-{% set fqncpp = fqn|replace(".","::") %}
-
-template<>
-struct convert<{{fqncpp}}> {
-    msgpack::object const& operator()(msgpack::object const& o, {{fqncpp}}& v) const {
-        if (o.type != msgpack::type::ARRAY) throw msgpack::type_error();
-        if (o.via.array.size != {{ r.fields|length }}) throw msgpack::type_error();
-        {% for f in r.fields %}
-        v.{{f.name}} = o.via.array.ptr[{{loop.index0}}].as<{{f.item|replace(".","::")}}>();
-        {% endfor %}
-        return o;
-    }
-};
-
-template<>
-struct pack<{{fqncpp}}> {
-    template <typename Stream>
-    packer<Stream>& operator()(msgpack::packer<Stream>& o, {{fqncpp}} const& v) const {
-        // packing member variables as an array.
-        o.pack_array({{ r.fields|length }});
-        {% for f in r.fields %}
-        o.pack(v.{{ f.name }});
-        {% endfor %}
-        return o;
-    }
-};
-
-{% endfor %}
-
-} // namespace adaptor
-} // MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
-} // namespace msgpack
 
 #endif // {{cpp.headerguard(model, tcname)}}

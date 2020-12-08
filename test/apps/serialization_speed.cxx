@@ -2,6 +2,7 @@
 #include "networkqueue/NetworkObjectReceiver.hpp"
 #include "networkqueue/fsd/Structs.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
+#include "networkqueue/fsd/MsgPack.hpp"
 
 #include <iostream>
 #include <thread>

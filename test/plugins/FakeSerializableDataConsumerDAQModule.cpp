@@ -12,6 +12,7 @@
 #include "appfwk/cmd/Nljs.hpp"
 #include "networkqueue/fsdc/Nljs.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
+#include "networkqueue/fsd/MsgPack.hpp"
 
 #include "TRACE/trace.h"
 #include <ers/ers.h>

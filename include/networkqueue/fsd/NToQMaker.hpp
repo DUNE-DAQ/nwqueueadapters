@@ -6,6 +6,7 @@
 
 #include "networkqueue/fsd/Structs.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
+#include "networkqueue/fsd/MsgPack.hpp"
 
 #include "appfwk/cmd/Structs.hpp"
 #include "appfwk/cmd/Nljs.hpp"

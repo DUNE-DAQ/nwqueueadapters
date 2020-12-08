@@ -1,5 +1,6 @@
 #include "networkqueue/fsd/Structs.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
+#include "networkqueue/fsd/MsgPack.hpp"
 #include "networkqueue/Serialization.hpp"
 
 #include <iostream>

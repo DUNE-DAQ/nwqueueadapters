@@ -13,8 +13,6 @@
 
 
 #include <nlohmann/json.hpp>
-#include <msgpack.hpp>
-#include <networkqueue/msgpack_json.hpp>
 
 namespace dunedaq::networkqueue::nos {
 
@@ -38,41 +36,5 @@ namespace dunedaq::networkqueue::nos {
 
 } // namespace dunedaq::networkqueue::nos
 
-
-// MsgPack serialization/deserialization functions
-namespace msgpack {
-MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS) {
-namespace adaptor {
-
-
-template<>
-struct convert<dunedaq::networkqueue::nos::Conf> {
-    msgpack::object const& operator()(msgpack::object const& o, dunedaq::networkqueue::nos::Conf& v) const {
-        if (o.type != msgpack::type::ARRAY) throw msgpack::type_error();
-        if (o.via.array.size != 3) throw msgpack::type_error();
-        v.stype = o.via.array.ptr[0].as<dunedaq::networkqueue::nos::SerializationString>();
-        v.ipm_plugin_type = o.via.array.ptr[1].as<dunedaq::networkqueue::nos::IPMPluginType>();
-        v.address = o.via.array.ptr[2].as<dunedaq::networkqueue::nos::Address>();
-        return o;
-    }
-};
-
-template<>
-struct pack<dunedaq::networkqueue::nos::Conf> {
-    template <typename Stream>
-    packer<Stream>& operator()(msgpack::packer<Stream>& o, dunedaq::networkqueue::nos::Conf const& v) const {
-        // packing member variables as an array.
-        o.pack_array(3);
-        o.pack(v.stype);
-        o.pack(v.ipm_plugin_type);
-        o.pack(v.address);
-        return o;
-    }
-};
-
-
-} // namespace adaptor
-} // MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
-} // namespace msgpack
 
 #endif // DUNEDAQ_NETWORKQUEUE_NOS_NLJS_HPP
