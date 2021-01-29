@@ -14,10 +14,8 @@
 #include <vector>
 
 #include "serialization/Serialization.hpp"
-#include "networkqueue/nq/Structs.hpp"
-#include "networkqueue/nq/Nljs.hpp"
 
-#include "networkqueue/fsd/QToNMaker.hpp"
+// #include "networkqueue/fsd/QToNMaker.hpp"
 
 namespace dunedaq {
 

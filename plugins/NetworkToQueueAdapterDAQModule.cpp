@@ -14,10 +14,7 @@
 
 #include "appfwk/cmd/Nljs.hpp"
 
-#include "networkqueue/nq/Structs.hpp"
-#include "networkqueue/nq/Nljs.hpp"
-
-#include "networkqueue/fsd/NToQMaker.hpp"
+// #include "networkqueue/fsd/NToQMaker.hpp"
 
 namespace dunedaq {
 
