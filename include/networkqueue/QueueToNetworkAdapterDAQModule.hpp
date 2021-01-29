@@ -66,7 +66,7 @@ class QueueToNetworkImpl : public QueueToNetworkBase
 {
 public:
   QueueToNetworkImpl(const appfwk::cmd::ModInit& mod_init_data,
-                     const dunedaq::networkqueue::nos::Conf& sender_conf)
+                     const dunedaq::serialization::networkobjectsender::Conf& sender_conf)
     : sender_(sender_conf)
   {
     for (const auto& qi : mod_init_data.qinfos) {
