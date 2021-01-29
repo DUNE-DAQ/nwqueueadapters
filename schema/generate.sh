@@ -21,52 +21,39 @@ srcdir=$(dirname $mydir)
 # Wrap up the render command.  This bakes in a mapping to file name
 # which would be better somehow captured by the schema itself.
 render () {
-    local name="$1" ; shift
-    local What="$1" ; shift
-    local outdir="${1:-$srcdir/include/networkqueue/${name}}"; shift
-    local hppcpp="hpp"
-    if [ -n "$1" ]; then
-        hppcpp="$1"; shift
+    local name="$1" ;    shift
+    local What="$1" ;    shift
+    local is_test="$1" ; shift
+
+    local name_lc=$( echo "$name" | tr '[:upper:]' '[:lower:]' )
+    local outdir="${1:-$srcdir/include/networkqueue/${name_lc}}"
+    if [ "${is_test}" = "TEST" ]; then
+        outdir="${1:-$srcdir/test/src/networkqueue/${name_lc}}"
     fi
-    
     local what="$(echo $What | tr '[:upper:]' '[:lower:]')"
-    local tmpl="networkqueue-${what}.${hppcpp}.j2"
-    local outhpp="$outdir/${What}.${hppcpp}"
+    local tmpl="o${what}.hpp.j2"
+    local outhpp="$outdir/${What}.hpp"
     mkdir -p $outdir
     set -x
     moo -g '/lang:ocpp.jsonnet' \
         -M $mydir -T $mydir \
-        -M /home/rodrigues/dune/daq/appfwk-network-queue/sourcecode/moo/moo/jsonnet-code \
-        -A path="dunedaq.networkqueue.${name}" \
+        -A path="dunedaq.networkqueue.${name_lc}" \
         -A ctxpath="dunedaq" \
         -A os="networkqueue-${name}-schema.jsonnet" \
-        render networkqueue-model.jsonnet $tmpl \
+        render omodel.jsonnet $tmpl \
         > $outhpp || exit -1
     set +x
     echo $outhpp
 }
 
+render fsd Structs    TEST
+render fsd Nljs       TEST
+render fsd MsgP       TEST
+render fsd NToQMaker  TEST
+render fsd QToNMaker  TEST
 
-render nq Structs
-render nq Nljs
+render fsdp Structs   TEST
+render fsdp Nljs      TEST
 
-render fsd Structs   $srcdir/include/networkqueue/fsd
-render fsd Nljs      $srcdir/include/networkqueue/fsd
-render fsd MsgPack   $srcdir/include/networkqueue/fsd
-
-render nos Structs   $srcdir/include/networkqueue/nos
-render nos Nljs      $srcdir/include/networkqueue/nos
-
-render nor Structs   $srcdir/include/networkqueue/nor
-render nor Nljs      $srcdir/include/networkqueue/nor
-
-render fsd NToQMaker      $srcdir/include/networkqueue/fsd
-render fsd QToNMaker      $srcdir/include/networkqueue/fsd
-
-render fsdp Structs  $srcdir/test/src/networkqueue/fsdp
-render fsdp Nljs     $srcdir/test/src/networkqueue/fsdp
-
-render fsdc Structs  $srcdir/test/src/networkqueue/fsdc
-render fsdc Nljs     $srcdir/test/src/networkqueue/fsdc
-
-
+render fsdc Structs   TEST
+render fsdc Nljs      TEST

@@ -1,4 +1,3 @@
-{% import 'networkqueue-cpp.hpp.j2' as cpp %}
 /*
  * This file is 100% generated.  Any manual edits will likely be lost.
  *
@@ -6,9 +5,26 @@
 
 {% set tcname = "NToQ" %}
 
-#include "{{model.relpath|replace(".","/")}}/Structs.hpp"
-#include "{{model.relpath|replace(".","/")}}/Nljs.hpp"
-#include "{{model.relpath|replace(".","/")}}/MsgPack.hpp"
+{# TODO: I copied this #include stuff blindly from omsgp.hpp.j2. Should try to understand it #}
+// My structs
+{% if model.ctxpath %}
+#include "{{ model.path|relpath(model.ctxpath)|join("/") }}/Structs.hpp"
+#include "{{ model.path|relpath(model.ctxpath)|join("/") }}/Nljs.hpp"
+#include "{{ model.path|relpath(model.ctxpath)|join("/") }}/MsgP.hpp"
+{% else %}
+#include "Structs.hpp"
+{% endif %}
+
+{% if model.extrefs %}
+// {{tcname}} for externally referenced schema
+{% endif %}
+{% for ep in model.extrefs %}
+{% if ep %}
+#include "{{ep|listify|join("/")}}/{{tcname}}.hpp"
+{% else %}
+#include "{{tcname}}.hpp"
+{% endif %}
+{% endfor %}
 
 #include "appfwk/cmd/Structs.hpp"
 #include "appfwk/cmd/Nljs.hpp"
@@ -17,15 +33,15 @@
 #include "serialization/Serialization.hpp"
 #include "serialization/NetworkObjectSender.hpp"
 
+{# TODO: This should probably be the full namespace of the schema? #}
 namespace dunedaq{
 
 std::unique_ptr<QueueToNetworkBase> QueueToNetworkBaseMaker(std::string msg_type_name, const appfwk::cmd::ModInit& mod_init_data, const dunedaq::networkqueue::nos::Conf& sender_conf)
 {
 {% for fqn in model.byscn.record %}    
   {% set r = model.byref[fqn] %}
-  {% set n = fqn.replace(model.nspre,"") %}
 
-  if(msg_type_name=="{{n}}"){
+  if(msg_type_name=="{{r.name}}"){
     return std::make_unique<QueueToNetworkImpl<{{ fqn|replace(".","::") }}>>(mod_init_data, sender_conf);
   }
 {% endfor %}
