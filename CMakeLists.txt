@@ -16,7 +16,7 @@ find_package(serialization REQUIRED)
 # We don't have a real library, but we want to create a
 # networkqueue::networkqueue target for dependents to be able to
 # depend on
-daq_add_library(LINK_LIBRARIES ipm::ipm)
+daq_add_library(LINK_LIBRARIES ipm::ipm serialization::serialization)
 
 ##############################################################################
 
