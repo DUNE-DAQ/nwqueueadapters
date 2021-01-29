@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "networkqueue/Serialization.hpp"
+#include "serialization/Serialization.hpp"
 #include "networkqueue/nq/Structs.hpp"
 #include "networkqueue/nq/Nljs.hpp"
 

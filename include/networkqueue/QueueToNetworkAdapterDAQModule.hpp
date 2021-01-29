@@ -23,8 +23,8 @@
 
 #include "appfwk/cmd/Nljs.hpp"
 
-#include "networkqueue/Serialization.hpp"
-#include "networkqueue/NetworkObjectSender.hpp"
+#include "serialization/Serialization.hpp"
+#include "serialization/NetworkObjectSender.hpp"
 
 namespace dunedaq {
 

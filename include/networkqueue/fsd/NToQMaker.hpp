@@ -12,8 +12,8 @@
 #include "appfwk/cmd/Nljs.hpp"
 
 #include "networkqueue/NetworkToQueueAdapterDAQModule.hpp"
-#include "networkqueue/Serialization.hpp"
-#include "networkqueue/NetworkObjectReceiver.hpp"
+#include "serialization/Serialization.hpp"
+#include "serialization/NetworkObjectReceiver.hpp"
 
 namespace dunedaq{
 
