@@ -15,6 +15,9 @@
 #include "appfwk/DAQSink.hpp"
 #include "appfwk/ThreadHelper.hpp"
 
+#include <cetlib/BasicPluginFactory.h>
+#include <cetlib/compiler_macros.h>
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -23,6 +26,21 @@
 
 #include "serialization/Serialization.hpp"
 #include "serialization/NetworkObjectReceiver.hpp"
+
+#ifndef EXTERN_C_FUNC_DECLARE_START
+#define EXTERN_C_FUNC_DECLARE_START                                                                                    \
+  extern "C"                                                                                                           \
+  {
+#endif
+
+/**
+ * @brief Declare the function that will be called by the plugin loader
+ * @param klass Class for which a NetworkToQueue module will be used
+ */
+#define DEFINE_DUNE_NETWORK_TO_QUEUE(klass)                                                                                \
+  EXTERN_C_FUNC_DECLARE_START                                                                                          \
+  std::unique_ptr<dunedaq::NetworkToQueueBase> makeNToQ(std::string const& plugin_name, const dunedaq::appfwk::cmd::ModInit& mod_init_data, const dunedaq::serialization::networkobjectreceiver::Conf& receiver_conf) { if(plugin_name==#klass) return std::make_unique<dunedaq::NetworkToQueueImpl<klass>>(mod_init_data, receiver_conf); else return nullptr;} \
+  }
 
 namespace dunedaq {
 
@@ -102,6 +120,13 @@ private:
   std::unique_ptr<NetworkToQueueBase> impl_;
 
 };
+
+std::unique_ptr<NetworkToQueueBase>
+makeNetworkToQueueBase(std::string const& module_name, std::string const& plugin_name, const appfwk::cmd::ModInit& mod_init_data, const dunedaq::serialization::networkobjectreceiver::Conf& sender_conf)
+{
+  static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeNToQ");
+  return bpf.makePlugin<std::unique_ptr<NetworkToQueueBase>>(module_name, plugin_name, mod_init_data, sender_conf);
+}
 
 } // namespace dunedaq
 

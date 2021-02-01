@@ -4,13 +4,12 @@
             "modules": [
                 {
                     "data": {
-                        "msg_type": "FakeData",
+                        "msg_type": "dunedaq::networkqueue::fsd::FakeData",
+                        "msg_module_name": "FakeData",
                         "receiver_config":{
-                            "stype": "cbor",
                             "ipm_plugin_type": "ZmqReceiver",
                             "address": "tcp://127.0.0.1:12345"
                         },
-                        "serialization_type": "msgpack",
                         "qinfos": [
                             {
                                 "dir": "output",

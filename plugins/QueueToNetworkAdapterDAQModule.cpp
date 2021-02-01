@@ -35,10 +35,11 @@ QueueToNetworkAdapterDAQModule::init(const data_t& init_data)
 {
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
   // TODO: Should get these values safely via codegen/schema
+  std::string msg_module_name=init_data.at("msg_module_name");
   std::string msg_type_name=init_data.at("msg_type");
   auto sender_conf=init_data.at("sender_config").get<dunedaq::serialization::networkobjectsender::Conf>();
 
-  impl_=QueueToNetworkBaseMaker(msg_type_name, mod_init_data, sender_conf);
+  impl_=makeQueueToNetworkBase(msg_module_name, msg_type_name, mod_init_data, sender_conf);
   if(impl_.get()==nullptr){
     throw std::runtime_error("No QToN for requested msg_type");
   }

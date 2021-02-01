@@ -17,6 +17,9 @@
 
 #include <ers/Issue.h>
 
+#include <cetlib/BasicPluginFactory.h>
+#include <cetlib/compiler_macros.h>
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -25,6 +28,21 @@
 
 #include "serialization/Serialization.hpp"
 #include "serialization/NetworkObjectSender.hpp"
+
+#ifndef EXTERN_C_FUNC_DECLARE_START
+#define EXTERN_C_FUNC_DECLARE_START                                                                                    \
+  extern "C"                                                                                                           \
+  {
+#endif
+
+/**
+ * @brief Declare the function that will be called by the plugin loader
+ * @param klass Class for which a QueueToNetwork module will be used
+ */
+#define DEFINE_DUNE_QUEUE_TO_NETWORK(klass)                                                                                \
+  EXTERN_C_FUNC_DECLARE_START                                                                                          \
+  std::unique_ptr<dunedaq::QueueToNetworkBase> makeQToN(std::string const& plugin_name, const dunedaq::appfwk::cmd::ModInit& mod_init_data, const dunedaq::serialization::networkobjectsender::Conf& sender_conf) { if(plugin_name==#klass) return std::make_unique<dunedaq::QueueToNetworkImpl<klass>>(mod_init_data, sender_conf); else return nullptr;} \
+  }
 
 namespace dunedaq {
 
@@ -132,6 +150,13 @@ private:
 
   std::unique_ptr<QueueToNetworkBase> impl_;
 };
+
+std::unique_ptr<QueueToNetworkBase>
+makeQueueToNetworkBase(std::string const& module_name, std::string const& plugin_name, const appfwk::cmd::ModInit& mod_init_data, const dunedaq::serialization::networkobjectsender::Conf& sender_conf)
+{
+  static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeQToN");
+  return bpf.makePlugin<std::unique_ptr<QueueToNetworkBase>>(module_name, plugin_name, mod_init_data, sender_conf);
+}
 
 } // namespace dunedaq
 
