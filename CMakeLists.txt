@@ -21,8 +21,8 @@ daq_add_library(LINK_LIBRARIES ipm::ipm serialization::serialization)
 ##############################################################################
 
 # Test stuff
-daq_add_plugin( FakeSerializableDataConsumerDAQModule duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk )
-daq_add_plugin( FakeSerializableDataProducerDAQModule duneDAQModule TEST LINK_LIBRARIES networkqueue appfwk::appfwk )
+daq_add_plugin( FakeSerializableDataConsumerDAQModule duneDAQModule SCHEMA TEST LINK_LIBRARIES networkqueue appfwk::appfwk )
+daq_add_plugin( FakeSerializableDataProducerDAQModule duneDAQModule SCHEMA TEST LINK_LIBRARIES networkqueue appfwk::appfwk )
 
 daq_add_plugin( QueueToNetworkAdapterDAQModule duneDAQModule LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)
 daq_add_plugin( NetworkToQueueAdapterDAQModule duneDAQModule LINK_LIBRARIES networkqueue appfwk::appfwk ipm::ipm)

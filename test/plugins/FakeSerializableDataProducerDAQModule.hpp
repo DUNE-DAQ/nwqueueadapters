@@ -20,7 +20,7 @@
 #include "appfwk/ThreadHelper.hpp"
 
 // Our command structures.  
-#include "networkqueue/fsdp/Structs.hpp"
+#include "networkqueue/fakeserializabledataproducerdaqmodule/Structs.hpp"
 #include "networkqueue/fsd/Structs.hpp"
 
 #include <memory>
@@ -63,7 +63,7 @@ private:
   std::unique_ptr<dunedaq::appfwk::DAQSink<fsd::FakeData>> outputQueue_;
   std::chrono::milliseconds queueTimeout_;
 
-  fsdp::Conf cfg_;
+  fakeserializabledataproducerdaqmodule::Conf cfg_;
 };
 
 } // namespace networkqueue

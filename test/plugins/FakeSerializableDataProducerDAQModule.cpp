@@ -10,7 +10,7 @@
 #include "FakeSerializableDataProducerDAQModule.hpp"
 
 #include "appfwk/cmd/Nljs.hpp"
-#include "networkqueue/fsdp/Nljs.hpp"
+#include "networkqueue/fakeserializabledataproducerdaqmodule/Nljs.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
 #include "networkqueue/fsd/MsgP.hpp"
 
@@ -56,7 +56,7 @@ FakeSerializableDataProducerDAQModule::init(const nlohmann::json& init_data)
 void
 FakeSerializableDataProducerDAQModule::do_configure(const data_t& data)
 {
-  cfg_ = data.get<fsdp::Conf>();
+  cfg_ = data.get<fakeserializabledataproducerdaqmodule::Conf>();
 
   queueTimeout_ = std::chrono::milliseconds(cfg_.queue_timeout_ms);
 }

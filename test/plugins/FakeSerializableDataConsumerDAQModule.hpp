@@ -17,7 +17,7 @@
 #include "appfwk/ThreadHelper.hpp"
 
 // Our command data structures
-#include "networkqueue/fsdc/Structs.hpp"
+#include "networkqueue/fakeserializabledataconsumerdaqmodule/Nljs.hpp"
 #include "networkqueue/fsd/Structs.hpp"
 
 #include <ers/Issue.h>
@@ -60,7 +60,7 @@ private:
   dunedaq::appfwk::ThreadHelper thread_;
 
   // Configuration (for validation)
-  fsdc::Conf cfg_;
+  fakeserializabledataconsumerdaqmodule::Conf cfg_;
 
   std::chrono::milliseconds queueTimeout_;
   std::unique_ptr<dunedaq::appfwk::DAQSource<fsd::FakeData>> inputQueue_;

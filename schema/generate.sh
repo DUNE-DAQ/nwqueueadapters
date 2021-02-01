@@ -49,11 +49,3 @@ render () {
 render fsd Structs    TEST
 render fsd Nljs       TEST
 render fsd MsgP       TEST
-render fsd NToQMaker  TEST
-render fsd QToNMaker  TEST
-
-render fsdp Structs   TEST
-render fsdp Nljs      TEST
-
-render fsdc Structs   TEST
-render fsdc Nljs      TEST

@@ -8,7 +8,7 @@
 local moo = import "moo.jsonnet";
 
 // A schema builder in the given path (namespace)
-local ns = "dunedaq.networkqueue.fsdp";
+local ns = "dunedaq.networkqueue.fakeserializabledataproducerdaqmodule";
 local s = moo.oschema.schema(ns);
 
 // Object structure used by the test/fake producer module
@@ -34,5 +34,5 @@ local fsdp = {
 
 };
 
-moo.oschema.sort_select(fsdp, ns)
+moo.oschema.sort_select(fsdp)
 
