@@ -33,7 +33,7 @@ NetworkToQueueAdapterDAQModule::init(const data_t& init_data)
 {
   auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
   std::string msg_type_name=init_data.at("msg_type");
-  auto receiver_conf=init_data.at("receiver_config").get<dunedaq::networkqueue::nor::Conf>();
+  auto receiver_conf=init_data.at("receiver_config").get<dunedaq::serialization::networkobjectreceiver::Conf>();
 
   impl_=NetworkToQueueBaseMaker(msg_type_name, mod_init_data, receiver_conf);
   if(impl_.get()==nullptr){

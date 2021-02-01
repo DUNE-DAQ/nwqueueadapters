@@ -36,7 +36,7 @@ template<typename T>
 class NetworkToQueueImpl : public NetworkToQueueBase
 {
 public:
-  NetworkToQueueImpl(const appfwk::cmd::ModInit& mod_init_data, const dunedaq::serialization::networkobjectsender::Conf& receiver_conf)
+  NetworkToQueueImpl(const appfwk::cmd::ModInit& mod_init_data, const dunedaq::serialization::networkobjectreceiver::Conf& receiver_conf)
     : receiver_(receiver_conf)
   {
     for (const auto& qi : mod_init_data.qinfos) {
