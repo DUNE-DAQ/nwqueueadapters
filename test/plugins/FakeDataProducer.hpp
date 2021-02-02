@@ -1,7 +1,7 @@
 /**
- * @file FakeSerializableDataProducerDAQModule.hpp
+ * @file FakeDataProducer.hpp
  *
- * FakeSerializableDataProducerDAQModule, based on
+ * FakeDataProducer, based on
  * FakeDataProducerDAQModule from appfwk, pushes
  * networkqueue::fsd::FakeData objects onto a queue. It exists to
  * allow testing of QueueToNetworkAdapterDAQModule, which takes the
@@ -20,7 +20,7 @@
 #include "appfwk/ThreadHelper.hpp"
 
 // Our command structures.  
-#include "networkqueue/fakeserializabledataproducerdaqmodule/Structs.hpp"
+#include "networkqueue/fakedataproducer/Structs.hpp"
 #include "networkqueue/fsd/Structs.hpp"
 
 #include <memory>
@@ -29,23 +29,23 @@
 
 namespace dunedaq {
 namespace networkqueue {
-class FakeSerializableDataProducerDAQModule : public ::dunedaq::appfwk::DAQModule
+class FakeDataProducer : public ::dunedaq::appfwk::DAQModule
 {
 public:
   /**
-   * @brief FakeSerializableDataProducerDAQModule Constructor
-   * @param name Instance name for this FakeSerializableDataProducerDAQModule instance
+   * @brief FakeDataProducer Constructor
+   * @param name Instance name for this FakeDataProducer instance
    */
-  explicit FakeSerializableDataProducerDAQModule(const std::string& name);
+  explicit FakeDataProducer(const std::string& name);
 
-  FakeSerializableDataProducerDAQModule(const FakeSerializableDataProducerDAQModule&) =
-    delete; ///< FakeSerializableDataProducerDAQModule is not copy-constructible
-  FakeSerializableDataProducerDAQModule& operator=(const FakeSerializableDataProducerDAQModule&) =
-    delete; ///< FakeSerializableDataProducerDAQModule is not copy-assignable
-  FakeSerializableDataProducerDAQModule(FakeSerializableDataProducerDAQModule&&) =
-    delete; ///< FakeSerializableDataProducerDAQModule is not move-constructible
-  FakeSerializableDataProducerDAQModule& operator=(FakeSerializableDataProducerDAQModule&&) =
-    delete; ///< FakeSerializableDataProducerDAQModule is not move-assignable
+  FakeDataProducer(const FakeDataProducer&) =
+    delete; ///< FakeDataProducer is not copy-constructible
+  FakeDataProducer& operator=(const FakeDataProducer&) =
+    delete; ///< FakeDataProducer is not copy-assignable
+  FakeDataProducer(FakeDataProducer&&) =
+    delete; ///< FakeDataProducer is not move-constructible
+  FakeDataProducer& operator=(FakeDataProducer&&) =
+    delete; ///< FakeDataProducer is not move-assignable
 
   void init(const nlohmann::json& ) override;
 
@@ -63,7 +63,7 @@ private:
   std::unique_ptr<dunedaq::appfwk::DAQSink<fsd::FakeData>> outputQueue_;
   std::chrono::milliseconds queueTimeout_;
 
-  fakeserializabledataproducerdaqmodule::Conf cfg_;
+  fakedataproducer::Conf cfg_;
 };
 
 } // namespace networkqueue

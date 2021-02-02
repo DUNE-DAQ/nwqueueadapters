@@ -1,7 +1,7 @@
 /**
- * @file FakeSerializableDataConsumerDAQModule.hpp
+ * @file FakeDataConsumer.hpp
  *
- * FakeSerializableDataConsumerDAQModule is a simple DAQModule implementation that receives FakeData objects produced by
+ * FakeDataConsumer is a simple DAQModule implementation that receives FakeData objects produced by
  * FakeSerializableDataProducerDAQModule. It is intended for testing NetworkToQueueAdapterDAQModule
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
@@ -17,7 +17,7 @@
 #include "appfwk/ThreadHelper.hpp"
 
 // Our command data structures
-#include "networkqueue/fakeserializabledataconsumerdaqmodule/Nljs.hpp"
+#include "networkqueue/fakedataconsumer/Nljs.hpp"
 #include "networkqueue/fsd/Structs.hpp"
 
 #include <ers/Issue.h>
@@ -29,23 +29,23 @@
 namespace dunedaq {
 namespace networkqueue {
 
-class FakeSerializableDataConsumerDAQModule : public dunedaq::appfwk::DAQModule
+class FakeDataConsumer : public dunedaq::appfwk::DAQModule
 {
 public:
   /**
-   * @brief FakeSerializableDataConsumerDAQModule Constructor
-   * @param name Instance name for this FakeSerializableDataConsumerDAQModule instance
+   * @brief FakeDataConsumer Constructor
+   * @param name Instance name for this FakeDataConsumer instance
    */
-  explicit FakeSerializableDataConsumerDAQModule(const std::string& name);
+  explicit FakeDataConsumer(const std::string& name);
 
-  FakeSerializableDataConsumerDAQModule(const FakeSerializableDataConsumerDAQModule&) =
-    delete; ///< FakeSerializableDataConsumerDAQModule is not copy-constructible
-  FakeSerializableDataConsumerDAQModule& operator=(const FakeSerializableDataConsumerDAQModule&) =
-    delete; ///< FakeSerializableDataConsumerDAQModule is not copy-assignable
-  FakeSerializableDataConsumerDAQModule(FakeSerializableDataConsumerDAQModule&&) =
-    delete; ///< FakeSerializableDataConsumerDAQModule is not move-constructible
-  FakeSerializableDataConsumerDAQModule& operator=(FakeSerializableDataConsumerDAQModule&&) =
-    delete; ///< FakeSerializableDataConsumerDAQModule is not move-assignable
+  FakeDataConsumer(const FakeDataConsumer&) =
+    delete; ///< FakeDataConsumer is not copy-constructible
+  FakeDataConsumer& operator=(const FakeDataConsumer&) =
+    delete; ///< FakeDataConsumer is not copy-assignable
+  FakeDataConsumer(FakeDataConsumer&&) =
+    delete; ///< FakeDataConsumer is not move-constructible
+  FakeDataConsumer& operator=(FakeDataConsumer&&) =
+    delete; ///< FakeDataConsumer is not move-assignable
 
   void init(const nlohmann::json& ) override;
 
@@ -60,7 +60,7 @@ private:
   dunedaq::appfwk::ThreadHelper thread_;
 
   // Configuration (for validation)
-  fakeserializabledataconsumerdaqmodule::Conf cfg_;
+  fakedataconsumer::Conf cfg_;
 
   std::chrono::milliseconds queueTimeout_;
   std::unique_ptr<dunedaq::appfwk::DAQSource<fsd::FakeData>> inputQueue_;

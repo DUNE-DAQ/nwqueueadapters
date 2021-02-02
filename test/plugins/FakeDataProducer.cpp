@@ -1,5 +1,5 @@
 /**
- * @file FakeSerializableDataProducerDAQModule.cc FakeSerializableDataProducerDAQModule class
+ * @file FakeDataProducer.cc FakeDataProducer class
  * implementation
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
@@ -7,10 +7,10 @@
  * received with this code.
  */
 
-#include "FakeSerializableDataProducerDAQModule.hpp"
+#include "FakeDataProducer.hpp"
 
 #include "appfwk/cmd/Nljs.hpp"
-#include "networkqueue/fakeserializabledataproducerdaqmodule/Nljs.hpp"
+#include "networkqueue/fakedataproducer/Nljs.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
 #include "networkqueue/fsd/MsgP.hpp"
 
@@ -25,24 +25,24 @@
 /**
  * @brief Name used by TRACE TLOG calls from this source file
  */
-#define TRACE_NAME "FakeSerializableDataProducer" // NOLINT
+#define TRACE_NAME "FakeDataProducer" // NOLINT
 
 namespace dunedaq {
 namespace networkqueue {
 
-FakeSerializableDataProducerDAQModule::FakeSerializableDataProducerDAQModule(const std::string& name)
+FakeDataProducer::FakeDataProducer(const std::string& name)
   : DAQModule(name)
-  , thread_(std::bind(&FakeSerializableDataProducerDAQModule::do_work, this, std::placeholders::_1))
+  , thread_(std::bind(&FakeDataProducer::do_work, this, std::placeholders::_1))
   , outputQueue_(nullptr)
   , queueTimeout_(100)
 {
-  register_command("conf", &FakeSerializableDataProducerDAQModule::do_configure);
-  register_command("start", &FakeSerializableDataProducerDAQModule::do_start);
-  register_command("stop", &FakeSerializableDataProducerDAQModule::do_stop);
+  register_command("conf", &FakeDataProducer::do_configure);
+  register_command("start", &FakeDataProducer::do_start);
+  register_command("stop", &FakeDataProducer::do_stop);
 }
 
 void
-FakeSerializableDataProducerDAQModule::init(const nlohmann::json& init_data)
+FakeDataProducer::init(const nlohmann::json& init_data)
 {
   auto ini = init_data.get<dunedaq::appfwk::cmd::ModInit>();
   for (const auto& qi : ini.qinfos) {
@@ -54,27 +54,27 @@ FakeSerializableDataProducerDAQModule::init(const nlohmann::json& init_data)
 }
 
 void
-FakeSerializableDataProducerDAQModule::do_configure(const data_t& data)
+FakeDataProducer::do_configure(const data_t& data)
 {
-  cfg_ = data.get<fakeserializabledataproducerdaqmodule::Conf>();
+  cfg_ = data.get<fakedataproducer::Conf>();
 
   queueTimeout_ = std::chrono::milliseconds(cfg_.queue_timeout_ms);
 }
 
 void
-FakeSerializableDataProducerDAQModule::do_start(const data_t& /*data*/)
+FakeDataProducer::do_start(const data_t& /*data*/)
 {
   thread_.start_working_thread();
 }
 
 void
-FakeSerializableDataProducerDAQModule::do_stop(const data_t& /*data*/)
+FakeDataProducer::do_stop(const data_t& /*data*/)
 {
   thread_.stop_working_thread();
 }
 
 void
-FakeSerializableDataProducerDAQModule::do_work(std::atomic<bool>& running_flag)
+FakeDataProducer::do_work(std::atomic<bool>& running_flag)
 {
   ERS_INFO("FDP: do_work");
   int current_int = cfg_.starting_int;
@@ -108,7 +108,7 @@ FakeSerializableDataProducerDAQModule::do_work(std::atomic<bool>& running_flag)
 } // namespace networkqueue
 } // namespace dunedaq
 
-DEFINE_DUNE_DAQ_MODULE(dunedaq::networkqueue::FakeSerializableDataProducerDAQModule)
+DEFINE_DUNE_DAQ_MODULE(dunedaq::networkqueue::FakeDataProducer)
 
 
 // Local Variables:

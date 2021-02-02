@@ -8,18 +8,19 @@
 local moo = import "moo.jsonnet";
 
 // A schema builder in the given path (namespace)
-local ns = "dunedaq.networkqueue.fakeserializabledataproducerdaqmodule";
+local ns = "dunedaq.networkqueue.fakedataconsumer";
 local s = moo.oschema.schema(ns);
 
 // Object structure used by the test/fake producer module
-local fsdp = {
+local fsdc = {
+
     size: s.number("Size", "u8",
                    doc="A count of very many things"),
 
     count : s.number("Count", "i4",
                      doc="A count of not too many things"),
 
-    conf: s.record("Conf", [
+    conf: s.record("Conf",  [
         s.field("nIntsPerVector", self.size, 10,
                 doc="Number of numbers"),
         s.field("starting_int", self.count, -4,
@@ -28,11 +29,9 @@ local fsdp = {
                 doc="Number to end with"),
         s.field("queue_timeout_ms", self.count, 100,
                 doc="Milliseconds to wait on queue before timing out"),
-        s.field("wait_between_sends_ms", self.count, 1000,
-                doc="Millisecs to wait between sending"),
-    ], doc="Fake Data Producer DAQ Module Configuration"),
+    ], doc="Fake Data Consumer DAQ Module Configuration"),
 
 };
 
-moo.oschema.sort_select(fsdp)
+moo.oschema.sort_select(fsdc)
 
