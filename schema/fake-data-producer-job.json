@@ -6,40 +6,40 @@
                     "data": {
                         "msg_type": "dunedaq::networkqueue::fsd::FakeData",
                         "msg_module_name": "FakeData",
-                        "receiver_config":{
-                            "ipm_plugin_type": "ZmqReceiver",
+                        "sender_config":{
+                            "stype": "msgpack",
+                            "ipm_plugin_type": "ZmqSender",
                             "address": "tcp://127.0.0.1:12345"
                         },
                         "qinfos": [
                             {
-                                "dir": "output",
-                                "inst": "hose2",
-                                "name": "output"
-                            }
-                        ]
-                    },
-                    "inst": "ntoq",
-                    "plugin": "NetworkToQueueAdapterDAQModule"
-                },
-
-                {
-                    "data": {
-                        "qinfos": [
-                            {
                                 "dir": "input",
-                                "inst": "hose2",
+                                "inst": "hose1",
                                 "name": "input"
                             }
                         ]
                     },
-                    "inst": "fsdc",
-                    "plugin": "FakeSerializableDataConsumerDAQModule"
+                    "inst": "qton",
+                    "plugin": "QueueToNetworkAdapterDAQModule"
+                },
+                {
+                    "data": {
+                        "qinfos": [
+                            {
+                                "dir": "output",
+                                "inst": "hose1",
+                                "name": "output"
+                            }
+                        ]
+                    },
+                    "inst": "fsdp",
+                    "plugin": "FakeDataProducer"
                 }
             ],
             "queues": [
                 {
-                    "capacity": 10000,
-                    "inst": "hose2",
+                    "capacity": 100,
+                    "inst": "hose1",
                     "kind": "FollySPSCQueue"
                 }
             ]
@@ -54,16 +54,17 @@
                         "queue_timeout_ms": 100,
                         "connection_info": {"connection_string": "tcp://127.0.0.1:12345"}
                     },
-                    "match": "ntoq"
+                    "match": "qton"
                 },
                 {
                     "data": {
                         "ending_int": 14,
                         "nIntsPerVector": 10,
                         "queue_timeout_ms": 100,
-                        "starting_int": -4
+                        "starting_int": -4,
+                        "wait_between_sends_ms": 1
                     },
-                    "match": "fsdc"
+                    "match": "fsdp"
                 }
             ]
         },
@@ -87,14 +88,12 @@
             "modules": [
                 {
                     "data": {},
-                    "match": "fsdc"
+                    "match": "fsdp"
                 },
                 {
                     "data": {},
-                    "match": "ntoq"
+                    "match": "qton"
                 }
-
-               
             ]
         },
         "id": "stop"
