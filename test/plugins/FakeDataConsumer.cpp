@@ -11,8 +11,8 @@
 
 #include "appfwk/cmd/Nljs.hpp"
 #include "networkqueue/fakedataconsumer/Nljs.hpp"
-#include "networkqueue/fsd/Nljs.hpp"
 #include "networkqueue/fsd/MsgP.hpp"
+#include "networkqueue/fsd/Nljs.hpp"
 
 #include "TRACE/trace.h"
 #include <ers/ers.h>
@@ -33,9 +33,9 @@ FakeDataConsumer::FakeDataConsumer(const std::string& name)
   , thread_(std::bind(&FakeDataConsumer::do_work, this, std::placeholders::_1))
   , inputQueue_(nullptr)
 {
-  register_command("conf",  &FakeDataConsumer::do_configure);
+  register_command("conf", &FakeDataConsumer::do_configure);
   register_command("start", &FakeDataConsumer::do_start);
-  register_command("stop",  &FakeDataConsumer::do_stop);
+  register_command("stop", &FakeDataConsumer::do_stop);
 }
 
 void
@@ -78,26 +78,27 @@ FakeDataConsumer::do_work(std::atomic<bool>& running_flag)
   int fail_count = 0;
   int timeout_count = 0;
   fsd::FakeData fake_data;
-  int prev_fake_count=-1;
+  int prev_fake_count = -1;
   std::ostringstream oss;
 
   while (running_flag.load()) {
     try {
       inputQueue_->pop(fake_data, queueTimeout_);
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& excpt) {
-      //ERS_INFO("FDC \"" << get_name() << "\" queue timeout on " << counter);
+      // ERS_INFO("FDC \"" << get_name() << "\" queue timeout on " << counter);
       ++timeout_count;
       continue;
     }
 
-    if(prev_fake_count != -1 && (fake_data.fake_count != prev_fake_count+1)){
-      ERS_INFO("Got fake_count " << fake_data.fake_count << " when expecting " << (prev_fake_count+1));
+    if (prev_fake_count != -1 && (fake_data.fake_count != prev_fake_count + 1)) {
+      ERS_INFO("Got fake_count " << fake_data.fake_count << " when expecting " << (prev_fake_count + 1));
       ++fail_count;
     }
     counter++;
   }
-  
-  oss << ": Processed " << counter << " objects with " << fail_count << " failures and " << timeout_count << " timeouts";
+
+  oss << ": Processed " << counter << " objects with " << fail_count << " failures and " << timeout_count
+      << " timeouts";
   ers::info(ConsumerProgressUpdate(ERS_HERE, get_name(), oss.str()));
 }
 

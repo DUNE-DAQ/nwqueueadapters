@@ -38,16 +38,12 @@ public:
    */
   explicit FakeDataConsumer(const std::string& name);
 
-  FakeDataConsumer(const FakeDataConsumer&) =
-    delete; ///< FakeDataConsumer is not copy-constructible
-  FakeDataConsumer& operator=(const FakeDataConsumer&) =
-    delete; ///< FakeDataConsumer is not copy-assignable
-  FakeDataConsumer(FakeDataConsumer&&) =
-    delete; ///< FakeDataConsumer is not move-constructible
-  FakeDataConsumer& operator=(FakeDataConsumer&&) =
-    delete; ///< FakeDataConsumer is not move-assignable
+  FakeDataConsumer(const FakeDataConsumer&) = delete;            ///< FakeDataConsumer is not copy-constructible
+  FakeDataConsumer& operator=(const FakeDataConsumer&) = delete; ///< FakeDataConsumer is not copy-assignable
+  FakeDataConsumer(FakeDataConsumer&&) = delete;                 ///< FakeDataConsumer is not move-constructible
+  FakeDataConsumer& operator=(FakeDataConsumer&&) = delete;      ///< FakeDataConsumer is not move-assignable
 
-  void init(const nlohmann::json& ) override;
+  void init(const nlohmann::json&) override;
 
 private:
   // Commands

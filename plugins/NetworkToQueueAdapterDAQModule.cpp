@@ -1,5 +1,5 @@
 /**
- * 
+ *
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
@@ -23,29 +23,28 @@ NetworkToQueueAdapterDAQModule::NetworkToQueueAdapterDAQModule(const std::string
   , thread_(std::bind(&NetworkToQueueAdapterDAQModule::do_work, this, std::placeholders::_1))
   , impl_(nullptr)
 {
-  register_command("conf",      &NetworkToQueueAdapterDAQModule::do_configure);
-  register_command("start",     &NetworkToQueueAdapterDAQModule::do_start);
-  register_command("stop",      &NetworkToQueueAdapterDAQModule::do_stop);
+  register_command("conf", &NetworkToQueueAdapterDAQModule::do_configure);
+  register_command("start", &NetworkToQueueAdapterDAQModule::do_start);
+  register_command("stop", &NetworkToQueueAdapterDAQModule::do_stop);
 }
 
 void
 NetworkToQueueAdapterDAQModule::init(const data_t& init_data)
 {
-  auto mod_init_data=init_data.get<appfwk::cmd::ModInit>();
-  std::string msg_type_name=init_data.at("msg_type");
-  std::string msg_module_name=init_data.at("msg_module_name");
-  auto receiver_conf=init_data.at("receiver_config").get<dunedaq::serialization::networkobjectreceiver::Conf>();
+  auto mod_init_data = init_data.get<appfwk::cmd::ModInit>();
+  std::string msg_type_name = init_data.at("msg_type");
+  std::string msg_module_name = init_data.at("msg_module_name");
+  auto receiver_conf = init_data.at("receiver_config").get<dunedaq::serialization::networkobjectreceiver::Conf>();
 
-  impl_=makeNetworkToQueueBase(msg_module_name, msg_type_name, mod_init_data, receiver_conf);
-  if(impl_.get()==nullptr){
+  impl_ = makeNetworkToQueueBase(msg_module_name, msg_type_name, mod_init_data, receiver_conf);
+  if (impl_.get() == nullptr) {
     throw std::runtime_error("No NToQ for requested msg_type");
   }
 }
 
 void
 NetworkToQueueAdapterDAQModule::do_configure(const data_t& /* config_data */)
-{
-}
+{}
 
 void
 NetworkToQueueAdapterDAQModule::do_start(const data_t& /*args*/)
@@ -62,13 +61,12 @@ NetworkToQueueAdapterDAQModule::do_stop(const data_t& /*args*/)
 void
 NetworkToQueueAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
 {
-  static int recv_counter=0;
+  static int recv_counter = 0;
   while (running_flag.load()) {
-    try{
+    try {
       impl_->push();
       ++recv_counter;
-    }
-    catch(ipm::ReceiveTimeoutExpired&){
+    } catch (ipm::ReceiveTimeoutExpired&) {
       // It's not a problem if the receive times out
       continue;
     }
@@ -78,4 +76,3 @@ NetworkToQueueAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
 
 DEFINE_DUNE_DAQ_MODULE(NetworkToQueueAdapterDAQModule)
 } // namespace dunedaq
-

@@ -19,7 +19,7 @@
 #include "appfwk/DAQSink.hpp"
 #include "appfwk/ThreadHelper.hpp"
 
-// Our command structures.  
+// Our command structures.
 #include "networkqueue/fakedataproducer/Structs.hpp"
 #include "networkqueue/fsd/Structs.hpp"
 
@@ -38,16 +38,12 @@ public:
    */
   explicit FakeDataProducer(const std::string& name);
 
-  FakeDataProducer(const FakeDataProducer&) =
-    delete; ///< FakeDataProducer is not copy-constructible
-  FakeDataProducer& operator=(const FakeDataProducer&) =
-    delete; ///< FakeDataProducer is not copy-assignable
-  FakeDataProducer(FakeDataProducer&&) =
-    delete; ///< FakeDataProducer is not move-constructible
-  FakeDataProducer& operator=(FakeDataProducer&&) =
-    delete; ///< FakeDataProducer is not move-assignable
+  FakeDataProducer(const FakeDataProducer&) = delete;            ///< FakeDataProducer is not copy-constructible
+  FakeDataProducer& operator=(const FakeDataProducer&) = delete; ///< FakeDataProducer is not copy-assignable
+  FakeDataProducer(FakeDataProducer&&) = delete;                 ///< FakeDataProducer is not move-constructible
+  FakeDataProducer& operator=(FakeDataProducer&&) = delete;      ///< FakeDataProducer is not move-assignable
 
-  void init(const nlohmann::json& ) override;
+  void init(const nlohmann::json&) override;
 
 private:
   // Commands
