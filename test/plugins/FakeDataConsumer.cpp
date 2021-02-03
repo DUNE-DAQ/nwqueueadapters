@@ -102,7 +102,7 @@ FakeDataConsumer::do_work(std::atomic<bool>& running_flag)
   ers::info(ConsumerProgressUpdate(ERS_HERE, get_name(), oss.str()));
 }
 
-} // namespace dunedaq::appfwk
+} // namespace dunedaq::networkqueue
 
 DEFINE_DUNE_DAQ_MODULE(dunedaq::networkqueue::FakeDataConsumer)
 

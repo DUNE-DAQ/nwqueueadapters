@@ -1,3 +1,13 @@
+/**
+ * @file NetworkQueueMacros.hpp
+ *
+ * Macros to make a type usable with the networkqueue modules
+ *
+ * This is part of the DUNE DAQ Application Framework, copyright 2020.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
+
 #ifndef NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKQUEUEMACROS_HPP_
 #define NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKQUEUEMACROS_HPP_
 

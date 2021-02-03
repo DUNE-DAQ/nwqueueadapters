@@ -9,8 +9,8 @@
  * received with this code.
  */
 
-#ifndef APPFWK_TEST_FAKEDATACONSUMERDAQMODULE_HPP_
-#define APPFWK_TEST_FAKEDATACONSUMERDAQMODULE_HPP_
+#ifndef NETWORKQUEUE_TEST_PLUGINS_FAKEDATACONSUMER_HPP_
+#define NETWORKQUEUE_TEST_PLUGINS_FAKEDATACONSUMER_HPP_
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSource.hpp"
@@ -71,4 +71,4 @@ ERS_DECLARE_ISSUE_BASE(networkqueue,
                        ((std::string)message))
 } // namespace dunedaq
 
-#endif // APPFWK_TEST_FAKEDATACONSUMERDAQMODULE_HPP_
+#endif // NETWORKQUEUE_TEST_PLUGINS_FAKEDATACONSUMER_HPP_

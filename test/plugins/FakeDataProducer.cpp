@@ -83,7 +83,7 @@ FakeDataProducer::do_work(std::atomic<bool>& running_flag)
 
   while (running_flag.load()) {
     TLOG(TLVL_TRACE) << get_name() << ": Creating output vector";
-    fsd::FakeData output{ current_int++ };
+    fsd::FakeData output{ current_int++ }; // NOLINT
     oss << "Produced vector " << counter << " with contents " << current_int;
     ers::debug(ProducerProgressUpdate(ERS_HERE, get_name(), oss.str()));
     oss.str("");
