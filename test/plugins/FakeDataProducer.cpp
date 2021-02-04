@@ -10,6 +10,8 @@
 #include "FakeDataProducer.hpp"
 
 #include "appfwk/cmd/Nljs.hpp"
+#include "appfwk/DAQModuleHelper.hpp"
+
 #include "networkqueue/fakedataproducer/Nljs.hpp"
 #include "networkqueue/fsd/MsgP.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
@@ -44,13 +46,8 @@ FakeDataProducer::FakeDataProducer(const std::string& name)
 void
 FakeDataProducer::init(const nlohmann::json& init_data)
 {
-  auto ini = init_data.get<dunedaq::appfwk::cmd::ModInit>();
-  for (const auto& qi : ini.qinfos) {
-    if (qi.name == "output") {
-      ERS_INFO("FDP: output queue is " << qi.inst);
-      outputQueue_.reset(new dunedaq::appfwk::DAQSink<fsd::FakeData>(qi.inst));
-    }
-  }
+  auto qindex=appfwk::queue_index(init_data, {"output"});
+  outputQueue_.reset(new dunedaq::appfwk::DAQSink<fsd::FakeData>(qindex["output"].inst));
 }
 
 void

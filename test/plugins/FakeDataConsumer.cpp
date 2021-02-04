@@ -10,6 +10,8 @@
 #include "FakeDataConsumer.hpp"
 
 #include "appfwk/cmd/Nljs.hpp"
+#include "appfwk/DAQModuleHelper.hpp"
+
 #include "networkqueue/fakedataconsumer/Nljs.hpp"
 #include "networkqueue/fsd/MsgP.hpp"
 #include "networkqueue/fsd/Nljs.hpp"
@@ -41,13 +43,8 @@ FakeDataConsumer::FakeDataConsumer(const std::string& name)
 void
 FakeDataConsumer::init(const nlohmann::json& init_data)
 {
-  auto ini = init_data.get<dunedaq::appfwk::cmd::ModInit>();
-  for (const auto& qi : ini.qinfos) {
-    if (qi.name == "input") {
-      ERS_INFO("FDP: input queue is " << qi.inst);
-      inputQueue_.reset(new dunedaq::appfwk::DAQSource<fsd::FakeData>(qi.inst));
-    }
-  }
+  auto qindex=appfwk::queue_index(init_data, {"input"});
+  inputQueue_.reset(new dunedaq::appfwk::DAQSource<fsd::FakeData>(qindex["input"].inst));
 }
 
 void
