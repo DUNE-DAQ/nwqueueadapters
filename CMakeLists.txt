@@ -24,8 +24,8 @@ daq_add_library(LINK_LIBRARIES ipm::ipm serialization::serialization)
 daq_add_plugin( FakeDataConsumer duneDAQModule SCHEMA TEST LINK_LIBRARIES networkqueue )
 daq_add_plugin( FakeDataProducer duneDAQModule SCHEMA TEST LINK_LIBRARIES networkqueue )
 
-daq_add_plugin( QueueToNetworkAdapterDAQModule duneDAQModule LINK_LIBRARIES networkqueue )
-daq_add_plugin( NetworkToQueueAdapterDAQModule duneDAQModule LINK_LIBRARIES networkqueue )
+daq_add_plugin( QueueToNetworkAdapterDAQModule duneDAQModule SCHEMA LINK_LIBRARIES networkqueue)
+daq_add_plugin( NetworkToQueueAdapterDAQModule duneDAQModule SCHEMA LINK_LIBRARIES networkqueue )
 
 daq_add_plugin( FakeData duneNetworkQueue TEST LINK_LIBRARIES networkqueue )
 

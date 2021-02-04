@@ -43,11 +43,11 @@
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
   std::unique_ptr<dunedaq::QueueToNetworkBase> makeQToN(                                                               \
     std::string const& plugin_name,                                                                                    \
-    const dunedaq::appfwk::cmd::ModInit& mod_init_data,                                                                \
+    const std::string queue_instance,                                                                                  \
     const dunedaq::serialization::networkobjectsender::Conf& sender_conf)                                              \
   {                                                                                                                    \
     if (plugin_name == #klass)                                                                                         \
-      return std::make_unique<dunedaq::QueueToNetworkImpl<klass>>(mod_init_data, sender_conf);                         \
+      return std::make_unique<dunedaq::QueueToNetworkImpl<klass>>(queue_instance, sender_conf);                        \
     else                                                                                                               \
       return nullptr;                                                                                                  \
   }                                                                                                                    \
@@ -92,15 +92,11 @@ template<typename MsgType>
 class QueueToNetworkImpl : public QueueToNetworkBase
 {
 public:
-  QueueToNetworkImpl(const appfwk::cmd::ModInit& mod_init_data,
+  QueueToNetworkImpl(const std::string queue_instance,
                      const dunedaq::serialization::networkobjectsender::Conf& sender_conf)
     : sender_(sender_conf)
   {
-    for (const auto& qi : mod_init_data.qinfos) {
-      if (qi.name == "input") {
-        inputQueue_.reset(new appfwk::DAQSource<MsgType>(qi.inst));
-      }
-    }
+    inputQueue_.reset(new appfwk::DAQSource<MsgType>(queue_instance));
   }
 
   /**
@@ -157,17 +153,19 @@ private:
   void do_work(std::atomic<bool>& running_flag);
   appfwk::ThreadHelper thread_;
 
+  std::string queue_instance_;
+  
   std::unique_ptr<QueueToNetworkBase> impl_;
 };
 
 std::unique_ptr<QueueToNetworkBase>
 makeQueueToNetworkBase(std::string const& module_name,
                        std::string const& plugin_name,
-                       const appfwk::cmd::ModInit& mod_init_data,
+                       const std::string queue_instance,
                        const dunedaq::serialization::networkobjectsender::Conf& sender_conf)
 {
   static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeQToN");
-  return bpf.makePlugin<std::unique_ptr<QueueToNetworkBase>>(module_name, plugin_name, mod_init_data, sender_conf);
+  return bpf.makePlugin<std::unique_ptr<QueueToNetworkBase>>(module_name, plugin_name, queue_instance, sender_conf);
 }
 
 } // namespace dunedaq

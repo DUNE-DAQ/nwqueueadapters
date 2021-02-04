@@ -12,9 +12,10 @@
 #include <string>
 #include <vector>
 
-#include "appfwk/cmd/Nljs.hpp"
+#include "appfwk/DAQModuleHelper.hpp"
 
-// #include "networkqueue/fsd/NToQMaker.hpp"
+#include "serialization/networkobjectreceiver/Nljs.hpp"
+#include "networkqueue/networktoqueueadapterdaqmodule/Nljs.hpp"
 
 namespace dunedaq {
 
@@ -31,20 +32,20 @@ NetworkToQueueAdapterDAQModule::NetworkToQueueAdapterDAQModule(const std::string
 void
 NetworkToQueueAdapterDAQModule::init(const data_t& init_data)
 {
-  auto mod_init_data = init_data.get<appfwk::cmd::ModInit>();
-  std::string msg_type_name = init_data.at("msg_type");
-  std::string msg_module_name = init_data.at("msg_module_name");
-  auto receiver_conf = init_data.at("receiver_config").get<dunedaq::serialization::networkobjectreceiver::Conf>();
+  queue_instance_ = dunedaq::appfwk::queue_index(init_data, {"output"})["output"].inst;
+}
 
-  impl_ = makeNetworkToQueueBase(msg_module_name, msg_type_name, mod_init_data, receiver_conf);
+void
+NetworkToQueueAdapterDAQModule::do_configure(const data_t& config_data)
+{
+  auto conf = config_data.get<dunedaq::networkqueue::networktoqueueadapterdaqmodule::Conf>();
+  auto receiver_conf = conf.receiver_config.get<dunedaq::serialization::networkobjectreceiver::Conf>();
+
+  impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, receiver_conf);
   if (impl_.get() == nullptr) {
     throw std::runtime_error("No NToQ for requested msg_type");
   }
 }
-
-void
-NetworkToQueueAdapterDAQModule::do_configure(const data_t& /* config_data */)
-{}
 
 void
 NetworkToQueueAdapterDAQModule::do_start(const data_t& /*args*/)
