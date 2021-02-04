@@ -11,14 +11,14 @@ DUNE `DAQModule`s that connect `appfwk` queues to [IPM](https://github.com/DUNE-
 DEFINE_DUNE_NETWORKQUEUE(mynamespace::MyClass)
 ```
 
-Build the plugin with `daq_add_plugin(MyClass duneNetworkQueue LINK_LIBRARIES networkqueue)`. In the job configuration, pass the following parameters to NToQ/QToN at init time:
+Build the plugin with `daq_add_plugin(MyClass duneNetworkQueue LINK_LIBRARIES networkqueue)`. In the job configuration, pass the following parameters to NToQ/QToN at conf time:
 
 ```json
 "msg_type": "mynamespace::MyClass",
 "msg_module_name": "MyClass",
 ```
 
-The "msg_type" should match the argument to `DEFINE_DUNE_NETWORKQUEUE()` and "msg_module_name" should match the plugin name in `daq_add_plugin()`. For an actual example, see [`FakeData.cpp`](./test/plugins/FakeData.cpp).
+The "msg_type" should match the argument to `DEFINE_DUNE_NETWORKQUEUE()` and "msg_module_name" should match the plugin name in `daq_add_plugin()`. For an actual example, see [`FakeData.cpp`](./test/plugins/FakeData.cpp). The queue which is the input/output to QToN/NToQ should be passed at init time in the usual way, with name "input"/"output" as appropriate. A full job configuration example can be found in the python directory.
 
 ## Design and implementation
 
