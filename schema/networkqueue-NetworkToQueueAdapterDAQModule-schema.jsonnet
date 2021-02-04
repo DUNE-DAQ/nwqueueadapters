@@ -13,7 +13,7 @@ local s = moo.oschema.schema(ns);
 
 // Object structure used by the test/fake producer module
 local ntoq = {
-  name: s.string("Name", moo.re.ident_only,
+  name: s.string("Name", ".*",
     doc="Name of a plugin etc"),
 
   any: s.any("Data", doc="Any"),
