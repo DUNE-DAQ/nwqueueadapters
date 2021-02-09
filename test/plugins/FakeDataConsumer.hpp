@@ -2,7 +2,7 @@
  * @file FakeDataConsumer.hpp
  *
  * FakeDataConsumer is a simple DAQModule implementation that receives FakeData objects produced by
- * FakeSerializableDataProducerDAQModule. It is intended for testing NetworkToQueueAdapterDAQModule
+ * FakeSerializableDataProducerDAQModule. It is intended for testing NetworkToQueue
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have

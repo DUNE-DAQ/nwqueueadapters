@@ -6,7 +6,7 @@
  * received with this code.
  */
 
-#include "networkqueue/NetworkToQueueAdapterDAQModule.hpp"
+#include "networkqueue/NetworkToQueue.hpp"
 
 #include <chrono>
 #include <string>
@@ -15,30 +15,30 @@
 #include "appfwk/DAQModuleHelper.hpp"
 
 #include "serialization/networkobjectreceiver/Nljs.hpp"
-#include "networkqueue/networktoqueueadapterdaqmodule/Nljs.hpp"
+#include "networkqueue/networktoqueue/Nljs.hpp"
 
 namespace dunedaq {
 
-NetworkToQueueAdapterDAQModule::NetworkToQueueAdapterDAQModule(const std::string& name)
+NetworkToQueue::NetworkToQueue(const std::string& name)
   : appfwk::DAQModule(name)
-  , thread_(std::bind(&NetworkToQueueAdapterDAQModule::do_work, this, std::placeholders::_1))
+  , thread_(std::bind(&NetworkToQueue::do_work, this, std::placeholders::_1))
   , impl_(nullptr)
 {
-  register_command("conf", &NetworkToQueueAdapterDAQModule::do_configure);
-  register_command("start", &NetworkToQueueAdapterDAQModule::do_start);
-  register_command("stop", &NetworkToQueueAdapterDAQModule::do_stop);
+  register_command("conf", &NetworkToQueue::do_configure);
+  register_command("start", &NetworkToQueue::do_start);
+  register_command("stop", &NetworkToQueue::do_stop);
 }
 
 void
-NetworkToQueueAdapterDAQModule::init(const data_t& init_data)
+NetworkToQueue::init(const data_t& init_data)
 {
   queue_instance_ = dunedaq::appfwk::queue_index(init_data, {"output"})["output"].inst;
 }
 
 void
-NetworkToQueueAdapterDAQModule::do_configure(const data_t& config_data)
+NetworkToQueue::do_configure(const data_t& config_data)
 {
-  auto conf = config_data.get<dunedaq::networkqueue::networktoqueueadapterdaqmodule::Conf>();
+  auto conf = config_data.get<dunedaq::networkqueue::networktoqueue::Conf>();
   auto receiver_conf = conf.receiver_config.get<dunedaq::serialization::networkobjectreceiver::Conf>();
 
   impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, receiver_conf);
@@ -48,19 +48,19 @@ NetworkToQueueAdapterDAQModule::do_configure(const data_t& config_data)
 }
 
 void
-NetworkToQueueAdapterDAQModule::do_start(const data_t& /*args*/)
+NetworkToQueue::do_start(const data_t& /*args*/)
 {
   thread_.start_working_thread();
 }
 
 void
-NetworkToQueueAdapterDAQModule::do_stop(const data_t& /*args*/)
+NetworkToQueue::do_stop(const data_t& /*args*/)
 {
   thread_.stop_working_thread();
 }
 
 void
-NetworkToQueueAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
+NetworkToQueue::do_work(std::atomic<bool>& running_flag)
 {
   static int recv_counter = 0;
   while (running_flag.load()) {
@@ -75,5 +75,5 @@ NetworkToQueueAdapterDAQModule::do_work(std::atomic<bool>& running_flag)
   ERS_INFO("Did " << recv_counter << " receives");
 }
 
-DEFINE_DUNE_DAQ_MODULE(NetworkToQueueAdapterDAQModule)
+DEFINE_DUNE_DAQ_MODULE(NetworkToQueue)
 } // namespace dunedaq

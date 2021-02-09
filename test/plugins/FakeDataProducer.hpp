@@ -4,7 +4,7 @@
  * FakeDataProducer, based on
  * FakeDataProducerDAQModule from appfwk, pushes
  * networkqueue::fsd::FakeData objects onto a queue. It exists to
- * allow testing of QueueToNetworkAdapterDAQModule, which takes the
+ * allow testing of QueueToNetwork, which takes the
  * FakeData items off the queue and serializes them onto the network
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
