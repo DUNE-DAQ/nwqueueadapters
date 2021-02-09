@@ -8,8 +8,8 @@
  * received with this code.
  */
 
-#ifndef NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUEADAPTERDAQMODULE_HPP_
-#define NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUEADAPTERDAQMODULE_HPP_
+#ifndef NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_
+#define NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
@@ -81,7 +81,7 @@ private:
 };
 
 /**
- * @brief NetworkToQueueAdapterDAQModule connects an incoming IPM
+ * @brief NetworkToQueue connects an incoming IPM
  * receiver to an app framework queue, transparently to users of the
  * queue
  *
@@ -91,23 +91,23 @@ private:
  * but as the configuration parameter @c msg_type, which must be
  * specified in the init command of the module
  */
-class NetworkToQueueAdapterDAQModule : public appfwk::DAQModule
+class NetworkToQueue : public appfwk::DAQModule
 {
 public:
   /**
-   * @brief NetworkToQueueAdapterDAQModule Constructor
-   * @param name Instance name for this NetworkToQueueAdapterDAQModule instance
+   * @brief NetworkToQueue Constructor
+   * @param name Instance name for this NetworkToQueue instance
    */
-  explicit NetworkToQueueAdapterDAQModule(const std::string& name);
+  explicit NetworkToQueue(const std::string& name);
 
-  NetworkToQueueAdapterDAQModule(const NetworkToQueueAdapterDAQModule&) =
-    delete; ///< NetworkToQueueAdapterDAQModule is not copy-constructible
-  NetworkToQueueAdapterDAQModule& operator=(const NetworkToQueueAdapterDAQModule&) =
-    delete; ///< NetworkToQueueAdapterDAQModule is not copy-assignable
-  NetworkToQueueAdapterDAQModule(NetworkToQueueAdapterDAQModule&&) =
-    delete; ///< NetworkToQueueAdapterDAQModule is not move-constructible
-  NetworkToQueueAdapterDAQModule& operator=(NetworkToQueueAdapterDAQModule&&) =
-    delete; ///< NetworkToQueueAdapterDAQModule is not move-assignable
+  NetworkToQueue(const NetworkToQueue&) =
+    delete; ///< NetworkToQueue is not copy-constructible
+  NetworkToQueue& operator=(const NetworkToQueue&) =
+    delete; ///< NetworkToQueue is not copy-assignable
+  NetworkToQueue(NetworkToQueue&&) =
+    delete; ///< NetworkToQueue is not move-constructible
+  NetworkToQueue& operator=(NetworkToQueue&&) =
+    delete; ///< NetworkToQueue is not move-assignable
 
   void init(const data_t&) override;
 
@@ -138,4 +138,4 @@ makeNetworkToQueueBase(std::string const& module_name,
 
 } // namespace dunedaq
 
-#endif // NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUEADAPTERDAQMODULE_HPP_
+#endif // NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_

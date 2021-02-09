@@ -11,8 +11,8 @@
 #ifndef NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKQUEUEMACROS_HPP_
 #define NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKQUEUEMACROS_HPP_
 
-#include "networkqueue/NetworkToQueueAdapterDAQModule.hpp"
-#include "networkqueue/QueueToNetworkAdapterDAQModule.hpp"
+#include "networkqueue/NetworkToQueue.hpp"
+#include "networkqueue/QueueToNetwork.hpp"
 
 #define DEFINE_DUNE_NETWORKQUEUE(klass)                                                                                \
   DEFINE_DUNE_QUEUE_TO_NETWORK(klass)                                                                                  \

@@ -4,15 +4,15 @@
  *
  * This file exists to generate the code needed to make
  * dunedaq::networkqueue::fsd::FakeData usable in
- * QueueToNetworkAdapterDAQModule and
- * NetworkToQueueAdapterDAQModule. It has to be compiled with
+ * QueueToNetwork and
+ * NetworkToQueue. It has to be compiled with
  * daq_add_plugin() in the CMakeLists.txt, with a line like this:
  *
  *    daq_add_plugin( FakeData duneNetworkQueue TEST LINK_LIBRARIES networkqueue )
  *
  * The generated plugin is used inside a
- * QueueToNetworkAdapterDAQModule or
- * NetworkToQueueAdapterDAQModule. Pass these parameters
+ * QueueToNetwork or
+ * NetworkToQueue. Pass these parameters
  * to that module at init time:
  *
  *     "msg_type": "dunedaq::networkqueue::fsd::FakeData",
