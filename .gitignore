@@ -1,5 +1,5 @@
-src/networkqueue/networktoqueueadapterdaqmodule
-src/networkqueue/queuetonetworkadapterdaqmodule
+src/networkqueue/networktoqueue
+src/networkqueue/queuetonetwork
 test/src/networkqueue/fakedataconsumer
 test/src/networkqueue/fakedataproducer
 python/networkqueue-fake-data-consumer-job.json
