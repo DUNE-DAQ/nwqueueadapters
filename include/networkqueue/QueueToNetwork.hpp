@@ -111,7 +111,7 @@ public:
 
 private:
   std::unique_ptr<appfwk::DAQSource<MsgType>> inputQueue_;
-  NetworkObjectSender<MsgType> sender_;
+  dunedaq::serialization::NetworkObjectSender<MsgType> sender_;
 };
 
 /**

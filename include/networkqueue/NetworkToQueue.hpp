@@ -77,7 +77,7 @@ public:
 
 private:
   std::unique_ptr<appfwk::DAQSink<T>> outputQueue_;
-  NetworkObjectReceiver<T> receiver_;
+  dunedaq::serialization::NetworkObjectReceiver<T> receiver_;
 };
 
 /**
