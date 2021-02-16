@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "appfwk/DAQModuleHelper.hpp"
+#include "logging/Logging.hpp"
 
 #include "serialization/networkobjectreceiver/Nljs.hpp"
 #include "networkqueue/networktoqueue/Nljs.hpp"
@@ -72,7 +73,8 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
       continue;
     }
   }
-  ERS_INFO("Did " << recv_counter << " receives");
+  ers::info( ers::Message(ERS_HERE,"Did "
+                          +std::to_string(recv_counter)+" receives"));
 }
 
 DEFINE_DUNE_DAQ_MODULE(NetworkToQueue)
