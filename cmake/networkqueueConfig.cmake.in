@@ -6,6 +6,7 @@ include(CMakeFindDependencyMacro)
 find_dependency(appfwk)
 find_dependency(ipm)
 find_dependency(serialization)
+find_dependency(nlohmann_json)
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/@PROJECT_NAME@)
 
