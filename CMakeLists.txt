@@ -10,6 +10,8 @@ find_package(ipm REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(serialization REQUIRED)
 
+daq_codegen_schema(*.jsonnet TEMPL Structs.hpp Nljs.hpp )
+
 ##############################################################################
 # Main library
 
