@@ -8,7 +8,7 @@
 local moo = import "moo.jsonnet";
 
 // A schema builder in the given path (namespace)
-local ns = "dunedaq.networkqueue.fakedataproducer";
+local ns = "dunedaq.nwqueueadapters.fakedataproducer";
 local s = moo.oschema.schema(ns);
 
 // Object structure used by the test/fake producer module

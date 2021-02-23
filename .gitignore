@@ -1,6 +1,6 @@
-src/networkqueue/networktoqueue
-src/networkqueue/queuetonetwork
-test/src/networkqueue/fakedataconsumer
-test/src/networkqueue/fakedataproducer
-python/networkqueue-fake-data-consumer-job.json
-python/networkqueue-fake-data-producer-job.json
+src/nwqueueadapters/networktoqueue
+src/nwqueueadapters/queuetonetwork
+test/src/nwqueueadapters/fakedataconsumer
+test/src/nwqueueadapters/fakedataproducer
+python/nwqueueadapters-fake-data-consumer-job.json
+python/nwqueueadapters-fake-data-producer-job.json

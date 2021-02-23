@@ -12,9 +12,9 @@
 #include "appfwk/cmd/Nljs.hpp"
 #include "appfwk/DAQModuleHelper.hpp"
 
-#include "networkqueue/fakedataproducer/Nljs.hpp"
-#include "networkqueue/fsd/MsgP.hpp"
-#include "networkqueue/fsd/Nljs.hpp"
+#include "nwqueueadapters/fakedataproducer/Nljs.hpp"
+#include "nwqueueadapters/fsd/MsgP.hpp"
+#include "nwqueueadapters/fsd/Nljs.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -30,7 +30,7 @@
 #define TRACE_NAME "FakeDataProducer" // NOLINT
 
 namespace dunedaq {
-namespace networkqueue {
+namespace nwqueueadapters {
 
 FakeDataProducer::FakeDataProducer(const std::string& name)
   : DAQModule(name)
@@ -101,10 +101,10 @@ FakeDataProducer::do_work(std::atomic<bool>& running_flag)
   }
 }
 
-} // namespace networkqueue
+} // namespace nwqueueadapters
 } // namespace dunedaq
 
-DEFINE_DUNE_DAQ_MODULE(dunedaq::networkqueue::FakeDataProducer)
+DEFINE_DUNE_DAQ_MODULE(dunedaq::nwqueueadapters::FakeDataProducer)
 
 // Local Variables:
 // c-basic-offset: 2

@@ -2,23 +2,23 @@
  * This file is 100% generated.  Any manual edits will likely be lost.
  *
  * This contains functions struct and other type definitions for shema in 
- * namespace dunedaq::networkqueue::fsd to be serialized via nlohmann::json.
+ * namespace dunedaq::nwqueueadapters::fsd to be serialized via nlohmann::json.
  */
-#ifndef DUNEDAQ_NETWORKQUEUE_FSD_NLJS_HPP
-#define DUNEDAQ_NETWORKQUEUE_FSD_NLJS_HPP
+#ifndef DUNEDAQ_NWQUEUEADAPTERS_FSD_NLJS_HPP
+#define DUNEDAQ_NWQUEUEADAPTERS_FSD_NLJS_HPP
 
 // My structs
-#include "networkqueue/fsd/Structs.hpp"
+#include "nwqueueadapters/fsd/Structs.hpp"
 
 
 #include <nlohmann/json.hpp>
 
-namespace dunedaq::networkqueue::fsd {
+namespace dunedaq::nwqueueadapters::fsd {
 
     using data_t = nlohmann::json;    NLOHMANN_JSON_SERIALIZE_ENUM( Fakeness, {
-            { dunedaq::networkqueue::fsd::Fakeness::Unknown, "Unknown" },
-            { dunedaq::networkqueue::fsd::Fakeness::Fake, "Fake" },
-            { dunedaq::networkqueue::fsd::Fakeness::SuperFake, "SuperFake" },
+            { dunedaq::nwqueueadapters::fsd::Fakeness::Unknown, "Unknown" },
+            { dunedaq::nwqueueadapters::fsd::Fakeness::Fake, "Fake" },
+            { dunedaq::nwqueueadapters::fsd::Fakeness::SuperFake, "SuperFake" },
         })
 
     
@@ -49,6 +49,6 @@ namespace dunedaq::networkqueue::fsd {
             j.at("fakeness").get_to(obj.fakeness);    
     }
     
-} // namespace dunedaq::networkqueue::fsd
+} // namespace dunedaq::nwqueueadapters::fsd
 
-#endif // DUNEDAQ_NETWORKQUEUE_FSD_NLJS_HPP
+#endif // DUNEDAQ_NWQUEUEADAPTERS_FSD_NLJS_HPP

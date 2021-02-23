@@ -2,16 +2,16 @@
  * This file is 100% generated.  Any manual edits will likely be lost.
  *
  * This contains struct and other type definitions for shema in 
- * namespace dunedaq::networkqueue::fsd.
+ * namespace dunedaq::nwqueueadapters::fsd.
  */
-#ifndef DUNEDAQ_NETWORKQUEUE_FSD_STRUCTS_HPP
-#define DUNEDAQ_NETWORKQUEUE_FSD_STRUCTS_HPP
+#ifndef DUNEDAQ_NWQUEUEADAPTERS_FSD_STRUCTS_HPP
+#define DUNEDAQ_NWQUEUEADAPTERS_FSD_STRUCTS_HPP
 
 #include <cstdint>
 
 #include <vector>
 
-namespace dunedaq::networkqueue::fsd {
+namespace dunedaq::nwqueueadapters::fsd {
 
     // @brief A count of not too many things
     using Count = int32_t;
@@ -29,7 +29,7 @@ namespace dunedaq::networkqueue::fsd {
     };
 
     // @brief A sequence of FakeData
-    using FakeDatas = std::vector<dunedaq::networkqueue::fsd::FakeData>;
+    using FakeDatas = std::vector<dunedaq::nwqueueadapters::fsd::FakeData>;
 
     // @brief The amount of fakeness
     enum class Fakeness: unsigned {
@@ -66,9 +66,9 @@ namespace dunedaq::networkqueue::fsd {
         FakeDatas fake_datas = {};
 
         // @brief 
-        Fakeness fakeness = dunedaq::networkqueue::fsd::Fakeness::Unknown;
+        Fakeness fakeness = dunedaq::nwqueueadapters::fsd::Fakeness::Unknown;
     };
 
-} // namespace dunedaq::networkqueue::fsd
+} // namespace dunedaq::nwqueueadapters::fsd
 
-#endif // DUNEDAQ_NETWORKQUEUE_FSD_STRUCTS_HPP
+#endif // DUNEDAQ_NWQUEUEADAPTERS_FSD_STRUCTS_HPP
