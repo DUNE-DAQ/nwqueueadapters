@@ -41,19 +41,19 @@
  */
 #define DEFINE_DUNE_QUEUE_TO_NETWORK(klass)                                                                            \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::unique_ptr<dunedaq::QueueToNetworkBase> makeQToN(                                                               \
+  std::unique_ptr<dunedaq::networkqueue::QueueToNetworkBase> makeQToN(                                                 \
     std::string const& plugin_name,                                                                                    \
     const std::string queue_instance,                                                                                  \
     const dunedaq::serialization::networkobjectsender::Conf& sender_conf)                                              \
   {                                                                                                                    \
     if (plugin_name == #klass)                                                                                         \
-      return std::make_unique<dunedaq::QueueToNetworkImpl<klass>>(queue_instance, sender_conf);                        \
+      return std::make_unique<dunedaq::networkqueue::QueueToNetworkImpl<klass>>(queue_instance, sender_conf); \
     else                                                                                                               \
       return nullptr;                                                                                                  \
   }                                                                                                                    \
   }
 
-namespace dunedaq {
+namespace dunedaq::networkqueue {
 
 /**
  * @brief Base class for the queue-to-network implementation
@@ -168,6 +168,6 @@ makeQueueToNetworkBase(std::string const& module_name,
   return bpf.makePlugin<std::unique_ptr<QueueToNetworkBase>>(module_name, plugin_name, queue_instance, sender_conf);
 }
 
-} // namespace dunedaq
+} // namespace dunedaq::networkqueue
 
 #endif // NETWORKQUEUE_INCLUDE_NETWORKQUEUE_QUEUETONETWORK_HPP_

@@ -20,7 +20,7 @@
 #include "serialization/networkobjectsender/Nljs.hpp"
 #include "networkqueue/queuetonetwork/Nljs.hpp"
 
-namespace dunedaq {
+namespace dunedaq::networkqueue {
 
 QueueToNetwork::QueueToNetwork(const std::string& name)
   : appfwk::DAQModule(name)
@@ -79,4 +79,4 @@ QueueToNetwork::do_work(std::atomic<bool>& running_flag)
 }
 
 DEFINE_DUNE_DAQ_MODULE(QueueToNetwork)
-} // namespace dunedaq
+} // namespace dunedaq::networkqueue
