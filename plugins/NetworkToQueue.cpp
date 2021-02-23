@@ -6,7 +6,7 @@
  * received with this code.
  */
 
-#include "networkqueue/NetworkToQueue.hpp"
+#include "nwqueueadapters/NetworkToQueue.hpp"
 
 #include <chrono>
 #include <string>
@@ -15,9 +15,9 @@
 #include "appfwk/DAQModuleHelper.hpp"
 
 #include "serialization/networkobjectreceiver/Nljs.hpp"
-#include "networkqueue/networktoqueue/Nljs.hpp"
+#include "nwqueueadapters/networktoqueue/Nljs.hpp"
 
-namespace dunedaq::networkqueue {
+namespace dunedaq::nwqueueadapters {
 
 NetworkToQueue::NetworkToQueue(const std::string& name)
   : appfwk::DAQModule(name)
@@ -38,7 +38,7 @@ NetworkToQueue::init(const data_t& init_data)
 void
 NetworkToQueue::do_configure(const data_t& config_data)
 {
-  auto conf = config_data.get<dunedaq::networkqueue::networktoqueue::Conf>();
+  auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
   auto receiver_conf = conf.receiver_config.get<dunedaq::serialization::networkobjectreceiver::Conf>();
 
   impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, receiver_conf);
@@ -76,4 +76,4 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
 }
 
 DEFINE_DUNE_DAQ_MODULE(NetworkToQueue)
-} // namespace dunedaq::networkqueue
+} // namespace dunedaq::nwqueueadapters

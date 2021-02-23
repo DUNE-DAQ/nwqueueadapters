@@ -8,8 +8,8 @@
  * received with this code.
  */
 
-#ifndef NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_
-#define NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_
+#ifndef NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKTOQUEUE_HPP_
+#define NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKTOQUEUE_HPP_
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
@@ -39,19 +39,19 @@
  */
 #define DEFINE_DUNE_NETWORK_TO_QUEUE(klass)                                                                            \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::unique_ptr<dunedaq::networkqueue::NetworkToQueueBase> makeNToQ(                                                 \
+  std::unique_ptr<dunedaq::nwqueueadapters::NetworkToQueueBase> makeNToQ(                                                 \
     std::string const& plugin_name,                                                                                    \
     const std::string queue_instance,                                                                                  \
     const dunedaq::serialization::networkobjectreceiver::Conf& receiver_conf)                                          \
   {                                                                                                                    \
     if (plugin_name == #klass)                                                                                         \
-      return std::make_unique<dunedaq::networkqueue::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);        \
+      return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);        \
     else                                                                                                               \
       return nullptr;                                                                                                  \
   }                                                                                                                    \
   }
 
-namespace dunedaq::networkqueue {
+namespace dunedaq::nwqueueadapters {
 
 class NetworkToQueueBase
 {
@@ -136,6 +136,6 @@ makeNetworkToQueueBase(std::string const& module_name,
   return bpf.makePlugin<std::unique_ptr<NetworkToQueueBase>>(module_name, plugin_name, queue_instance, sender_conf);
 }
 
-} // namespace dunedaq::networkqueue
+} // namespace dunedaq::nwqueueadapters
 
-#endif // NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_
+#endif // NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKTOQUEUE_HPP_

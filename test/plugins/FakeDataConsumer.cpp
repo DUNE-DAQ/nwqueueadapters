@@ -12,9 +12,9 @@
 #include "appfwk/cmd/Nljs.hpp"
 #include "appfwk/DAQModuleHelper.hpp"
 
-#include "networkqueue/fakedataconsumer/Nljs.hpp"
-#include "networkqueue/fsd/MsgP.hpp"
-#include "networkqueue/fsd/Nljs.hpp"
+#include "nwqueueadapters/fakedataconsumer/Nljs.hpp"
+#include "nwqueueadapters/fsd/MsgP.hpp"
+#include "nwqueueadapters/fsd/Nljs.hpp"
 
 #include "TRACE/trace.h"
 #include <ers/ers.h>
@@ -28,7 +28,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq::networkqueue {
+namespace dunedaq::nwqueueadapters {
 
 FakeDataConsumer::FakeDataConsumer(const std::string& name)
   : DAQModule(name)
@@ -99,9 +99,9 @@ FakeDataConsumer::do_work(std::atomic<bool>& running_flag)
   ers::info(ConsumerProgressUpdate(ERS_HERE, get_name(), oss.str()));
 }
 
-} // namespace dunedaq::networkqueue
+} // namespace dunedaq::nwqueueadapters
 
-DEFINE_DUNE_DAQ_MODULE(dunedaq::networkqueue::FakeDataConsumer)
+DEFINE_DUNE_DAQ_MODULE(dunedaq::nwqueueadapters::FakeDataConsumer)
 
 // Local Variables:
 // c-basic-offset: 2

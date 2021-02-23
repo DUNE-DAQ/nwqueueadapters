@@ -6,14 +6,14 @@ moo.io.default_load_path = get_moo_model_path()
 # Load configuration types
 import moo.otypes
 moo.otypes.load_types('appfwk-cmd-schema.jsonnet')
-moo.otypes.load_types('networkqueue-QueueToNetworkAdapterDAQModule-schema.jsonnet')
-moo.otypes.load_types('networkqueue-FakeDataProducer-schema.jsonnet')
+moo.otypes.load_types('nwqueueadapters-QueueToNetworkAdapterDAQModule-schema.jsonnet')
+moo.otypes.load_types('nwqueueadapters-FakeDataProducer-schema.jsonnet')
 moo.otypes.load_types('serialization-NetworkObjectSender-schema.jsonnet')
 
 # Import new types
 import dunedaq.appfwk.cmd as cmd # AddressedCmd, 
-import dunedaq.networkqueue.queuetonetworkadapterdaqmodule as qton
-import dunedaq.networkqueue.fakedataproducer as fdp
+import dunedaq.nwqueueadapters.queuetonetworkadapterdaqmodule as qton
+import dunedaq.nwqueueadapters.fakedataproducer as fdp
 import dunedaq.serialization.networkobjectsender as nos
 
 from appfwk.utils import mcmd, mspec
@@ -54,7 +54,7 @@ def generate():
                                         queue_timeout_ms=100)
                         ),
                        
-                       ("qton", qton.Conf(msg_type="dunedaq::networkqueue::fsd::FakeData",
+                       ("qton", qton.Conf(msg_type="dunedaq::nwqueueadapters::fsd::FakeData",
                                           msg_module_name="FakeData",
                                           sender_config=nos.Conf(ipm_plugin_type="ZmqSender",
                                                                  address= "tcp://127.0.0.1:12345")
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     import click
 
     @click.command(context_settings=CONTEXT_SETTINGS)
-    @click.argument('json_file', type=click.Path(), default='networkqueue-fake-data-producer-job.json')
+    @click.argument('json_file', type=click.Path(), default='nwqueueadapters-fake-data-producer-job.json')
     def cli(json_file):
         """
           JSON_FILE: Input raw data file.

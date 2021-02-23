@@ -29,14 +29,14 @@
 #include "appfwk/cmd/Structs.hpp"
 #include "appfwk/cmd/Nljs.hpp"
 
-#include "networkqueue/NetworkToQueueAdapterDAQModule.hpp"
+#include "nwqueueadapters/NetworkToQueueAdapterDAQModule.hpp"
 #include "serialization/Serialization.hpp"
 #include "serialization/NetworkObjectReceiver.hpp"
 
 {# TODO: This should probably be the full namespace of the schema? #}
 namespace dunedaq{
 
-std::unique_ptr<NetworkToQueueBase> NetworkToQueueBaseMaker(std::string msg_type_name, const appfwk::cmd::ModInit& mod_init_data, const dunedaq::networkqueue::nor::Conf& receiver_conf)
+std::unique_ptr<NetworkToQueueBase> NetworkToQueueBaseMaker(std::string msg_type_name, const appfwk::cmd::ModInit& mod_init_data, const dunedaq::nwqueueadapters::nor::Conf& receiver_conf)
 {
 {% for fqn in model.byscn.record %}    
   {% set r = model.byref[fqn] %}

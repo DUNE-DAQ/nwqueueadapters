@@ -9,16 +9,16 @@
  * received with this code.
  */
 
-#ifndef NETWORKQUEUE_TEST_PLUGINS_FAKEDATACONSUMER_HPP_
-#define NETWORKQUEUE_TEST_PLUGINS_FAKEDATACONSUMER_HPP_
+#ifndef NWQUEUEADAPTERS_TEST_PLUGINS_FAKEDATACONSUMER_HPP_
+#define NWQUEUEADAPTERS_TEST_PLUGINS_FAKEDATACONSUMER_HPP_
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSource.hpp"
 #include "appfwk/ThreadHelper.hpp"
 
 // Our command data structures
-#include "networkqueue/fakedataconsumer/Nljs.hpp"
-#include "networkqueue/fsd/Structs.hpp"
+#include "nwqueueadapters/fakedataconsumer/Nljs.hpp"
+#include "nwqueueadapters/fsd/Structs.hpp"
 
 #include <ers/Issue.h>
 
@@ -27,7 +27,7 @@
 #include <vector>
 
 namespace dunedaq {
-namespace networkqueue {
+namespace nwqueueadapters {
 
 class FakeDataConsumer : public dunedaq::appfwk::DAQModule
 {
@@ -63,7 +63,7 @@ private:
 };
 
 } // namespace appfwk
-ERS_DECLARE_ISSUE_BASE(networkqueue,
+ERS_DECLARE_ISSUE_BASE(nwqueueadapters,
                        ConsumerProgressUpdate,
                        appfwk::GeneralDAQModuleIssue,
                        message,
@@ -71,4 +71,4 @@ ERS_DECLARE_ISSUE_BASE(networkqueue,
                        ((std::string)message))
 } // namespace dunedaq
 
-#endif // NETWORKQUEUE_TEST_PLUGINS_FAKEDATACONSUMER_HPP_
+#endif // NWQUEUEADAPTERS_TEST_PLUGINS_FAKEDATACONSUMER_HPP_
