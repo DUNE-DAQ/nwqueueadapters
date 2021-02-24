@@ -11,6 +11,11 @@ find_package(nlohmann_json REQUIRED)
 find_package(serialization REQUIRED)
 
 ##############################################################################
+# Schema
+
+daq_codegen(*.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
+
+##############################################################################
 # Main library
 
 # We don't have a real library, but we want to create a
