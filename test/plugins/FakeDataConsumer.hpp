@@ -20,7 +20,7 @@
 #include "nwqueueadapters/fakedataconsumer/Nljs.hpp"
 #include "nwqueueadapters/fsd/Structs.hpp"
 
-#include <ers/Issue.h>
+#include <ers/Issue.hpp>
 
 #include <memory>
 #include <string>

@@ -15,7 +15,7 @@
 #include "appfwk/DAQSource.hpp"
 #include "appfwk/ThreadHelper.hpp"
 
-#include <ers/Issue.h>
+#include <ers/Issue.hpp>
 
 #include <cetlib/BasicPluginFactory.h>
 #include <cetlib/compiler_macros.h>
