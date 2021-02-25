@@ -23,7 +23,7 @@
 #include <utility>
 #include <vector>
 
-#include <TRACE/trace.h>
+#include <logging/Logging.hpp>
 /**
  * @brief Name used by TRACE TLOG calls from this source file
  */
@@ -73,30 +73,29 @@ FakeDataProducer::do_stop(const data_t& /*data*/)
 void
 FakeDataProducer::do_work(std::atomic<bool>& running_flag)
 {
-  ERS_INFO("FDP: do_work");
+  TLOG() << "FDP: do_work";
   int current_int = cfg_.starting_int;
   size_t counter = 0;
   std::ostringstream oss;
 
   while (running_flag.load()) {
-    TLOG(TLVL_TRACE) << get_name() << ": Creating output vector";
+    TLOG_DEBUG(TLVL_TRACE) << get_name() << ": Creating output vector";
     fsd::FakeData output{ current_int++ }; // NOLINT
     oss << "Produced vector " << counter << " with contents " << current_int;
     ers::debug(ProducerProgressUpdate(ERS_HERE, get_name(), oss.str()));
     oss.str("");
 
-    TLOG(TLVL_TRACE) << get_name() << ": Pushing vector into outputQueue";
-    ERS_INFO("FDP \"" << get_name() << "\" push " << counter);
+    TLOG_DEBUG(TLVL_TRACE) << get_name() << ": Pushing vector into outputQueue";
+    TLOG() << "FDP \"" << get_name() << "\" push " << counter;
     try {
       outputQueue_->push(std::move(output), queueTimeout_);
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& ex) {
-      ERS_INFO("FDP \"" << get_name() << "\" queue timeout on " << counter);
       ers::warning(ex);
     }
 
-    TLOG(TLVL_TRACE) << get_name() << ": Start of sleep between sends";
+    TLOG_DEBUG(TLVL_TRACE) << get_name() << ": Start of sleep between sends";
     std::this_thread::sleep_for(std::chrono::milliseconds(cfg_.wait_between_sends_ms));
-    TLOG(TLVL_TRACE) << get_name() << ": End of do_work loop";
+    TLOG_DEBUG(TLVL_TRACE) << get_name() << ": End of do_work loop";
     counter++;
   }
 }
