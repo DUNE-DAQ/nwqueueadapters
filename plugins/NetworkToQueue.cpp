@@ -11,6 +11,7 @@
 #include <chrono>
 #include <string>
 #include <vector>
+#include "logging/Logging.hpp"
 
 #include "appfwk/DAQModuleHelper.hpp"
 
@@ -72,7 +73,7 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
       continue;
     }
   }
-  ERS_INFO("Did " << recv_counter << " receives");
+  TLOG() <<"Did " << recv_counter << " receives";
 }
 
 DEFINE_DUNE_DAQ_MODULE(NetworkToQueue)

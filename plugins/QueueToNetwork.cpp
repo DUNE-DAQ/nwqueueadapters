@@ -7,8 +7,6 @@
 
 #include "nwqueueadapters/QueueToNetwork.hpp"
 
-#include <ers/ers.h>
-
 #include <chrono>
 #include <string>
 #include <vector>
