@@ -26,7 +26,7 @@
 
 #include "appfwk/cmd/Nljs.hpp"
 
-#include "serialization/NetworkObjectSender.hpp"
+#include "nwqueueadapters/NetworkObjectSender.hpp"
 #include "serialization/Serialization.hpp"
 
 #ifndef EXTERN_C_FUNC_DECLARE_START
@@ -44,7 +44,7 @@
   std::unique_ptr<dunedaq::nwqueueadapters::QueueToNetworkBase> makeQToN(                                                 \
     std::string const& plugin_name,                                                                                    \
     const std::string queue_instance,                                                                                  \
-    const dunedaq::serialization::networkobjectsender::Conf& sender_conf)                                              \
+    const dunedaq::nwqueueadapters::networkobjectsender::Conf& sender_conf)                                              \
   {                                                                                                                    \
     if (plugin_name == #klass)                                                                                         \
       return std::make_unique<dunedaq::nwqueueadapters::QueueToNetworkImpl<klass>>(queue_instance, sender_conf); \
@@ -93,7 +93,7 @@ class QueueToNetworkImpl : public QueueToNetworkBase
 {
 public:
   QueueToNetworkImpl(const std::string queue_instance,
-                     const dunedaq::serialization::networkobjectsender::Conf& sender_conf)
+                     const dunedaq::nwqueueadapters::networkobjectsender::Conf& sender_conf)
     : sender_(sender_conf)
   {
     inputQueue_.reset(new appfwk::DAQSource<MsgType>(queue_instance));
@@ -111,7 +111,7 @@ public:
 
 private:
   std::unique_ptr<appfwk::DAQSource<MsgType>> inputQueue_;
-  dunedaq::serialization::NetworkObjectSender<MsgType> sender_;
+  dunedaq::nwqueueadapters::NetworkObjectSender<MsgType> sender_;
 };
 
 /**
@@ -162,7 +162,7 @@ std::unique_ptr<QueueToNetworkBase>
 makeQueueToNetworkBase(std::string const& module_name,
                        std::string const& plugin_name,
                        const std::string queue_instance,
-                       const dunedaq::serialization::networkobjectsender::Conf& sender_conf)
+                       const dunedaq::nwqueueadapters::networkobjectsender::Conf& sender_conf)
 {
   static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeQToN");
   return bpf.makePlugin<std::unique_ptr<QueueToNetworkBase>>(module_name, plugin_name, queue_instance, sender_conf);

@@ -15,7 +15,7 @@
 
 #include "serialization/Serialization.hpp"
 
-#include "serialization/networkobjectsender/Nljs.hpp"
+#include "nwqueueadapters/networkobjectsender/Nljs.hpp"
 #include "nwqueueadapters/queuetonetwork/Nljs.hpp"
 
 namespace dunedaq::nwqueueadapters {
@@ -41,7 +41,7 @@ void
 QueueToNetwork::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::queuetonetwork::Conf>();
-  auto sender_conf = conf.sender_config.get<dunedaq::serialization::networkobjectsender::Conf>();
+  auto sender_conf = conf.sender_config.get<dunedaq::nwqueueadapters::networkobjectsender::Conf>();
 
   impl_ = makeQueueToNetworkBase(conf.msg_module_name, conf.msg_type, queue_instance_, sender_conf);
   if (impl_.get() == nullptr) {

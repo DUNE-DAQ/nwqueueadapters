@@ -15,7 +15,7 @@
 
 #include "appfwk/DAQModuleHelper.hpp"
 
-#include "serialization/networkobjectreceiver/Nljs.hpp"
+#include "nwqueueadapters/networkobjectreceiver/Nljs.hpp"
 #include "nwqueueadapters/networktoqueue/Nljs.hpp"
 
 namespace dunedaq::nwqueueadapters {
@@ -40,7 +40,7 @@ void
 NetworkToQueue::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
-  auto receiver_conf = conf.receiver_config.get<dunedaq::serialization::networkobjectreceiver::Conf>();
+  auto receiver_conf = conf.receiver_config.get<dunedaq::nwqueueadapters::networkobjectreceiver::Conf>();
 
   impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, receiver_conf);
   if (impl_.get() == nullptr) {

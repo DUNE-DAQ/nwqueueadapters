@@ -13,7 +13,7 @@ find_package(serialization REQUIRED)
 ##############################################################################
 # Schema
 
-daq_codegen(*.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
+daq_codegen(*.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 MsgP.hpp.j2 )
 
 ##############################################################################
 # Main library
@@ -34,6 +34,13 @@ daq_add_plugin( NetworkToQueue duneDAQModule LINK_LIBRARIES nwqueueadapters )
 
 daq_add_plugin( FakeData duneNetworkQueue TEST LINK_LIBRARIES nwqueueadapters )
 
+daq_add_application( network_object_send_receive network_object_send_receive.cxx TEST LINK_LIBRARIES nwqueueadapters )
+daq_add_application( serialization_speed serialization_speed.cxx TEST LINK_LIBRARIES nwqueueadapters )
+
 ##############################################################################
+
+# Unit tests
+
+daq_add_unit_test(NOR_NOS_test  LINK_LIBRARIES nwqueueadapters)
 
 daq_install()
