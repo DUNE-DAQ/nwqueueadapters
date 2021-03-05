@@ -9,12 +9,13 @@
 
 #include "FakeDataProducer.hpp"
 
-#include "appfwk/cmd/Nljs.hpp"
-#include "appfwk/DAQModuleHelper.hpp"
-
 #include "nwqueueadapters/fakedataproducer/Nljs.hpp"
 #include "nwqueueadapters/fsd/MsgP.hpp"
 #include "nwqueueadapters/fsd/Nljs.hpp"
+
+#include "appfwk/cmd/Nljs.hpp"
+#include "appfwk/DAQModuleHelper.hpp"
+#include "logging/Logging.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -22,12 +23,6 @@
 #include <thread>
 #include <utility>
 #include <vector>
-
-#include <logging/Logging.hpp>
-/**
- * @brief Name used by TRACE TLOG calls from this source file
- */
-#define TRACE_NAME "FakeDataProducer" // NOLINT
 
 namespace dunedaq {
 namespace nwqueueadapters {
@@ -79,13 +74,13 @@ FakeDataProducer::do_work(std::atomic<bool>& running_flag)
   std::ostringstream oss;
 
   while (running_flag.load()) {
-    TLOG_DEBUG(TLVL_TRACE) << get_name() << ": Creating output vector";
+    TLOG_DEBUG(1) << get_name() << ": Creating output vector";
     fsd::FakeData output{ current_int++ }; // NOLINT
     oss << "Produced vector " << counter << " with contents " << current_int;
     ers::debug(ProducerProgressUpdate(ERS_HERE, get_name(), oss.str()));
     oss.str("");
 
-    TLOG_DEBUG(TLVL_TRACE) << get_name() << ": Pushing vector into outputQueue";
+    TLOG_DEBUG(1) << get_name() << ": Pushing vector into outputQueue";
     TLOG() << "FDP \"" << get_name() << "\" push " << counter;
     try {
       outputQueue_->push(std::move(output), queueTimeout_);
@@ -93,9 +88,9 @@ FakeDataProducer::do_work(std::atomic<bool>& running_flag)
       ers::warning(ex);
     }
 
-    TLOG_DEBUG(TLVL_TRACE) << get_name() << ": Start of sleep between sends";
+    TLOG_DEBUG(1) << get_name() << ": Start of sleep between sends";
     std::this_thread::sleep_for(std::chrono::milliseconds(cfg_.wait_between_sends_ms));
-    TLOG_DEBUG(TLVL_TRACE) << get_name() << ": End of do_work loop";
+    TLOG_DEBUG(1) << get_name() << ": End of do_work loop";
     counter++;
   }
 }

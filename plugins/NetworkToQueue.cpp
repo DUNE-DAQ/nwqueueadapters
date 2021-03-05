@@ -8,15 +8,15 @@
 
 #include "nwqueueadapters/NetworkToQueue.hpp"
 
+#include "nwqueueadapters/networkobjectreceiver/Nljs.hpp"
+#include "nwqueueadapters/networktoqueue/Nljs.hpp"
+
+#include "appfwk/DAQModuleHelper.hpp"
+#include "logging/Logging.hpp"
+
 #include <chrono>
 #include <string>
 #include <vector>
-#include "logging/Logging.hpp"
-
-#include "appfwk/DAQModuleHelper.hpp"
-
-#include "nwqueueadapters/networkobjectreceiver/Nljs.hpp"
-#include "nwqueueadapters/networktoqueue/Nljs.hpp"
 
 namespace dunedaq::nwqueueadapters {
 
