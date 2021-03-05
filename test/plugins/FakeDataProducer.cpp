@@ -24,11 +24,6 @@
 #include <utility>
 #include <vector>
 
-/**
- * @brief Name used by TRACE TLOG calls from this source file
- */
-//#define TRACE_NAME "FakeDataProducer" // NOLINT This is the default
-
 namespace dunedaq {
 namespace nwqueueadapters {
 
