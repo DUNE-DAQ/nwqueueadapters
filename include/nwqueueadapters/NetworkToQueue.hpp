@@ -8,8 +8,8 @@
  * received with this code.
  */
 
-#ifndef NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_
-#define NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_
+#ifndef NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKTOQUEUE_HPP_
+#define NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKTOQUEUE_HPP_
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
@@ -24,7 +24,7 @@
 
 #include "appfwk/cmd/Nljs.hpp"
 
-#include "serialization/NetworkObjectReceiver.hpp"
+#include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "serialization/Serialization.hpp"
 
 #ifndef EXTERN_C_FUNC_DECLARE_START
@@ -39,19 +39,19 @@
  */
 #define DEFINE_DUNE_NETWORK_TO_QUEUE(klass)                                                                            \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::unique_ptr<dunedaq::NetworkToQueueBase> makeNToQ(                                                               \
+  std::unique_ptr<dunedaq::nwqueueadapters::NetworkToQueueBase> makeNToQ(                                                 \
     std::string const& plugin_name,                                                                                    \
     const std::string queue_instance,                                                                                  \
-    const dunedaq::serialization::networkobjectreceiver::Conf& receiver_conf)                                          \
+    const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& receiver_conf)                                          \
   {                                                                                                                    \
     if (plugin_name == #klass)                                                                                         \
-      return std::make_unique<dunedaq::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);                      \
+      return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);        \
     else                                                                                                               \
       return nullptr;                                                                                                  \
   }                                                                                                                    \
   }
 
-namespace dunedaq {
+namespace dunedaq::nwqueueadapters {
 
 class NetworkToQueueBase
 {
@@ -64,7 +64,7 @@ class NetworkToQueueImpl : public NetworkToQueueBase
 {
 public:
   NetworkToQueueImpl(const std::string queue_instance,
-                     const dunedaq::serialization::networkobjectreceiver::Conf& receiver_conf)
+                     const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& receiver_conf)
     : receiver_(receiver_conf)
   {
     outputQueue_.reset(new appfwk::DAQSink<T>(queue_instance));
@@ -77,7 +77,7 @@ public:
 
 private:
   std::unique_ptr<appfwk::DAQSink<T>> outputQueue_;
-  dunedaq::serialization::NetworkObjectReceiver<T> receiver_;
+  dunedaq::nwqueueadapters::NetworkObjectReceiver<T> receiver_;
 };
 
 /**
@@ -130,12 +130,12 @@ std::unique_ptr<NetworkToQueueBase>
 makeNetworkToQueueBase(std::string const& module_name,
                        std::string const& plugin_name,
                        const std::string queue_instance,
-                       const dunedaq::serialization::networkobjectreceiver::Conf& sender_conf)
+                       const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& sender_conf)
 {
   static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeNToQ");
   return bpf.makePlugin<std::unique_ptr<NetworkToQueueBase>>(module_name, plugin_name, queue_instance, sender_conf);
 }
 
-} // namespace dunedaq
+} // namespace dunedaq::nwqueueadapters
 
-#endif // NETWORKQUEUE_INCLUDE_NETWORKQUEUE_NETWORKTOQUEUE_HPP_
+#endif // NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKTOQUEUE_HPP_

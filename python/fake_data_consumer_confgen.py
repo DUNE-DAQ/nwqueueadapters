@@ -6,15 +6,15 @@ moo.io.default_load_path = get_moo_model_path()
 # Load configuration types
 import moo.otypes
 moo.otypes.load_types('appfwk-cmd-schema.jsonnet')
-#moo.otypes.load_types('networkqueue-QueueToNetworkAdapterDAQModule-schema.jsonnet')
-moo.otypes.load_types('networkqueue-NetworkToQueueAdapterDAQModule-schema.jsonnet')
-moo.otypes.load_types('networkqueue-FakeDataConsumer-schema.jsonnet')
+#moo.otypes.load_types('nwqueueadapters-QueueToNetworkAdapterDAQModule-schema.jsonnet')
+moo.otypes.load_types('nwqueueadapters-NetworkToQueueAdapterDAQModule-schema.jsonnet')
+moo.otypes.load_types('nwqueueadapters-FakeDataConsumer-schema.jsonnet')
 moo.otypes.load_types('serialization-NetworkObjectReceiver-schema.jsonnet')
 
 # Import new types
 import dunedaq.appfwk.cmd as cmd # AddressedCmd, 
-import dunedaq.networkqueue.networktoqueueadapterdaqmodule as ntoq
-import dunedaq.networkqueue.fakedataconsumer as fdc
+import dunedaq.nwqueueadapters.networktoqueueadapterdaqmodule as ntoq
+import dunedaq.nwqueueadapters.fakedataconsumer as fdc
 import dunedaq.serialization.networkobjectreceiver as nor
 
 from appfwk.utils import mcmd, mspec
@@ -55,7 +55,7 @@ def generate():
                                         queue_timeout_ms=100)
                         ),
                        
-                       ("ntoq", ntoq.Conf(msg_type="dunedaq::networkqueue::fsd::FakeData",
+                       ("ntoq", ntoq.Conf(msg_type="dunedaq::nwqueueadapters::fsd::FakeData",
                                           msg_module_name="FakeData",
                                           receiver_config=nor.Conf(ipm_plugin_type="ZmqReceiver",
                                                                    address= "tcp://127.0.0.1:12345")
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     import click
 
     @click.command(context_settings=CONTEXT_SETTINGS)
-    @click.argument('json_file', type=click.Path(), default='networkqueue-fake-data-consumer-job.json')
+    @click.argument('json_file', type=click.Path(), default='nwqueueadapters-fake-data-consumer-job.json')
     def cli(json_file):
         """
           JSON_FILE: Input raw data file.

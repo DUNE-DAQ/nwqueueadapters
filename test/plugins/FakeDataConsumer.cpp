@@ -12,12 +12,11 @@
 #include "appfwk/cmd/Nljs.hpp"
 #include "appfwk/DAQModuleHelper.hpp"
 
-#include "networkqueue/fakedataconsumer/Nljs.hpp"
-#include "networkqueue/fsd/MsgP.hpp"
-#include "networkqueue/fsd/Nljs.hpp"
+#include "nwqueueadapters/fakedataconsumer/Nljs.hpp"
+#include "nwqueueadapters/fsd/MsgP.hpp"
+#include "nwqueueadapters/fsd/Nljs.hpp"
 
-#include "TRACE/trace.h"
-#include <ers/ers.h>
+#include <logging/Logging.hpp>
 
 /**
  * @brief Name used by TRACE TLOG calls from this source file
@@ -28,7 +27,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq::networkqueue {
+namespace dunedaq::nwqueueadapters {
 
 FakeDataConsumer::FakeDataConsumer(const std::string& name)
   : DAQModule(name)
@@ -70,7 +69,7 @@ FakeDataConsumer::do_stop(const data_t& /*data*/)
 void
 FakeDataConsumer::do_work(std::atomic<bool>& running_flag)
 {
-  ERS_INFO("FDC: do_work");
+  TLOG() << "FDC: do_work";
   int counter = 0;
   int fail_count = 0;
   int timeout_count = 0;
@@ -82,13 +81,12 @@ FakeDataConsumer::do_work(std::atomic<bool>& running_flag)
     try {
       inputQueue_->pop(fake_data, queueTimeout_);
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& excpt) {
-      // ERS_INFO("FDC \"" << get_name() << "\" queue timeout on " << counter);
       ++timeout_count;
       continue;
     }
 
     if (prev_fake_count != -1 && (fake_data.fake_count != prev_fake_count + 1)) {
-      ERS_INFO("Got fake_count " << fake_data.fake_count << " when expecting " << (prev_fake_count + 1));
+      TLOG() << "Got fake_count " << fake_data.fake_count << " when expecting " << (prev_fake_count + 1);
       ++fail_count;
     }
     counter++;
@@ -99,9 +97,9 @@ FakeDataConsumer::do_work(std::atomic<bool>& running_flag)
   ers::info(ConsumerProgressUpdate(ERS_HERE, get_name(), oss.str()));
 }
 
-} // namespace dunedaq::networkqueue
+} // namespace dunedaq::nwqueueadapters
 
-DEFINE_DUNE_DAQ_MODULE(dunedaq::networkqueue::FakeDataConsumer)
+DEFINE_DUNE_DAQ_MODULE(dunedaq::nwqueueadapters::FakeDataConsumer)
 
 // Local Variables:
 // c-basic-offset: 2

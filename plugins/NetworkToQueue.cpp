@@ -6,19 +6,20 @@
  * received with this code.
  */
 
-#include "networkqueue/NetworkToQueue.hpp"
+#include "nwqueueadapters/NetworkToQueue.hpp"
 
 #include <chrono>
 #include <string>
 #include <vector>
+#include "logging/Logging.hpp"
 
 #include "appfwk/DAQModuleHelper.hpp"
 #include "logging/Logging.hpp"
 
-#include "serialization/networkobjectreceiver/Nljs.hpp"
-#include "networkqueue/networktoqueue/Nljs.hpp"
+#include "nwqueueadapters/networkobjectreceiver/Nljs.hpp"
+#include "nwqueueadapters/networktoqueue/Nljs.hpp"
 
-namespace dunedaq {
+namespace dunedaq::nwqueueadapters {
 
 NetworkToQueue::NetworkToQueue(const std::string& name)
   : appfwk::DAQModule(name)
@@ -39,8 +40,8 @@ NetworkToQueue::init(const data_t& init_data)
 void
 NetworkToQueue::do_configure(const data_t& config_data)
 {
-  auto conf = config_data.get<dunedaq::networkqueue::networktoqueue::Conf>();
-  auto receiver_conf = conf.receiver_config.get<dunedaq::serialization::networkobjectreceiver::Conf>();
+  auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
+  auto receiver_conf = conf.receiver_config.get<dunedaq::nwqueueadapters::networkobjectreceiver::Conf>();
 
   impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, receiver_conf);
   if (impl_.get() == nullptr) {
@@ -73,9 +74,8 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
       continue;
     }
   }
-  ers::info( ers::Message(ERS_HERE,"Did "
-                          +std::to_string(recv_counter)+" receives"));
+  TLOG() <<"Did " << recv_counter << " receives";
 }
 
 DEFINE_DUNE_DAQ_MODULE(NetworkToQueue)
-} // namespace dunedaq
+} // namespace dunedaq::nwqueueadapters

@@ -9,12 +9,13 @@
 
 #include "FakeDataProducer.hpp"
 
+#include "nwqueueadapters/fakedataproducer/Nljs.hpp"
+#include "nwqueueadapters/fsd/MsgP.hpp"
+#include "nwqueueadapters/fsd/Nljs.hpp"
+
 #include "appfwk/cmd/Nljs.hpp"
 #include "appfwk/DAQModuleHelper.hpp"
-
-#include "networkqueue/fakedataproducer/Nljs.hpp"
-#include "networkqueue/fsd/MsgP.hpp"
-#include "networkqueue/fsd/Nljs.hpp"
+#include "logging/Logging.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -23,15 +24,13 @@
 #include <utility>
 #include <vector>
 
-//#include <TRACE/trace.h>
-#include "logging/Logging.hpp"
 /**
  * @brief Name used by TRACE TLOG calls from this source file
  */
 //#define TRACE_NAME "FakeDataProducer" // NOLINT This is the default
 
 namespace dunedaq {
-namespace networkqueue {
+namespace nwqueueadapters {
 
 FakeDataProducer::FakeDataProducer(const std::string& name)
   : DAQModule(name)
@@ -74,7 +73,7 @@ FakeDataProducer::do_stop(const data_t& /*data*/)
 void
 FakeDataProducer::do_work(std::atomic<bool>& running_flag)
 {
-  ers::info( ers::Message( ERS_HERE, "FDP: do_work"));
+  TLOG() << "FDP: do_work";
   int current_int = cfg_.starting_int;
   size_t counter = 0;
   std::ostringstream oss;
@@ -87,11 +86,10 @@ FakeDataProducer::do_work(std::atomic<bool>& running_flag)
     oss.str("");
 
     TLOG_DEBUG(1) << get_name() << ": Pushing vector into outputQueue";
-	ers::info( ers::Message(ERS_HERE,"FDP \""+get_name()+"\" push "+std::to_string(counter)));
+    TLOG() << "FDP \"" << get_name() << "\" push " << counter;
     try {
       outputQueue_->push(std::move(output), queueTimeout_);
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& ex) {
-	  ers::info( ers::Message(ERS_HERE,"FDP \""+get_name()+"\" queue timeout on "+std::to_string(counter)));
       ers::warning(ex);
     }
 
@@ -102,10 +100,10 @@ FakeDataProducer::do_work(std::atomic<bool>& running_flag)
   }
 }
 
-} // namespace networkqueue
+} // namespace nwqueueadapters
 } // namespace dunedaq
 
-DEFINE_DUNE_DAQ_MODULE(dunedaq::networkqueue::FakeDataProducer)
+DEFINE_DUNE_DAQ_MODULE(dunedaq::nwqueueadapters::FakeDataProducer)
 
 // Local Variables:
 // c-basic-offset: 2

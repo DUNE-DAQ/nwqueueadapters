@@ -4,7 +4,7 @@
             "modules": [
                 {
                     "data": {
-                        "msg_type": "dunedaq::networkqueue::fsd::FakeData",
+                        "msg_type": "dunedaq::nwqueueadapters::fsd::FakeData",
                         "msg_module_name": "FakeData",
                         "sender_config":{
                             "stype": "msgpack",

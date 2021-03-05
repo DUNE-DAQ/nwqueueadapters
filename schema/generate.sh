@@ -26,9 +26,9 @@ render () {
     local is_test="$1" ; shift
 
     local name_lc=$( echo "$name" | tr '[:upper:]' '[:lower:]' )
-    local outdir="${1:-$srcdir/include/networkqueue/${name_lc}}"
+    local outdir="${1:-$srcdir/include/nwqueueadapters/${name_lc}}"
     if [ "${is_test}" = "TEST" ]; then
-        outdir="${1:-$srcdir/test/src/networkqueue/${name_lc}}"
+        outdir="${1:-$srcdir/test/src/nwqueueadapters/${name_lc}}"
     fi
     local what="$(echo $What | tr '[:upper:]' '[:lower:]')"
     local tmpl="o${what}.hpp.j2"
@@ -37,9 +37,9 @@ render () {
     set -x
     moo -g '/lang:ocpp.jsonnet' \
         -M $mydir -T $mydir \
-        -A path="dunedaq.networkqueue.${name_lc}" \
+        -A path="dunedaq.nwqueueadapters.${name_lc}" \
         -A ctxpath="dunedaq" \
-        -A os="networkqueue-${name}-schema.jsonnet" \
+        -A os="nwqueueadapters-${name}-schema.jsonnet" \
         render omodel.jsonnet $tmpl \
         > $outhpp || exit -1
     set +x

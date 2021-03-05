@@ -3,7 +3,7 @@
  *
  * FakeDataProducer, based on
  * FakeDataProducerDAQModule from appfwk, pushes
- * networkqueue::fsd::FakeData objects onto a queue. It exists to
+ * nwqueueadapters::fsd::FakeData objects onto a queue. It exists to
  * allow testing of QueueToNetwork, which takes the
  * FakeData items off the queue and serializes them onto the network
  *
@@ -12,23 +12,23 @@
  * received with this code.
  */
 
-#ifndef NETWORKQUEUE_TEST_PLUGINS_FAKEDATAPRODUCER_HPP_
-#define NETWORKQUEUE_TEST_PLUGINS_FAKEDATAPRODUCER_HPP_
+#ifndef NWQUEUEADAPTERS_TEST_PLUGINS_FAKEDATAPRODUCER_HPP_
+#define NWQUEUEADAPTERS_TEST_PLUGINS_FAKEDATAPRODUCER_HPP_
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
 #include "appfwk/ThreadHelper.hpp"
 
 // Our command structures.
-#include "networkqueue/fakedataproducer/Structs.hpp"
-#include "networkqueue/fsd/Structs.hpp"
+#include "nwqueueadapters/fakedataproducer/Structs.hpp"
+#include "nwqueueadapters/fsd/Structs.hpp"
 
 #include <memory>
 #include <string>
 #include <vector>
 
 namespace dunedaq {
-namespace networkqueue {
+namespace nwqueueadapters {
 class FakeDataProducer : public ::dunedaq::appfwk::DAQModule
 {
 public:
@@ -62,8 +62,8 @@ private:
   fakedataproducer::Conf cfg_;
 };
 
-} // namespace networkqueue
-ERS_DECLARE_ISSUE_BASE(networkqueue,
+} // namespace nwqueueadapters
+ERS_DECLARE_ISSUE_BASE(nwqueueadapters,
                        ProducerProgressUpdate,
                        appfwk::GeneralDAQModuleIssue,
                        message,
@@ -71,4 +71,4 @@ ERS_DECLARE_ISSUE_BASE(networkqueue,
                        ((std::string)message))
 } // namespace dunedaq
 
-#endif // NETWORKQUEUE_TEST_PLUGINS_FAKEDATAPRODUCER_HPP_
+#endif // NWQUEUEADAPTERS_TEST_PLUGINS_FAKEDATAPRODUCER_HPP_
