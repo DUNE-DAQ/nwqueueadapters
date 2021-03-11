@@ -53,6 +53,17 @@
   }                                                                                                                    \
   }
 
+namespace dunedaq {
+// clang-format off
+ERS_DECLARE_ISSUE(nwqueueadapters,                        // namespace
+                  QueueToNetworkSendTimeout,              // issue name
+                  "Send timed out: Message of type " << t // message
+                  << " from queue " << q,
+                  ((std::string)t)((std::string)q))       // attributes
+
+// clang-format on
+}
+
 namespace dunedaq::nwqueueadapters {
 
 /**
@@ -154,7 +165,7 @@ private:
   appfwk::ThreadHelper thread_;
 
   std::string queue_instance_;
-  
+  std::string message_type_name_;
   std::unique_ptr<QueueToNetworkBase> impl_;
 };
 

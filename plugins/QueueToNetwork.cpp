@@ -8,6 +8,8 @@
 #include "nwqueueadapters/QueueToNetwork.hpp"
 
 #include <chrono>
+#include <ers/Severity.hpp>
+#include <ers/ers.hpp>
 #include <string>
 #include <vector>
 
@@ -42,8 +44,9 @@ QueueToNetwork::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::queuetonetwork::Conf>();
   auto sender_conf = conf.sender_config.get<dunedaq::nwqueueadapters::networkobjectsender::Conf>();
+  message_type_name_=conf.msg_type;
 
-  impl_ = makeQueueToNetworkBase(conf.msg_module_name, conf.msg_type, queue_instance_, sender_conf);
+  impl_ = makeQueueToNetworkBase(conf.msg_module_name, message_type_name_, queue_instance_, sender_conf);
   if (impl_.get() == nullptr) {
     throw std::runtime_error("No QToN for requested msg_type");
   }
@@ -70,7 +73,8 @@ QueueToNetwork::do_work(std::atomic<bool>& running_flag)
       impl_->get();
     } catch (const dunedaq::appfwk::QueueTimeoutExpired&) {
       continue;
-    } catch (const dunedaq::ipm::SendTimeoutExpired&) {
+    } catch (const dunedaq::ipm::SendTimeoutExpired& e) {
+      ers::warning(QueueToNetworkSendTimeout(ERS_HERE, message_type_name_, queue_instance_, e));
       continue;
     }
   }
