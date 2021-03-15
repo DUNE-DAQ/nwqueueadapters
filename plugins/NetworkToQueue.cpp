@@ -26,8 +26,7 @@ NetworkToQueue::NetworkToQueue(const std::string& name)
   , impl_(nullptr)
 {
   register_command("conf", &NetworkToQueue::do_configure);
-  register_command("start", &NetworkToQueue::do_start);
-  register_command("stop", &NetworkToQueue::do_stop);
+  register_command("scrap", &NetworkToQueue::do_scrap);
 }
 
 void
@@ -47,16 +46,11 @@ NetworkToQueue::do_configure(const data_t& config_data)
   if (impl_.get() == nullptr) {
     throw std::runtime_error("No NToQ for requested msg_type");
   }
-}
-
-void
-NetworkToQueue::do_start(const data_t& /*args*/)
-{
   thread_.start_working_thread();
 }
 
 void
-NetworkToQueue::do_stop(const data_t& /*args*/)
+NetworkToQueue::do_scrap(const data_t& /*args*/)
 {
   thread_.stop_working_thread();
 }

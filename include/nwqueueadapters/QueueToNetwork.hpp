@@ -157,8 +157,7 @@ public:
 private:
   // Commands
   void do_configure(const data_t&);
-  void do_start(const data_t&);
-  void do_stop(const data_t&);
+  void do_scrap(const data_t&);
 
   // Threading
   void do_work(std::atomic<bool>& running_flag);
