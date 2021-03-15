@@ -29,8 +29,8 @@ QueueToNetwork::QueueToNetwork(const std::string& name)
 {
 
   register_command("conf", &QueueToNetwork::do_configure);
-  register_command("start", &QueueToNetwork::do_start);
-  register_command("stop", &QueueToNetwork::do_stop);
+  register_command("scrap", &QueueToNetwork::do_scrap);
+
 }
 
 void
@@ -50,16 +50,11 @@ QueueToNetwork::do_configure(const data_t& config_data)
   if (impl_.get() == nullptr) {
     throw std::runtime_error("No QToN for requested msg_type");
   }
-}
-
-void
-QueueToNetwork::do_start(const data_t& /*args*/)
-{
   thread_.start_working_thread();
 }
 
 void
-QueueToNetwork::do_stop(const data_t& /*args*/)
+QueueToNetwork::do_scrap(const data_t& /*args*/)
 {
   thread_.stop_working_thread();
 }

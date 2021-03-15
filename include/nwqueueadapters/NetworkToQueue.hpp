@@ -51,6 +51,17 @@
   }                                                                                                                    \
   }
 
+namespace dunedaq {
+// clang-format off
+ERS_DECLARE_ISSUE(nwqueueadapters,                        // namespace
+                  NetworkToQueuePushTimeout,              // issue name
+                  "Push timed out: Message of type " << t // message
+                  << " to queue " << q,
+                  ((std::string)t)((std::string)q))       // attributes
+
+// clang-format on
+}
+
 namespace dunedaq::nwqueueadapters {
 
 class NetworkToQueueBase
@@ -114,15 +125,14 @@ public:
 private:
   // Commands
   void do_configure(const data_t&);
-  void do_start(const data_t&);
-  void do_stop(const data_t&);
+  void do_scrap(const data_t&);
 
   // Threading
   appfwk::ThreadHelper thread_;
   void do_work(std::atomic<bool>& running_flag);
 
   std::string queue_instance_;
-  
+  std::string message_type_name_;
   std::unique_ptr<NetworkToQueueBase> impl_;
 };
 

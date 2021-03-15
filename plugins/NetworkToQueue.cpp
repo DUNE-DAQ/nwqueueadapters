@@ -26,8 +26,7 @@ NetworkToQueue::NetworkToQueue(const std::string& name)
   , impl_(nullptr)
 {
   register_command("conf", &NetworkToQueue::do_configure);
-  register_command("start", &NetworkToQueue::do_start);
-  register_command("stop", &NetworkToQueue::do_stop);
+  register_command("scrap", &NetworkToQueue::do_scrap);
 }
 
 void
@@ -41,21 +40,17 @@ NetworkToQueue::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
   auto receiver_conf = conf.receiver_config.get<dunedaq::nwqueueadapters::networkobjectreceiver::Conf>();
+  message_type_name_=conf.msg_type;
 
   impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, receiver_conf);
   if (impl_.get() == nullptr) {
     throw std::runtime_error("No NToQ for requested msg_type");
   }
-}
-
-void
-NetworkToQueue::do_start(const data_t& /*args*/)
-{
   thread_.start_working_thread();
 }
 
 void
-NetworkToQueue::do_stop(const data_t& /*args*/)
+NetworkToQueue::do_scrap(const data_t& /*args*/)
 {
   thread_.stop_working_thread();
 }
@@ -70,6 +65,9 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
       ++recv_counter;
     } catch (ipm::ReceiveTimeoutExpired&) {
       // It's not a problem if the receive times out
+      continue;
+    } catch (const dunedaq::appfwk::QueueTimeoutExpired& e) {
+      ers::warning(NetworkToQueuePushTimeout(ERS_HERE, message_type_name_, queue_instance_, e));
       continue;
     }
   }
