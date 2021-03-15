@@ -41,6 +41,7 @@ NetworkToQueue::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
   auto receiver_conf = conf.receiver_config.get<dunedaq::nwqueueadapters::networkobjectreceiver::Conf>();
+  message_type_name_=conf.msg_type;
 
   impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, receiver_conf);
   if (impl_.get() == nullptr) {
@@ -70,6 +71,9 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
       ++recv_counter;
     } catch (ipm::ReceiveTimeoutExpired&) {
       // It's not a problem if the receive times out
+      continue;
+    } catch (const dunedaq::appfwk::QueueTimeoutExpired& e) {
+      ers::warning(NetworkToQueuePushTimeout(ERS_HERE, message_type_name_, queue_instance_, e));
       continue;
     }
   }
