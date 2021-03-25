@@ -7,6 +7,8 @@
 
 local moo = import "moo.jsonnet";
 
+local s_nor = import "networkobjectreceiver.jsonnet";
+local nor = moo.oschema.hier(s_nor).dunedaq.nwqueueadapters.networkobjectreceiver;
 // A schema builder in the given path (namespace)
 local ns = "dunedaq.nwqueueadapters.networktoqueue";
 local s = moo.oschema.schema(ns);
@@ -16,16 +18,14 @@ local ntoq = {
   name: s.string("Name", ".*",
     doc="Name of a plugin etc"),
 
-  any: s.any("Data", doc="Any"),
-  
   conf: s.record("Conf", [
     s.field("msg_type", self.name,
       doc="The fully-qualified name of the type in the queue"),
     s.field("msg_module_name", self.name,
       doc="The name of the plugin containing the code for the message type"),
-    s.field("receiver_config", self.any,
+    s.field("receiver_config", nor.Conf,
       doc="Configuration for the NetworkObjectReceiver"),
   ], doc="NetworkToQueueAdapterDAQModule Configuration"),
 };
 
-moo.oschema.sort_select(ntoq)
+s_nor + moo.oschema.sort_select(ntoq)
