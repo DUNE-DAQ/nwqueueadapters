@@ -7,6 +7,9 @@
 
 local moo = import "moo.jsonnet";
 
+local s_nos = import "networkobjectsender.jsonnet";
+local nos = moo.oschema.hier(s_nos).dunedaq.nwqueueadapters.networkobjectsender;
+
 // A schema builder in the given path (namespace)
 local ns = "dunedaq.nwqueueadapters.queuetonetwork";
 local s = moo.oschema.schema(ns);
@@ -16,16 +19,14 @@ local qton = {
   name: s.string("Name", ".*",
     doc="Name of a plugin etc"),
 
-  any: s.any("Data", doc="Any"),
-
   conf: s.record("Conf", [
     s.field("msg_type", self.name,
       doc="The fully-qualified name of the type in the queue"),
     s.field("msg_module_name", self.name,
       doc="The name of the plugin containing the code for the message type"),
-    s.field("sender_config", self.any,
+    s.field("sender_config", nos.Conf,
       doc="Configuration for the NetworkObjectSender"),
   ], doc="NetworkToQueueAdapterDAQModule Configuration"),
 };
 
-moo.oschema.sort_select(qton)
+s_nos + moo.oschema.sort_select(qton)

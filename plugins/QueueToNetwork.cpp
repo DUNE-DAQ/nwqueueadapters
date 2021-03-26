@@ -43,10 +43,9 @@ void
 QueueToNetwork::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::queuetonetwork::Conf>();
-  auto sender_conf = conf.sender_config.get<dunedaq::nwqueueadapters::networkobjectsender::Conf>();
   message_type_name_=conf.msg_type;
 
-  impl_ = makeQueueToNetworkBase(conf.msg_module_name, message_type_name_, queue_instance_, sender_conf);
+  impl_ = makeQueueToNetworkBase(conf.msg_module_name, message_type_name_, queue_instance_, conf.sender_config);
   if (impl_.get() == nullptr) {
     throw std::runtime_error("No QToN for requested msg_type");
   }

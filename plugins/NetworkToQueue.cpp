@@ -39,10 +39,9 @@ void
 NetworkToQueue::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
-  auto receiver_conf = conf.receiver_config.get<dunedaq::nwqueueadapters::networkobjectreceiver::Conf>();
   message_type_name_=conf.msg_type;
 
-  impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, receiver_conf);
+  impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, conf.receiver_config);
   if (impl_.get() == nullptr) {
     throw std::runtime_error("No NToQ for requested msg_type");
   }
