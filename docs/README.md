@@ -20,6 +20,8 @@ Build the plugin with `daq_add_plugin(MyClass duneNetworkQueue LINK_LIBRARIES nw
 
 The "msg_type" should match the argument to `DEFINE_DUNE_NWQUEUEADAPTERS()` and "msg_module_name" should match the plugin name in `daq_add_plugin()`. For an actual example, see [`FakeData.cpp`](./test/plugins/FakeData.cpp). The queue which is the input/output to QToN/NToQ should be passed at init time in the usual way, with name "input"/"output" as appropriate. A full job configuration example can be found in the python directory.
 
+Any number of classes can be passed to `DEFINE_DUNE_NWQUEUEADAPTERS()`, separated by commas, to be built into the same plugin.
+
 ## Design and implementation
 
 A natural way to implement QToN and NToQ would be as classes templated over the type they're sending/receiving, ie `QueueToNetwork<T>`, but `DAQModule`s are loaded as plugins using [cetlib](https://cdcvs.fnal.gov/redmine/projects/cetlib/wiki), which doesn't support plugin names with template arguments, so we need a slightly more complicated setup. QToN cannot itself depend on a template parameter, but it must call code that _does_ depend on the sent/received type (eg, to do `T t = serialization::deserialize(bytes)`). So we "hide" the code that depends on the sent/received type in `QueueToNetworkImpl<T>`, which inherits from `QueueToNetworkBase`. `QueueToNetwork` holds a `QueueToNetworkBase*`, via which it interacts with the underlying `QueueToNetworkImpl<T>`. For a given `T`, the  `QueueToNetworkImpl<T>` is instantiated in the cetlib plugin defined by the `DEFINE_DUNE_NWQUEUEADAPTERS` macro. (The same technique is used for `NetworkToQueue`, making the appropriate substitutions).

@@ -35,21 +35,22 @@
   {
 #endif
 
+#define MAKEQNIMPL(r, data, klass)                                       \
+  if (plugin_name == #klass)                                                                                           \
+    return std::make_unique<dunedaq::nwqueueadapters::QueueToNetworkImpl<klass>>(queue_instance, sender_conf);
 /**
  * @brief Declare the function that will be called by the plugin loader
  * @param klass Class for which a QueueToNetwork module will be used
  */
-#define DEFINE_DUNE_QUEUE_TO_NETWORK(klass)                                                                            \
+#define DEFINE_DUNE_QUEUE_TO_NETWORK(...)                                                                              \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::unique_ptr<dunedaq::nwqueueadapters::QueueToNetworkBase> makeQToN(                                                 \
+  std::unique_ptr<dunedaq::nwqueueadapters::QueueToNetworkBase> makeQToN(                                              \
     std::string const& plugin_name,                                                                                    \
     const std::string queue_instance,                                                                                  \
-    const dunedaq::nwqueueadapters::networkobjectsender::Conf& sender_conf)                                              \
+    const dunedaq::nwqueueadapters::networkobjectsender::Conf& sender_conf)                                            \
   {                                                                                                                    \
-    if (plugin_name == #klass)                                                                                         \
-      return std::make_unique<dunedaq::nwqueueadapters::QueueToNetworkImpl<klass>>(queue_instance, sender_conf); \
-    else                                                                                                               \
-      return nullptr;                                                                                                  \
+    BOOST_PP_SEQ_FOR_EACH(MAKEQNIMPL, , BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__))                                         \
+    return nullptr;                                                                                                    \
   }                                                                                                                    \
   }
 
@@ -143,14 +144,10 @@ public:
    */
   explicit QueueToNetwork(const std::string& name);
 
-  QueueToNetwork(const QueueToNetwork&) =
-    delete; ///< QueueToNetwork is not copy-constructible
-  QueueToNetwork& operator=(const QueueToNetwork&) =
-    delete; ///< QueueToNetwork is not copy-assignable
-  QueueToNetwork(QueueToNetwork&&) =
-    delete; ///< QueueToNetwork is not move-constructible
-  QueueToNetwork& operator=(QueueToNetwork&&) =
-    delete; ///< QueueToNetwork is not move-assignable
+  QueueToNetwork(const QueueToNetwork&) = delete;            ///< QueueToNetwork is not copy-constructible
+  QueueToNetwork& operator=(const QueueToNetwork&) = delete; ///< QueueToNetwork is not copy-assignable
+  QueueToNetwork(QueueToNetwork&&) = delete;                 ///< QueueToNetwork is not move-constructible
+  QueueToNetwork& operator=(QueueToNetwork&&) = delete;      ///< QueueToNetwork is not move-assignable
 
   void init(const data_t&) override;
 

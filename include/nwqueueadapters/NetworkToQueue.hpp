@@ -27,27 +27,29 @@
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "serialization/Serialization.hpp"
 
+#include "boost/preprocessor.hpp"
+
 #ifndef EXTERN_C_FUNC_DECLARE_START
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
   extern "C"                                                                                                           \
   {
 #endif
 
+#define MAKENQIMPL(r, data, klass)     if (plugin_name == #klass)             \
+      return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);     
 /**
  * @brief Declare the function that will be called by the plugin loader
  * @param klass Class for which a NetworkToQueue module will be used
  */
-#define DEFINE_DUNE_NETWORK_TO_QUEUE(klass)                                                                            \
+#define DEFINE_DUNE_NETWORK_TO_QUEUE(...)                                                                              \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::unique_ptr<dunedaq::nwqueueadapters::NetworkToQueueBase> makeNToQ(                                                 \
+  std::unique_ptr<dunedaq::nwqueueadapters::NetworkToQueueBase> makeNToQ(                                              \
     std::string const& plugin_name,                                                                                    \
     const std::string queue_instance,                                                                                  \
-    const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& receiver_conf)                                          \
+    const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& receiver_conf)                                        \
   {                                                                                                                    \
-    if (plugin_name == #klass)                                                                                         \
-      return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);        \
-    else                                                                                                               \
-      return nullptr;                                                                                                  \
+    BOOST_PP_SEQ_FOR_EACH(MAKENQIMPL, , BOOST_PP_VARIADIC_TO_SEQ(__VA_ARGS__))                                         \
+    return nullptr;                                                                                                    \
   }                                                                                                                    \
   }
 
@@ -111,14 +113,10 @@ public:
    */
   explicit NetworkToQueue(const std::string& name);
 
-  NetworkToQueue(const NetworkToQueue&) =
-    delete; ///< NetworkToQueue is not copy-constructible
-  NetworkToQueue& operator=(const NetworkToQueue&) =
-    delete; ///< NetworkToQueue is not copy-assignable
-  NetworkToQueue(NetworkToQueue&&) =
-    delete; ///< NetworkToQueue is not move-constructible
-  NetworkToQueue& operator=(NetworkToQueue&&) =
-    delete; ///< NetworkToQueue is not move-assignable
+  NetworkToQueue(const NetworkToQueue&) = delete;            ///< NetworkToQueue is not copy-constructible
+  NetworkToQueue& operator=(const NetworkToQueue&) = delete; ///< NetworkToQueue is not copy-assignable
+  NetworkToQueue(NetworkToQueue&&) = delete;                 ///< NetworkToQueue is not move-constructible
+  NetworkToQueue& operator=(NetworkToQueue&&) = delete;      ///< NetworkToQueue is not move-assignable
 
   void init(const data_t&) override;
 
