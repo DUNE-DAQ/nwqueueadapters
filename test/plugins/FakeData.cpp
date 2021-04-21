@@ -27,7 +27,6 @@
  * received with this code.
  */
 
-
 // This include is for the DEFINE_DUNE_NWQUEUEADAPTERS macro used below
 #include "nwqueueadapters/AdapterMacros.hpp"
 

@@ -39,11 +39,11 @@ void
 NetworkToQueue::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
-  m_message_type_name=conf.msg_type;
+  m_message_type_name = conf.msg_type;
 
-  try{
+  try {
     m_impl = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, m_queue_instance, conf.receiver_config);
-  } catch(NoNetworkToQueueImpl& e) {
+  } catch (NoNetworkToQueueImpl& e) {
     throw CannotConfigure(ERS_HERE, e);
   }
   m_thread.start_working_thread();
@@ -71,7 +71,7 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
       continue;
     }
   }
-  TLOG() <<"Did " << recv_counter << " receives";
+  TLOG() << "Did " << recv_counter << " receives";
 }
 
 DEFINE_DUNE_DAQ_MODULE(NetworkToQueue)

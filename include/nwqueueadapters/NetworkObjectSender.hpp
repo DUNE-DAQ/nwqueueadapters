@@ -10,9 +10,9 @@
 #ifndef NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKOBJECTSENDER_HPP_
 #define NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKOBJECTSENDER_HPP_
 
-#include "serialization/Serialization.hpp"
 #include "nwqueueadapters/networkobjectsender/Nljs.hpp"
 #include "nwqueueadapters/networkobjectsender/Structs.hpp"
+#include "serialization/Serialization.hpp"
 
 #include "ipm/Sender.hpp"
 
@@ -56,7 +56,7 @@ public:
    */
   void send(const T& obj, const dunedaq::ipm::Sender::duration_t& timeout)
   {
-    auto bytes=serialization::serialize(obj, m_stype);
+    auto bytes = serialization::serialize(obj, m_stype);
     m_sender->send(bytes.data(), bytes.size(), timeout);
   }
 

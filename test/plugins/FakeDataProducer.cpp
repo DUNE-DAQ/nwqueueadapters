@@ -13,8 +13,8 @@
 #include "nwqueueadapters/fsd/MsgP.hpp"
 #include "nwqueueadapters/fsd/Nljs.hpp"
 
-#include "appfwk/cmd/Nljs.hpp"
 #include "appfwk/DAQModuleHelper.hpp"
+#include "appfwk/cmd/Nljs.hpp"
 #include "logging/Logging.hpp"
 
 #include <chrono>

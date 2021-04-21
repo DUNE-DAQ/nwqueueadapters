@@ -9,8 +9,8 @@
 
 #include "FakeDataConsumer.hpp"
 
-#include "appfwk/cmd/Nljs.hpp"
 #include "appfwk/DAQModuleHelper.hpp"
+#include "appfwk/cmd/Nljs.hpp"
 
 #include "nwqueueadapters/fakedataconsumer/Nljs.hpp"
 #include "nwqueueadapters/fsd/MsgP.hpp"

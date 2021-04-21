@@ -10,9 +10,9 @@
 #ifndef NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKOBJECTRECEIVER_HPP_
 #define NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKOBJECTRECEIVER_HPP_
 
-#include "serialization/Serialization.hpp"
 #include "nwqueueadapters/networkobjectreceiver/Nljs.hpp"
 #include "nwqueueadapters/networkobjectreceiver/Structs.hpp"
+#include "serialization/Serialization.hpp"
 
 #include "ipm/Receiver.hpp"
 

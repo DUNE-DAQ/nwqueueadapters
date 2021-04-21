@@ -24,13 +24,12 @@
 
 #include "appfwk/cmd/Nljs.hpp"
 
-#include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "nwqueueadapters/Issues.hpp"
+#include "nwqueueadapters/NetworkObjectReceiver.hpp"
 
 #include "serialization/Serialization.hpp"
 
 #include "boost/preprocessor.hpp"
-
 
 #ifndef EXTERN_C_FUNC_DECLARE_START
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
@@ -38,8 +37,9 @@
   {
 #endif
 
-#define MAKENQIMPL(r, data, klass)     if (plugin_name == BOOST_PP_STRINGIZE(klass)) \
-      return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);
+#define MAKENQIMPL(r, data, klass)                                                                                     \
+  if (plugin_name == BOOST_PP_STRINGIZE(klass))                                                                        \
+    return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);
 /**
  * @brief Declare the function that will be called by the plugin loader
  * @param klass Class for which a NetworkToQueue module will be used
@@ -55,7 +55,6 @@
     return nullptr;                                                                                                    \
   }                                                                                                                    \
   }
-
 
 namespace dunedaq::nwqueueadapters {
 
@@ -135,7 +134,7 @@ makeNetworkToQueueBase(std::string const& module_name,
 {
   static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeNToQ");
   auto ptr = bpf.makePlugin<std::unique_ptr<NetworkToQueueBase>>(module_name, plugin_name, queue_instance, sender_conf);
-  if(!ptr){
+  if (!ptr) {
     throw NoNetworkToQueueImpl(ERS_HERE, plugin_name, module_name, queue_instance);
   }
   return ptr;

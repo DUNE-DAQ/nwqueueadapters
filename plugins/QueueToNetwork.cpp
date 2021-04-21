@@ -31,7 +31,6 @@ QueueToNetwork::QueueToNetwork(const std::string& name)
 
   register_command("conf", &QueueToNetwork::do_configure);
   register_command("scrap", &QueueToNetwork::do_scrap);
-
 }
 
 void
@@ -44,11 +43,11 @@ void
 QueueToNetwork::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::queuetonetwork::Conf>();
-  m_message_type_name=conf.msg_type;
+  m_message_type_name = conf.msg_type;
 
-  try{
+  try {
     m_impl = makeQueueToNetworkBase(conf.msg_module_name, m_message_type_name, m_queue_instance, conf.sender_config);
-  } catch(NoQueueToNetworkImpl& e) {
+  } catch (NoQueueToNetworkImpl& e) {
     throw CannotConfigure(ERS_HERE, e);
   }
   m_thread.start_working_thread();

@@ -6,22 +6,21 @@
  * received with this code.
  */
 
-#include "serialization/Serialization.hpp"
-#include "nwqueueadapters/NetworkObjectSender.hpp"
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
-
+#include "nwqueueadapters/NetworkObjectSender.hpp"
+#include "serialization/Serialization.hpp"
 
 /**
  * @brief Name of this test module
  */
 #define BOOST_TEST_MODULE NOR_NOS_test // NOLINT
 
-#include "boost/test/unit_test.hpp"
 #include "boost/test/data/test_case.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include <string>
-#include <vector>
 #include <thread>
+#include <vector>
 
 // A type that's made serializable "intrusively", ie, by changing the type itself
 struct MyTypeIntrusive
@@ -35,8 +34,7 @@ struct MyTypeIntrusive
 
 BOOST_AUTO_TEST_SUITE(NOR_NOS_test)
 
-
-BOOST_DATA_TEST_CASE(NetworkObjectSenderReceiver, boost::unit_test::data::make({"json", "msgpack"}))
+BOOST_DATA_TEST_CASE(NetworkObjectSenderReceiver, boost::unit_test::data::make({ "json", "msgpack" }))
 {
   // This function is run in a loop with the two serialization
   // types. Sometimes we get back to the top of the loop before the
@@ -65,11 +63,9 @@ BOOST_DATA_TEST_CASE(NetworkObjectSenderReceiver, boost::unit_test::data::make({
   sender.send(m, std::chrono::milliseconds(2));
   MyTypeIntrusive m_recv = receiver.recv(std::chrono::milliseconds(2));
 
-  BOOST_CHECK_EQUAL(m_recv.count,  m.count);
-  BOOST_CHECK_EQUAL(m_recv.name,   m.name);
-  BOOST_CHECK_EQUAL_COLLECTIONS(m_recv.values.begin(), m_recv.values.end(),
-                                m.values.begin(),      m.values.end());
-
+  BOOST_CHECK_EQUAL(m_recv.count, m.count);
+  BOOST_CHECK_EQUAL(m_recv.name, m.name);
+  BOOST_CHECK_EQUAL_COLLECTIONS(m_recv.values.begin(), m_recv.values.end(), m.values.begin(), m.values.end());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

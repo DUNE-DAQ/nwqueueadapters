@@ -26,8 +26,8 @@
 
 #include "appfwk/cmd/Nljs.hpp"
 
-#include "nwqueueadapters/NetworkObjectSender.hpp"
 #include "nwqueueadapters/Issues.hpp"
+#include "nwqueueadapters/NetworkObjectSender.hpp"
 
 #include "serialization/Serialization.hpp"
 
@@ -37,8 +37,8 @@
   {
 #endif
 
-#define MAKEQNIMPL(r, data, klass)                                       \
-  if (plugin_name == BOOST_PP_STRINGIZE(klass))                         \
+#define MAKEQNIMPL(r, data, klass)                                                                                     \
+  if (plugin_name == BOOST_PP_STRINGIZE(klass))                                                                        \
     return std::make_unique<dunedaq::nwqueueadapters::QueueToNetworkImpl<klass>>(queue_instance, sender_conf);
 /**
  * @brief Declare the function that will be called by the plugin loader
@@ -164,7 +164,7 @@ makeQueueToNetworkBase(std::string const& module_name,
 {
   static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeQToN");
   auto ptr = bpf.makePlugin<std::unique_ptr<QueueToNetworkBase>>(module_name, plugin_name, queue_instance, sender_conf);
- if (!ptr) {
+  if (!ptr) {
     throw NoQueueToNetworkImpl(ERS_HERE, plugin_name, module_name, queue_instance);
   }
   return ptr;

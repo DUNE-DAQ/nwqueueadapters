@@ -14,8 +14,8 @@
 #include "nwqueueadapters/NetworkToQueue.hpp"
 #include "nwqueueadapters/QueueToNetwork.hpp"
 
-#define DEFINE_DUNE_NWQUEUEADAPTERS(...)                                                                                \
-  DEFINE_DUNE_QUEUE_TO_NETWORK(__VA_ARGS__)                                                                             \
+#define DEFINE_DUNE_NWQUEUEADAPTERS(...)                                                                               \
+  DEFINE_DUNE_QUEUE_TO_NETWORK(__VA_ARGS__)                                                                            \
   DEFINE_DUNE_NETWORK_TO_QUEUE(__VA_ARGS__)
 
 #endif
