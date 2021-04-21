@@ -32,7 +32,7 @@ NetworkToQueue::NetworkToQueue(const std::string& name)
 void
 NetworkToQueue::init(const data_t& init_data)
 {
-  m_queue_instance = dunedaq::appfwk::queue_index(init_data, {"output"})["output"].inst;
+  m_queue_instance = appfwk::queue_inst(init_data, "output");
 }
 
 void

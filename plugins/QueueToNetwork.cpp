@@ -37,7 +37,7 @@ QueueToNetwork::QueueToNetwork(const std::string& name)
 void
 QueueToNetwork::init(const data_t& init_data)
 {
-  m_queue_instance = dunedaq::appfwk::queue_index(init_data, {"input"})["input"].inst;
+  m_queue_instance = appfwk::queue_inst(init_data, "input");
 }
 
 void

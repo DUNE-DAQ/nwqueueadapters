@@ -41,8 +41,7 @@ FakeDataProducer::FakeDataProducer(const std::string& name)
 void
 FakeDataProducer::init(const nlohmann::json& init_data)
 {
-  auto qindex=appfwk::queue_index(init_data, {"output"});
-  outputQueue_.reset(new dunedaq::appfwk::DAQSink<fsd::FakeData>(qindex["output"].inst));
+  outputQueue_.reset(new dunedaq::appfwk::DAQSink<fsd::FakeData>(appfwk::queue_inst(init_data, "output")));
 }
 
 void

@@ -42,8 +42,7 @@ FakeDataConsumer::FakeDataConsumer(const std::string& name)
 void
 FakeDataConsumer::init(const nlohmann::json& init_data)
 {
-  auto qindex=appfwk::queue_index(init_data, {"input"});
-  inputQueue_.reset(new dunedaq::appfwk::DAQSource<fsd::FakeData>(qindex["input"].inst));
+  inputQueue_.reset(new dunedaq::appfwk::DAQSource<fsd::FakeData>(appfwk::queue_inst(init_data, "input")));
 }
 
 void
