@@ -22,8 +22,8 @@ namespace dunedaq::nwqueueadapters {
 
 NetworkToQueue::NetworkToQueue(const std::string& name)
   : appfwk::DAQModule(name)
-  , thread_(std::bind(&NetworkToQueue::do_work, this, std::placeholders::_1))
-  , impl_(nullptr)
+  , m_thread(std::bind(&NetworkToQueue::do_work, this, std::placeholders::_1))
+  , m_impl(nullptr)
 {
   register_command("conf", &NetworkToQueue::do_configure);
   register_command("scrap", &NetworkToQueue::do_scrap);
@@ -32,27 +32,27 @@ NetworkToQueue::NetworkToQueue(const std::string& name)
 void
 NetworkToQueue::init(const data_t& init_data)
 {
-  queue_instance_ = dunedaq::appfwk::queue_index(init_data, {"output"})["output"].inst;
+  m_queue_instance = dunedaq::appfwk::queue_index(init_data, {"output"})["output"].inst;
 }
 
 void
 NetworkToQueue::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
-  message_type_name_=conf.msg_type;
+  m_message_type_name=conf.msg_type;
 
   try{
-    impl_ = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, queue_instance_, conf.receiver_config);
+    m_impl = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, m_queue_instance, conf.receiver_config);
   } catch(NoNetworkToQueueImpl& e) {
     throw CannotConfigure(ERS_HERE, e);
   }
-  thread_.start_working_thread();
+  m_thread.start_working_thread();
 }
 
 void
 NetworkToQueue::do_scrap(const data_t& /*args*/)
 {
-  thread_.stop_working_thread();
+  m_thread.stop_working_thread();
 }
 
 void
@@ -61,13 +61,13 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
   static int recv_counter = 0;
   while (running_flag.load()) {
     try {
-      impl_->push();
+      m_impl->push();
       ++recv_counter;
     } catch (ipm::ReceiveTimeoutExpired&) {
       // It's not a problem if the receive times out
       continue;
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& e) {
-      ers::warning(NetworkToQueuePushTimeout(ERS_HERE, message_type_name_, queue_instance_, e));
+      ers::warning(NetworkToQueuePushTimeout(ERS_HERE, m_message_type_name, m_queue_instance, e));
       continue;
     }
   }

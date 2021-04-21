@@ -97,9 +97,9 @@ class QueueToNetworkImpl : public QueueToNetworkBase
 public:
   QueueToNetworkImpl(const std::string queue_instance,
                      const dunedaq::nwqueueadapters::networkobjectsender::Conf& sender_conf)
-    : sender_(sender_conf)
+    : m_sender(sender_conf)
   {
-    inputQueue_.reset(new appfwk::DAQSource<MsgType>(queue_instance));
+    m_input_queue.reset(new appfwk::DAQSource<MsgType>(queue_instance));
   }
 
   /**
@@ -108,13 +108,13 @@ public:
   virtual void get()
   {
     MsgType msg;
-    inputQueue_->pop(msg, std::chrono::milliseconds(10));
-    sender_.send(msg, std::chrono::milliseconds(10));
+    m_input_queue->pop(msg, std::chrono::milliseconds(10));
+    m_sender.send(msg, std::chrono::milliseconds(10));
   }
 
 private:
-  std::unique_ptr<appfwk::DAQSource<MsgType>> inputQueue_;
-  dunedaq::nwqueueadapters::NetworkObjectSender<MsgType> sender_;
+  std::unique_ptr<appfwk::DAQSource<MsgType>> m_input_queue;
+  dunedaq::nwqueueadapters::NetworkObjectSender<MsgType> m_sender;
 };
 
 /**
@@ -149,11 +149,11 @@ private:
 
   // Threading
   void do_work(std::atomic<bool>& running_flag);
-  appfwk::ThreadHelper thread_;
+  appfwk::ThreadHelper m_thread;
 
-  std::string queue_instance_;
-  std::string message_type_name_;
-  std::unique_ptr<QueueToNetworkBase> impl_;
+  std::string m_queue_instance;
+  std::string m_message_type_name;
+  std::unique_ptr<QueueToNetworkBase> m_impl;
 };
 
 std::unique_ptr<QueueToNetworkBase>
@@ -164,7 +164,7 @@ makeQueueToNetworkBase(std::string const& module_name,
 {
   static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeQToN");
   auto ptr = bpf.makePlugin<std::unique_ptr<QueueToNetworkBase>>(module_name, plugin_name, queue_instance, sender_conf);
-  if (!ptr) {
+ if (!ptr) {
     throw NoQueueToNetworkImpl(ERS_HERE, plugin_name, module_name, queue_instance);
   }
   return ptr;

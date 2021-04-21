@@ -25,8 +25,8 @@ namespace dunedaq::nwqueueadapters {
 
 QueueToNetwork::QueueToNetwork(const std::string& name)
   : appfwk::DAQModule(name)
-  , thread_(std::bind(&QueueToNetwork::do_work, this, std::placeholders::_1))
-  , impl_(nullptr)
+  , m_thread(std::bind(&QueueToNetwork::do_work, this, std::placeholders::_1))
+  , m_impl(nullptr)
 {
 
   register_command("conf", &QueueToNetwork::do_configure);
@@ -37,27 +37,27 @@ QueueToNetwork::QueueToNetwork(const std::string& name)
 void
 QueueToNetwork::init(const data_t& init_data)
 {
-  queue_instance_ = dunedaq::appfwk::queue_index(init_data, {"input"})["input"].inst;
+  m_queue_instance = dunedaq::appfwk::queue_index(init_data, {"input"})["input"].inst;
 }
 
 void
 QueueToNetwork::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::queuetonetwork::Conf>();
-  message_type_name_=conf.msg_type;
+  m_message_type_name=conf.msg_type;
 
   try{
-    impl_ = makeQueueToNetworkBase(conf.msg_module_name, message_type_name_, queue_instance_, conf.sender_config);
+    m_impl = makeQueueToNetworkBase(conf.msg_module_name, m_message_type_name, m_queue_instance, conf.sender_config);
   } catch(NoQueueToNetworkImpl& e) {
     throw CannotConfigure(ERS_HERE, e);
   }
-  thread_.start_working_thread();
+  m_thread.start_working_thread();
 }
 
 void
 QueueToNetwork::do_scrap(const data_t& /*args*/)
 {
-  thread_.stop_working_thread();
+  m_thread.stop_working_thread();
 }
 
 void
@@ -66,11 +66,11 @@ QueueToNetwork::do_work(std::atomic<bool>& running_flag)
   while (running_flag.load()) {
     // TODO: Proper handling of "stop"
     try {
-      impl_->get();
+      m_impl->get();
     } catch (const dunedaq::appfwk::QueueTimeoutExpired&) {
       continue;
     } catch (const dunedaq::ipm::SendTimeoutExpired& e) {
-      ers::warning(QueueToNetworkSendTimeout(ERS_HERE, message_type_name_, queue_instance_, e));
+      ers::warning(QueueToNetworkSendTimeout(ERS_HERE, m_message_type_name, m_queue_instance, e));
       continue;
     }
   }

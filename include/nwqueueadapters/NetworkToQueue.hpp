@@ -71,19 +71,19 @@ class NetworkToQueueImpl : public NetworkToQueueBase
 public:
   NetworkToQueueImpl(const std::string queue_instance,
                      const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& receiver_conf)
-    : receiver_(receiver_conf)
+    : m_receiver(receiver_conf)
   {
-    outputQueue_.reset(new appfwk::DAQSink<T>(queue_instance));
+    m_output_queue.reset(new appfwk::DAQSink<T>(queue_instance));
   }
 
   virtual void push()
   {
-    outputQueue_->push(receiver_.recv(std::chrono::milliseconds(10)), std::chrono::milliseconds(10));
+    m_output_queue->push(m_receiver.recv(std::chrono::milliseconds(10)), std::chrono::milliseconds(10));
   }
 
 private:
-  std::unique_ptr<appfwk::DAQSink<T>> outputQueue_;
-  dunedaq::nwqueueadapters::NetworkObjectReceiver<T> receiver_;
+  std::unique_ptr<appfwk::DAQSink<T>> m_output_queue;
+  dunedaq::nwqueueadapters::NetworkObjectReceiver<T> m_receiver;
 };
 
 /**
@@ -119,12 +119,12 @@ private:
   void do_scrap(const data_t&);
 
   // Threading
-  appfwk::ThreadHelper thread_;
+  appfwk::ThreadHelper m_thread;
   void do_work(std::atomic<bool>& running_flag);
 
-  std::string queue_instance_;
-  std::string message_type_name_;
-  std::unique_ptr<NetworkToQueueBase> impl_;
+  std::string m_queue_instance;
+  std::string m_message_type_name;
+  std::unique_ptr<NetworkToQueueBase> m_impl;
 };
 
 std::unique_ptr<NetworkToQueueBase>
