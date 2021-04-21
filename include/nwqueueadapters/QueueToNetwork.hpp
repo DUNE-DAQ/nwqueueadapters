@@ -36,7 +36,7 @@
 #endif
 
 #define MAKEQNIMPL(r, data, klass)                                       \
-  if (plugin_name == #klass)                                                                                           \
+  if (plugin_name == BOOST_PP_STRINGIZE(klass))                         \
     return std::make_unique<dunedaq::nwqueueadapters::QueueToNetworkImpl<klass>>(queue_instance, sender_conf);
 /**
  * @brief Declare the function that will be called by the plugin loader

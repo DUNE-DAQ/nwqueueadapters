@@ -35,8 +35,8 @@
   {
 #endif
 
-#define MAKENQIMPL(r, data, klass)     if (plugin_name == #klass)             \
-      return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);     
+#define MAKENQIMPL(r, data, klass)     if (plugin_name == BOOST_PP_STRINGIZE(klass)) \
+      return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);
 /**
  * @brief Declare the function that will be called by the plugin loader
  * @param klass Class for which a NetworkToQueue module will be used
