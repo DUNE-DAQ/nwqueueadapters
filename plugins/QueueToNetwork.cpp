@@ -15,6 +15,7 @@
 
 #include "appfwk/DAQModuleHelper.hpp"
 
+#include "nwqueueadapters/Issues.hpp"
 #include "serialization/Serialization.hpp"
 
 #include "nwqueueadapters/networkobjectsender/Nljs.hpp"
@@ -45,9 +46,10 @@ QueueToNetwork::do_configure(const data_t& config_data)
   auto conf = config_data.get<dunedaq::nwqueueadapters::queuetonetwork::Conf>();
   message_type_name_=conf.msg_type;
 
-  impl_ = makeQueueToNetworkBase(conf.msg_module_name, message_type_name_, queue_instance_, conf.sender_config);
-  if (impl_.get() == nullptr) {
-    throw std::runtime_error("No QToN for requested msg_type");
+  try{
+    impl_ = makeQueueToNetworkBase(conf.msg_module_name, message_type_name_, queue_instance_, conf.sender_config);
+  } catch(NoQueueToNetworkImpl& e) {
+    throw CannotConfigure(ERS_HERE, e);
   }
   thread_.start_working_thread();
 }

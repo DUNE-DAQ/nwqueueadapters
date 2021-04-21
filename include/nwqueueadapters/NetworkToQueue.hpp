@@ -25,9 +25,12 @@
 #include "appfwk/cmd/Nljs.hpp"
 
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
+#include "nwqueueadapters/Issues.hpp"
+
 #include "serialization/Serialization.hpp"
 
 #include "boost/preprocessor.hpp"
+
 
 #ifndef EXTERN_C_FUNC_DECLARE_START
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
@@ -53,16 +56,6 @@
   }                                                                                                                    \
   }
 
-namespace dunedaq {
-// clang-format off
-ERS_DECLARE_ISSUE(nwqueueadapters,                        // namespace
-                  NetworkToQueuePushTimeout,              // issue name
-                  "Push timed out: Message of type " << t // message
-                  << " to queue " << q,
-                  ((std::string)t)((std::string)q))       // attributes
-
-// clang-format on
-}
 
 namespace dunedaq::nwqueueadapters {
 
@@ -141,7 +134,11 @@ makeNetworkToQueueBase(std::string const& module_name,
                        const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& sender_conf)
 {
   static cet::BasicPluginFactory bpf("duneNetworkQueue", "makeNToQ");
-  return bpf.makePlugin<std::unique_ptr<NetworkToQueueBase>>(module_name, plugin_name, queue_instance, sender_conf);
+  auto ptr = bpf.makePlugin<std::unique_ptr<NetworkToQueueBase>>(module_name, plugin_name, queue_instance, sender_conf);
+  if(!ptr){
+    throw NoNetworkToQueueImpl(ERS_HERE, plugin_name, module_name, queue_instance);
+  }
+  return ptr;
 }
 
 } // namespace dunedaq::nwqueueadapters
