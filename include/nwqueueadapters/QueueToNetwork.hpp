@@ -82,6 +82,8 @@ namespace dunedaq::nwqueueadapters {
 class QueueToNetworkBase
 {
 public:
+  virtual ~QueueToNetworkBase() = default;
+
   virtual void get() = 0;
 };
 

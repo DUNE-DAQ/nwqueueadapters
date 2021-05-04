@@ -61,6 +61,7 @@ namespace dunedaq::nwqueueadapters {
 class NetworkToQueueBase
 {
 public:
+  virtual ~NetworkToQueueBase() = default;
   virtual void push() = 0;
 };
 
