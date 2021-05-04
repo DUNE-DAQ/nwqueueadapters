@@ -53,6 +53,7 @@ void
 NetworkToQueue::do_scrap(const data_t& /*args*/)
 {
   m_thread.stop_working_thread();
+  m_impl.reset(nullptr); // call dtor of implementation
 }
 
 void
