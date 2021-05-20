@@ -14,7 +14,12 @@
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
 #include "appfwk/ThreadHelper.hpp"
+#include "appfwk/cmd/Nljs.hpp"
+#include "nwqueueadapters/Issues.hpp"
+#include "nwqueueadapters/NetworkObjectReceiver.hpp"
+#include "serialization/Serialization.hpp"
 
+#include "boost/preprocessor.hpp"
 #include <cetlib/BasicPluginFactory.h>
 #include <cetlib/compiler_macros.h>
 
@@ -22,28 +27,22 @@
 #include <string>
 #include <vector>
 
-#include "appfwk/cmd/Nljs.hpp"
-
-#include "nwqueueadapters/Issues.hpp"
-#include "nwqueueadapters/NetworkObjectReceiver.hpp"
-
-#include "serialization/Serialization.hpp"
-
-#include "boost/preprocessor.hpp"
-
 #ifndef EXTERN_C_FUNC_DECLARE_START
+// NOLINTNEXTLINE(build/define_used)
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
   extern "C"                                                                                                           \
   {
 #endif
 
+// NOLINTNEXTLINE(build/define_used)
 #define MAKENQIMPL(r, data, klass)                                                                                     \
   if (plugin_name == BOOST_PP_STRINGIZE(klass))                                                                        \
-    return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf);
+    return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf); // NOLINT
 /**
  * @brief Declare the function that will be called by the plugin loader
  * @param klass Class for which a NetworkToQueue module will be used
  */
+// NOLINTNEXTLINE(build/define_used)
 #define DEFINE_DUNE_NETWORK_TO_QUEUE(...)                                                                              \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
   std::unique_ptr<dunedaq::nwqueueadapters::NetworkToQueueBase> makeNToQ(                                              \
@@ -61,7 +60,14 @@ namespace dunedaq::nwqueueadapters {
 class NetworkToQueueBase
 {
 public:
+  NetworkToQueueBase() = default;
   virtual ~NetworkToQueueBase() = default;
+
+  NetworkToQueueBase(NetworkToQueueBase const&) = delete;
+  NetworkToQueueBase(NetworkToQueueBase&&) = default;
+  NetworkToQueueBase& operator=(NetworkToQueueBase const&) = delete;
+  NetworkToQueueBase& operator=(NetworkToQueueBase&&) = default;
+
   virtual void push() = 0;
 };
 

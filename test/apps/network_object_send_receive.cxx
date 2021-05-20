@@ -1,3 +1,11 @@
+/**
+ * @file network_object_send_receive.cxx
+ * 
+ * This is part of the DUNE DAQ Application Framework, copyright 2020.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
+
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "nwqueueadapters/NetworkObjectSender.hpp"
 // clang-format off
