@@ -9,11 +9,12 @@
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "nwqueueadapters/NetworkObjectSender.hpp"
 // clang-format off
-#include <string> // This is here to workaround moo issue #12
-#include "nwqueueadapters/fsd/MsgP.hpp"
-#include "nwqueueadapters/fsd/Nljs.hpp"
-#include "nwqueueadapters/fsd/Structs.hpp"
+#include <string> // NOLINT This is here to workaround moo issue #12
+#include "nwqueueadapters/fsd/MsgP.hpp" // NOLINT
+#include "nwqueueadapters/fsd/Nljs.hpp" // NOLINT
+#include "nwqueueadapters/fsd/Structs.hpp" // NOLINT
 // clang-format on
+#include "logging/Logging.hpp" // NOLINT
 
 #include <iostream>
 
@@ -39,5 +40,5 @@ main()
 
   sender.send(fd, std::chrono::milliseconds(2));
   FakeData fd_recv = receiver.recv(std::chrono::milliseconds(2));
-  std::cout << "Sent: " << fd.fake_count << ". Received: " << fd_recv.fake_count << std::endl;
+  TLOG() << "Sent: " << fd.fake_count << ". Received: " << fd_recv.fake_count << std::endl;
 }

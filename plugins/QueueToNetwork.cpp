@@ -64,7 +64,7 @@ void
 QueueToNetwork::do_work(std::atomic<bool>& running_flag)
 {
   while (running_flag.load()) {
-    // TODO: Proper handling of "stop"
+    // TODO 2021-05-21 Philip Rodrigues rodriges@fnal.gov: Proper handling of "stop"
     try {
       m_impl->get();
     } catch (const dunedaq::appfwk::QueueTimeoutExpired&) {
