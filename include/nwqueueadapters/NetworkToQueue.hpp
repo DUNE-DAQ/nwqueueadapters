@@ -34,10 +34,14 @@
   {
 #endif
 
+
+// clang-format off
 // NOLINTNEXTLINE(build/define_used)
 #define MAKENQIMPL(r, data, klass)                                                                                     \
   if (plugin_name == BOOST_PP_STRINGIZE(klass))                                                                        \
     return std::make_unique<dunedaq::nwqueueadapters::NetworkToQueueImpl<klass>>(queue_instance, receiver_conf); // NOLINT
+// clang-format on
+
 /**
  * @brief Declare the function that will be called by the plugin loader
  * @param klass Class for which a NetworkToQueue module will be used
