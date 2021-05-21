@@ -34,7 +34,6 @@
   {
 #endif
 
-
 // clang-format off
 // NOLINTNEXTLINE(build/define_used)
 #define MAKENQIMPL(r, data, klass)                                                                                     \
