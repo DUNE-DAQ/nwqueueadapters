@@ -14,8 +14,9 @@
 #include "nwqueueadapters/NetworkToQueue.hpp"
 #include "nwqueueadapters/QueueToNetwork.hpp"
 
+// NOLINTNEXTLINE(build/define_used)
 #define DEFINE_DUNE_NWQUEUEADAPTERS(...)                                                                               \
   DEFINE_DUNE_QUEUE_TO_NETWORK(__VA_ARGS__)                                                                            \
   DEFINE_DUNE_NETWORK_TO_QUEUE(__VA_ARGS__)
 
-#endif
+#endif // NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_ADAPTERMACROS_HPP_

@@ -1,7 +1,18 @@
+/**
+ * @file Issues.hpp
+ *
+ *
+ * This is part of the DUNE DAQ Application Framework, copyright 2020.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
+
 #ifndef NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_ISSUES_HPP_
 #define NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_ISSUES_HPP_
 
 #include "ers/Issue.hpp"
+
+#include <string>
 
 namespace dunedaq {
 // clang-format off
@@ -46,6 +57,6 @@ ERS_DECLARE_ISSUE(nwqueueadapters,                                        // nam
                   ((std::string)queue_instance))
 
 // clang-format on
-}
+} // namespace dunedaq
 
-#endif
+#endif // NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_ISSUES_HPP_

@@ -14,6 +14,10 @@
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSource.hpp"
 #include "appfwk/ThreadHelper.hpp"
+#include "appfwk/cmd/Nljs.hpp"
+#include "nwqueueadapters/Issues.hpp"
+#include "nwqueueadapters/NetworkObjectSender.hpp"
+#include "serialization/Serialization.hpp"
 
 #include <ers/Issue.hpp>
 
@@ -24,26 +28,22 @@
 #include <string>
 #include <vector>
 
-#include "appfwk/cmd/Nljs.hpp"
-
-#include "nwqueueadapters/Issues.hpp"
-#include "nwqueueadapters/NetworkObjectSender.hpp"
-
-#include "serialization/Serialization.hpp"
-
 #ifndef EXTERN_C_FUNC_DECLARE_START
+// NOLINTNEXTLINE(build/define_used)
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
   extern "C"                                                                                                           \
   {
 #endif
 
+// NOLINTNEXTLINE(build/define_used)
 #define MAKEQNIMPL(r, data, klass)                                                                                     \
   if (plugin_name == BOOST_PP_STRINGIZE(klass))                                                                        \
-    return std::make_unique<dunedaq::nwqueueadapters::QueueToNetworkImpl<klass>>(queue_instance, sender_conf);
+    return std::make_unique<dunedaq::nwqueueadapters::QueueToNetworkImpl<klass>>(queue_instance, sender_conf); // NOLINT
 /**
  * @brief Declare the function that will be called by the plugin loader
  * @param klass Class for which a QueueToNetwork module will be used
  */
+// NOLINTNEXTLINE(build/define_used)
 #define DEFINE_DUNE_QUEUE_TO_NETWORK(...)                                                                              \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
   std::unique_ptr<dunedaq::nwqueueadapters::QueueToNetworkBase> makeQToN(                                              \
@@ -82,7 +82,13 @@ namespace dunedaq::nwqueueadapters {
 class QueueToNetworkBase
 {
 public:
+  QueueToNetworkBase() = default;
   virtual ~QueueToNetworkBase() = default;
+
+  QueueToNetworkBase(QueueToNetworkBase const&) = delete;
+  QueueToNetworkBase(QueueToNetworkBase&&) = default;
+  QueueToNetworkBase& operator=(QueueToNetworkBase const&) = delete;
+  QueueToNetworkBase& operator=(QueueToNetworkBase&&) = default;
 
   virtual void get() = 0;
 };

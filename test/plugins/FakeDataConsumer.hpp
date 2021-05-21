@@ -60,7 +60,7 @@ private:
   std::unique_ptr<dunedaq::appfwk::DAQSource<fsd::FakeData>> inputQueue_;
 };
 
-} // namespace appfwk
+} // namespace nwqueueadapters
 ERS_DECLARE_ISSUE_BASE(nwqueueadapters,
                        ConsumerProgressUpdate,
                        appfwk::GeneralDAQModuleIssue,

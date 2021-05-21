@@ -1,5 +1,6 @@
 /**
- *
+ * @file QueueToNetwork.cpp
+ * 
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
  * received with this code.
@@ -7,19 +8,18 @@
 
 #include "nwqueueadapters/QueueToNetwork.hpp"
 
-#include <chrono>
-#include <ers/Severity.hpp>
-#include <ers/ers.hpp>
-#include <string>
-#include <vector>
-
 #include "appfwk/DAQModuleHelper.hpp"
-
 #include "nwqueueadapters/Issues.hpp"
-#include "serialization/Serialization.hpp"
-
 #include "nwqueueadapters/networkobjectsender/Nljs.hpp"
 #include "nwqueueadapters/queuetonetwork/Nljs.hpp"
+#include "serialization/Serialization.hpp"
+
+#include <ers/Severity.hpp>
+#include <ers/ers.hpp>
+
+#include <chrono>
+#include <string>
+#include <vector>
 
 namespace dunedaq::nwqueueadapters {
 
