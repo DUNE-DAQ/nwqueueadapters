@@ -76,12 +76,19 @@ FakeDataConsumer::do_work(std::atomic<bool>& running_flag)
   int prev_fake_count = -1;
   std::ostringstream oss;
 
-  while (running_flag.load()) {
+  while (true) {
     try {
       inputQueue_->pop(fake_data, queueTimeout_);
-    } catch (const dunedaq::appfwk::QueueTimeoutExpired& excpt) {
+    }
+    catch (const dunedaq::appfwk::QueueTimeoutExpired& excpt) {
       ++timeout_count;
-      continue;
+      // The condition to exit the loop is that we've been stopped and
+      // there's nothing left on the input queue
+      if (!running_flag.load()) {
+        break;
+      } else {
+        continue;
+      }
     }
 
     if (prev_fake_count != -1 && (fake_data.fake_count != prev_fake_count + 1)) {

@@ -70,28 +70,26 @@ FakeDataProducer::do_work(std::atomic<bool>& running_flag)
   TLOG() << "FDP: do_work";
   int current_int = cfg_.starting_int;
   size_t counter = 0;
-  std::ostringstream oss;
 
   while (running_flag.load()) {
-    TLOG_DEBUG(1) << get_name() << ": Creating output vector";
+    TLOG_DEBUG(3) << get_name() << ": Creating output vector";
     fsd::FakeData output{ current_int++ }; // NOLINT
-    oss << "Produced vector " << counter << " with contents " << current_int;
-    ers::debug(ProducerProgressUpdate(ERS_HERE, get_name(), oss.str()));
-    oss.str("");
+    TLOG_DEBUG(3) << "Produced vector " << counter << " with contents " << current_int;
 
-    TLOG_DEBUG(1) << get_name() << ": Pushing vector into outputQueue";
-    TLOG() << "FDP \"" << get_name() << "\" push " << counter;
+    TLOG_DEBUG(3) << get_name() << ": Pushing vector into outputQueue";
+    TLOG_DEBUG(3) << "FDP \"" << get_name() << "\" push " << counter;
     try {
       outputQueue_->push(std::move(output), queueTimeout_);
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& ex) {
       ers::warning(ex);
     }
 
-    TLOG_DEBUG(1) << get_name() << ": Start of sleep between sends";
+    TLOG_DEBUG(3) << get_name() << ": Start of sleep between sends";
     std::this_thread::sleep_for(std::chrono::milliseconds(cfg_.wait_between_sends_ms));
-    TLOG_DEBUG(1) << get_name() << ": End of do_work loop";
+    TLOG_DEBUG(3) << get_name() << ": End of do_work loop";
     counter++;
   }
+  TLOG() << "do_work pushed " << counter << " items";
 }
 
 } // namespace nwqueueadapters
