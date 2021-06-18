@@ -87,7 +87,7 @@ def generate(
                            msg_module_name="FakeData",
                            receiver_config=nor.Conf(ipm_plugin_type="ZmqSubscriber",
                                                     address=NETWORK_ENDPOINTS["fake_data"],
-                                                    subscription="") # Empty subscription means subscribe to everything
+                                                    subscription="foo") # Empty subscription means subscribe to everything
                            )
          )
 

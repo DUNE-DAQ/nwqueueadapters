@@ -45,7 +45,8 @@ class NetworkObjectSender
 {
 public:
   explicit NetworkObjectSender(const dunedaq::nwqueueadapters::networkobjectsender::Conf& conf)
-    : m_sender(dunedaq::ipm::make_ipm_sender(conf.ipm_plugin_type))
+    : m_conf(conf)
+    , m_sender(dunedaq::ipm::make_ipm_sender(conf.ipm_plugin_type))
     , m_stype(dunedaq::serialization::from_string(conf.stype))
   {
     m_sender->connect_for_sends({ { "connection_string", conf.address } });
@@ -57,10 +58,11 @@ public:
   void send(const T& obj, const dunedaq::ipm::Sender::duration_t& timeout)
   {
     auto bytes = serialization::serialize(obj, m_stype);
-    m_sender->send(bytes.data(), bytes.size(), timeout);
+    m_sender->send(bytes.data(), bytes.size(), timeout, m_conf.topic);
   }
 
 protected:
+  dunedaq::nwqueueadapters::networkobjectsender::Conf m_conf;
   std::shared_ptr<ipm::Sender> m_sender;
   serialization::SerializationType m_stype;
 };

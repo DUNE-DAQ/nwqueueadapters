@@ -87,7 +87,8 @@ def generate(
         ("qton", qton.Conf(msg_type="dunedaq::nwqueueadapters::fsd::FakeData",
                            msg_module_name="FakeData",
                            sender_config=nos.Conf(ipm_plugin_type="ZmqPublisher",
-                                                  address=NETWORK_ENDPOINTS["fake_data"])
+                                                  address=NETWORK_ENDPOINTS["fake_data"],
+                                                  topic="foo")
                            )
          )
     ])
