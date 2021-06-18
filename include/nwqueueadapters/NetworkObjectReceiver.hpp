@@ -47,11 +47,20 @@ public:
   {
     m_receiver->connect_for_receives({ { "connection_string", conf.address } });
 
-    // If the Receiver is of Subscriber type, we have to subscribe in order to receive anything
-    auto m_subscriber=std::dynamic_pointer_cast<ipm::Subscriber>(m_receiver);
-    if(m_subscriber){
-      for(auto topic : conf.subscriptions) {
-        m_subscriber->subscribe(topic);
+    // If the Receiver is of Subscriber type, we have to subscribe in
+    // order to receive anything. We should only attempt to subscribe
+    // if the ipm Receiver is of "Subscriber" type. We can't do this
+    // by checking whether the dynamic_cast<> below works, because the
+    // actual object type is ZmqReceiverImpl (which derives from both
+    // Receiver and Subscriber), regardless of whether the connection
+    // is of Subscriber type. So we do this hacky string comparison instead
+    if( conf.ipm_plugin_type.find("Subscriber") != std::string::npos ) {
+
+      auto m_subscriber=std::dynamic_pointer_cast<ipm::Subscriber>(m_receiver);
+      if(m_subscriber){
+        for(auto topic : conf.subscriptions) {
+          m_subscriber->subscribe(topic);
+        }
       }
     }
   }
