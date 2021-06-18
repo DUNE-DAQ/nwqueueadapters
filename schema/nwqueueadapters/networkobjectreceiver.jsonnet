@@ -12,15 +12,17 @@ local nor = {
   
   address: s.string("Address", doc="Address to receive from"),
 
-  subscription: s.string("Subscription", doc="Subscription string"),
+  topic: s.string("Topic", doc="A topic to subscribe to"),
+
+  subscriptions: s.sequence("Subscriptions", self.topic, doc="List of topics to subscribe to"),
   
   conf: s.record("Conf",  [
     s.field("ipm_plugin_type", self.ipmtype, "ZmqSender",
       doc="IPM plugin type"),
     s.field("address", self.address, "inproc://default",
       doc="Address to receive from"),
-    s.field("subscription", self.subscription, "",
-      doc="Topic to subscribe to. Empty topic subscribes to everything")
+    s.field("subscriptions", self.subscriptions, [""],
+      doc="List of topics to subscribe to. Empty-string topic subscribes to everything")
    ], doc="NetworkObjectReceiver Configuration"),
   
 };

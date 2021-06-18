@@ -50,7 +50,9 @@ public:
     // If the Receiver is of Subscriber type, we have to subscribe in order to receive anything
     auto m_subscriber=std::dynamic_pointer_cast<ipm::Subscriber>(m_receiver);
     if(m_subscriber){
-      m_subscriber->subscribe(conf.subscription); // Zero-length topic means "subscribe to all"
+      for(auto topic : conf.subscriptions) {
+        m_subscriber->subscribe(topic);
+      }
     }
   }
 
