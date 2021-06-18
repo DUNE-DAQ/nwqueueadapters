@@ -86,7 +86,8 @@ def generate(
         ("ntoq", ntoq.Conf(msg_type="dunedaq::nwqueueadapters::fsd::FakeData",
                            msg_module_name="FakeData",
                            receiver_config=nor.Conf(ipm_plugin_type="ZmqSubscriber",
-                                                    address=NETWORK_ENDPOINTS["fake_data"])
+                                                    address=NETWORK_ENDPOINTS["fake_data"],
+                                                    subscription="") # Empty subscription means subscribe to everything
                            )
          )
 
