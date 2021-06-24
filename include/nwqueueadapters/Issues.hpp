@@ -16,6 +16,7 @@
 
 namespace dunedaq {
 // clang-format off
+    // LCOV_EXCL_START
 
 ERS_DECLARE_ISSUE(nwqueueadapters,                        // namespace
                   CannotConfigure,                        // issue name
@@ -55,7 +56,8 @@ ERS_DECLARE_ISSUE(nwqueueadapters,                                        // nam
                   ((std::string)klass)                                    // attributes
                   ((std::string)library)
                   ((std::string)queue_instance))
-
+    
+    // LCOV_EXCL_STOP
 // clang-format on
 } // namespace dunedaq
 
