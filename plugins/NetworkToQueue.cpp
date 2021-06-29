@@ -45,7 +45,7 @@ NetworkToQueue::do_configure(const data_t& config_data)
   } catch (NoNetworkToQueueImpl& e) {
     throw CannotConfigure(ERS_HERE, e);
   }
-  m_thread.start_working_thread();
+  m_thread.start_working_thread("ntoq");
 }
 
 void
