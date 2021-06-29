@@ -11,7 +11,7 @@ DUNE `DAQModule`s that connect `appfwk` queues to [IPM](https://github.com/DUNE-
 DEFINE_DUNE_NWQUEUEADAPTERS(mynamespace::MyClass)
 ```
 
-Build the plugin with `daq_add_plugin(MyClass duneNetworkQueue LINK_LIBRARIES nwqueueadapters)`. In the job configuration, pass the following parameters to NToQ/QToN at conf time:
+Build the plugin with `daq_add_plugin(MyClass duneNetworkQueue LINK_LIBRARIES nwqueueadapters::nwqueueadapters)`. Add any other necessary libraries to `LINK_LIBRARIES`. In the job configuration, pass the following parameters to NToQ/QToN at conf time:
 
 ```json
 "msg_type": "mynamespace::MyClass",
