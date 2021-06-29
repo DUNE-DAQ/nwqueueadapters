@@ -17,7 +17,7 @@ local nos = {
   topic: s.string("Topic", doc="A topic string for publisher-type senders"),
   
   conf: s.record("Conf",  [
-    s.field("stype", self.stype, "json",
+    s.field("stype", self.stype, "msgpack",
       doc="Serialization type"),
     s.field("ipm_plugin_type", self.ipmtype, "ZmqSender",
       doc="IPM plugin type"),
