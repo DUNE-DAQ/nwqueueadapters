@@ -79,8 +79,7 @@ FakeDataConsumer::do_work(std::atomic<bool>& running_flag)
   while (true) {
     try {
       inputQueue_->pop(fake_data, queueTimeout_);
-    }
-    catch (const dunedaq::appfwk::QueueTimeoutExpired& excpt) {
+    } catch (const dunedaq::appfwk::QueueTimeoutExpired& excpt) {
       ++timeout_count;
       // The condition to exit the loop is that we've been stopped and
       // there's nothing left on the input queue
