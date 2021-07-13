@@ -19,6 +19,9 @@
 #include "logging/Logging.hpp" // NOLINT
 
 #include <iostream>
+#include <map>
+#include <memory>
+#include <string>
 
 using namespace dunedaq::appfwk;
 using namespace dunedaq::nwqueueadapters;
