@@ -10,11 +10,32 @@ find_package(logging REQUIRED)
 find_package(ipm REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(serialization REQUIRED)
+find_package(opmonlib REQUIRED)
 
 ##############################################################################
 # Schema
 
-daq_codegen(*.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 MsgP.hpp.j2 )
+daq_codegen(
+  fakedataconsumer.jsonnet
+  fakedataproducer.jsonnet
+  networkobjectreceiver.jsonnet
+  networkobjectsender.jsonnet
+  networktoqueueinfo.jsonnet
+  networktoqueue.jsonnet
+  queuetonetworkinfo.jsonnet
+  queuetonetwork.jsonnet
+  TEMPLATES Structs.hpp.j2 Nljs.hpp.j2
+)
+
+daq_codegen(
+  fsd.jsonnet
+  TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 MsgP.hpp.j2 )
+
+daq_codegen(
+  networktoqueueinfo.jsonnet
+  queuetonetworkinfo.jsonnet
+  DEP_PKGS opmonlib TEMPLATES opmonlib/InfoStructs.hpp.j2 opmonlib/InfoNljs.hpp.j2
+)
 
 ##############################################################################
 # Main library
