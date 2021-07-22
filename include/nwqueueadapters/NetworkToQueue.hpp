@@ -17,6 +17,7 @@
 #include "appfwk/cmd/Nljs.hpp"
 #include "nwqueueadapters/Issues.hpp"
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
+#include "nwqueueadapters/networktoqueueinfo/InfoNljs.hpp"
 #include "serialization/Serialization.hpp"
 
 #include "boost/preprocessor.hpp"
@@ -122,6 +123,8 @@ public:
 
   void init(const data_t&) override;
 
+  void get_info(opmonlib::InfoCollector& ci, int level) override;
+  
 private:
   // Commands
   void do_configure(const data_t&);
@@ -134,6 +137,9 @@ private:
   std::string m_queue_instance;
   std::string m_message_type_name;
   std::unique_ptr<NetworkToQueueBase> m_impl;
+
+  networktoqueueinfo::Info m_opmon_info;
+  std::mutex m_opmon_mutex;
 };
 
 std::unique_ptr<NetworkToQueueBase>

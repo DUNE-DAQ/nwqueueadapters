@@ -40,6 +40,13 @@ NetworkToQueue::do_configure(const data_t& config_data)
   auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
   m_message_type_name = conf.msg_type;
 
+  {
+    std::lock_guard<std::mutex> _(m_opmon_mutex);
+    m_opmon_info.received_count = 0;
+    m_opmon_info.pushed_count = 0;
+    m_opmon_info.push_failed_count = 0;
+  }
+  
   try {
     m_impl = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, m_queue_instance, conf.receiver_config);
   } catch (NoNetworkToQueueImpl& e) {
@@ -68,10 +75,25 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
       continue;
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& e) {
       ers::warning(NetworkToQueuePushTimeout(ERS_HERE, m_message_type_name, m_queue_instance, e));
+      
+      std::lock_guard<std::mutex> _(m_opmon_mutex);
+      ++m_opmon_info.received_count;
+      ++m_opmon_info.push_failed_count;
+
       continue;
     }
+    std::lock_guard<std::mutex> _(m_opmon_mutex);
+    ++m_opmon_info.received_count;
+    ++m_opmon_info.pushed_count;
+
   }
   TLOG() << "Did " << recv_counter << " receives";
+}
+
+void NetworkToQueue::get_info(opmonlib::InfoCollector& ci, int)
+{
+  std::lock_guard<std::mutex> _(m_opmon_mutex);
+  ci.add(m_opmon_info);
 }
 
 DEFINE_DUNE_DAQ_MODULE(NetworkToQueue)

@@ -45,6 +45,13 @@ QueueToNetwork::do_configure(const data_t& config_data)
   auto conf = config_data.get<dunedaq::nwqueueadapters::queuetonetwork::Conf>();
   m_message_type_name = conf.msg_type;
 
+  {
+    std::lock_guard<std::mutex> _(m_opmon_mutex);
+    m_opmon_info.popped_count = 0;
+    m_opmon_info.sent_count = 0;
+    m_opmon_info.send_failed_count = 0;
+  }
+
   try {
     m_impl = makeQueueToNetworkBase(conf.msg_module_name, m_message_type_name, m_queue_instance, conf.sender_config);
   } catch (NoQueueToNetworkImpl& e) {
@@ -71,9 +78,23 @@ QueueToNetwork::do_work(std::atomic<bool>& running_flag)
       continue;
     } catch (const dunedaq::ipm::SendTimeoutExpired& e) {
       ers::warning(QueueToNetworkSendTimeout(ERS_HERE, m_message_type_name, m_queue_instance, e));
+      
+      std::lock_guard<std::mutex> _(m_opmon_mutex);
+      ++m_opmon_info.popped_count;
+      ++m_opmon_info.send_failed_count;
+
       continue;
     }
+    std::lock_guard<std::mutex> _(m_opmon_mutex);
+    ++m_opmon_info.popped_count;
+    ++m_opmon_info.sent_count;
   }
+}
+
+void QueueToNetwork::get_info(opmonlib::InfoCollector& ci, int)
+{
+  std::lock_guard<std::mutex> _(m_opmon_mutex);
+  ci.add(m_opmon_info);
 }
 
 DEFINE_DUNE_DAQ_MODULE(QueueToNetwork)
