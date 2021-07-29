@@ -21,11 +21,13 @@
 #include "serialization/Serialization.hpp"
 
 
+#include <chrono>
 #include <ers/Issue.hpp>
 
 #include <cetlib/BasicPluginFactory.h>
 #include <cetlib/compiler_macros.h>
 
+#include <ipm/Sender.hpp>
 #include <memory>
 #include <string>
 #include <vector>
@@ -110,6 +112,47 @@ public:
     : m_sender(sender_conf)
   {
     m_input_queue.reset(new appfwk::DAQSource<MsgType>(queue_instance));
+
+    // Send a single control message that the other end will ignore,
+    // to ensure that the connection is made before this function
+    // finishes.
+    //
+    // This is to avoid data loss in the following case. Suppose we have:
+    //
+    //   ModuleA --q1--> Q2N (ipm::Sender) ==network==> N2Q --q2--> ModuleB
+    //
+    // And both:
+    //
+    // * ModuleA is sent "conf" before ModuleB
+    // * ModuleA pushes to q1 during its do_configure() function
+    //
+    // Then Q2N will pop the item off its queue and attempt to send
+    // the item _before_ ModuleB connects. The connection is not yet
+    // made, and so the network send() times out and the item is
+    // dropped. Q2N has no way to tell ModuleA that the item has been
+    // dropped, so we get silent data loss
+    //
+    // So instead, we send a single "control" message before we start
+    // popping items from the input queue. If this message times out,
+    // we throw an exception and so never get to the point where we're
+    // popping items from the input queue. This is kind of ugly, but
+    // it's better than silently dropping data.
+    //
+    // (The receiving end has logic to deal with control messages,
+    // which currently just ignores them. There's nothing it could
+    // usefully do with this message anyway)
+    //
+    // (If the Q2N is an ipm::Publisher instead of ipm::Sender,
+    // messages sent before the connection is made are silently
+    // dropped by ZeroMQ. This is intended, since subscribers (or lack
+    // of them) should have no effect on the sender. If you don't want
+    // message loss, you have to use something other than Publisher.)
+    
+    try{
+      m_sender.send_control_message('\0', std::chrono::milliseconds(1000));
+    } catch (ipm::SendTimeoutExpired& e) {
+      throw ReceiverNotReady(ERS_HERE, queue_instance, sender_conf.address, e);
+    }
   }
 
   /**

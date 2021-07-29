@@ -51,7 +51,16 @@ public:
   {
     m_sender->connect_for_sends({ { "connection_string", conf.address } });
   }
-
+  
+  /**
+   * @brief Send a control message consisting of a single byte @p c
+   */
+  void send_control_message(char c, const dunedaq::ipm::Sender::duration_t& timeout)
+  {
+    std::vector<char> bytes{c};
+    m_sender->send(bytes.data(), bytes.size(), timeout, m_conf.topic);
+  }
+  
   /**
    * @brief Send object @p obj with timeout @p timeout
    */

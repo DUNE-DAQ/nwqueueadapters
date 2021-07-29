@@ -61,7 +61,7 @@ BOOST_DATA_TEST_CASE(NetworkObjectSenderReceiver, boost::unit_test::data::make({
   m.values.push_back(2.781);
 
   sender.send(m, std::chrono::milliseconds(2));
-  MyTypeIntrusive m_recv = receiver.recv(std::chrono::milliseconds(2));
+  MyTypeIntrusive m_recv = std::get<MyTypeIntrusive>(receiver.recv(std::chrono::milliseconds(2)));
 
   BOOST_CHECK_EQUAL(m_recv.count, m.count);
   BOOST_CHECK_EQUAL(m_recv.name, m.name);
