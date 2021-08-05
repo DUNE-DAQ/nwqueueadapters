@@ -149,7 +149,7 @@ public:
     // message loss, you have to use something other than Publisher.)
     
     try{
-      m_sender.send_control_message('\0', std::chrono::milliseconds(1000));
+      m_sender.send_control_message('\0', std::chrono::milliseconds(sender_conf.control_timeout));
     } catch (ipm::SendTimeoutExpired& e) {
       throw ReceiverNotReady(ERS_HERE, queue_instance, sender_conf.address, e);
     }
