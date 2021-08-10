@@ -26,6 +26,7 @@
 
 #include <memory>
 #include <string>
+#include <variant>
 #include <vector>
 
 #ifndef EXTERN_C_FUNC_DECLARE_START
@@ -88,7 +89,13 @@ public:
 
   virtual void push()
   {
-    m_output_queue->push(m_receiver.recv(std::chrono::milliseconds(10)), std::chrono::milliseconds(10));
+    std::variant<char, T> incoming=m_receiver.recv(std::chrono::milliseconds(10));
+    if (std::holds_alternative<char>(incoming)) {
+      // So far the only control message is the "test connection" message, which we ignore
+    }
+    else if (std::holds_alternative<T>(incoming)) {
+      m_output_queue->push(std::get<T>(incoming), std::chrono::milliseconds(10));
+    }
   }
 
 private:

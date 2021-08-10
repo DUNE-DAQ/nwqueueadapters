@@ -45,7 +45,7 @@ receiver_thread_fn(dunedaq::nwqueueadapters::networkobjectreceiver::Conf receive
   int total = 0;
   dunedaq::nwqueueadapters::NetworkObjectReceiver<FakeData> receiver(receiver_conf);
   for (int i = 0; i < n_messages; ++i) {
-    FakeData fd_recv = receiver.recv(std::chrono::milliseconds(1000000));
+    FakeData fd_recv = std::get<FakeData>(receiver.recv(std::chrono::milliseconds(1000000)));
     total += fd_recv.fake_count;
   }
   TLOG() << "Total:" << total << std::endl;

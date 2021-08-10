@@ -24,6 +24,15 @@ ERS_DECLARE_ISSUE(nwqueueadapters,                        // namespace
                   )                                       // (no attributes)
 
 ERS_DECLARE_ISSUE(nwqueueadapters,                        // namespace
+                  ReceiverNotReady,                       // issue name
+                  "Receiver not ready in QueueToNetwork"  // message
+                  << " with queue \"" << queue
+                  << "\", connection " << connection
+                  << ". Ensure that receiving NetworkToQueue is configured before sender",
+                  ((std::string)queue)                    // attributes
+                  ((std::string)connection))
+
+ERS_DECLARE_ISSUE(nwqueueadapters,                        // namespace
                   NetworkToQueuePushTimeout,              // issue name
                   "Push timed out: Message of type " << t // message
                   << " to queue " << q,
@@ -56,7 +65,7 @@ ERS_DECLARE_ISSUE(nwqueueadapters,                                        // nam
                   ((std::string)klass)                                    // attributes
                   ((std::string)library)
                   ((std::string)queue_instance))
-    
+
     // LCOV_EXCL_STOP
 // clang-format on
 } // namespace dunedaq

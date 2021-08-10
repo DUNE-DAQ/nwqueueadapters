@@ -39,6 +39,6 @@ main()
   fd.fake_count = 25;
 
   sender.send(fd, std::chrono::milliseconds(2));
-  FakeData fd_recv = receiver.recv(std::chrono::milliseconds(2));
+  FakeData fd_recv = std::get<FakeData>(receiver.recv(std::chrono::milliseconds(2)));
   TLOG() << "Sent: " << fd.fake_count << ". Received: " << fd_recv.fake_count << std::endl;
 }
