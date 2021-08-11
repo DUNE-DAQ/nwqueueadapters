@@ -94,7 +94,7 @@ public:
       // So far the only control message is the "test connection" message, which we ignore
     }
     else if (std::holds_alternative<T>(incoming)) {
-      m_output_queue->push(std::get<T>(incoming), std::chrono::milliseconds(10));
+      m_output_queue->push(std::move(std::get<T>(incoming)), std::chrono::milliseconds(10));
     }
   }
 
