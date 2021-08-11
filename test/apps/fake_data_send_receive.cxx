@@ -77,19 +77,19 @@ main()
   to_json(producer_conf_json, producer_config);
   fake_data_producer->execute_command("conf", producer_conf_json);
 
-  queuetonetwork::Conf sender_config;
-  sender_config.msg_type = "dunedaq::nwqueueadapters::fsd::FakeData";
-  sender_config.msg_module_name = "FakeData";
-  nlohmann::json sender_conf_json;
-  to_json(sender_conf_json, sender_config);
-  fake_data_sender->execute_command("conf", sender_conf_json);
-
   networktoqueue::Conf receiver_config;
   receiver_config.msg_type = "dunedaq::nwqueueadapters::fsd::FakeData";
   receiver_config.msg_module_name = "FakeData";
   nlohmann::json receiver_conf_json;
   to_json(receiver_conf_json, receiver_config);
   fake_data_receiver->execute_command("conf", receiver_conf_json);
+
+  queuetonetwork::Conf sender_config;
+  sender_config.msg_type = "dunedaq::nwqueueadapters::fsd::FakeData";
+  sender_config.msg_module_name = "FakeData";
+  nlohmann::json sender_conf_json;
+  to_json(sender_conf_json, sender_config);
+  fake_data_sender->execute_command("conf", sender_conf_json);
 
   fakedataconsumer::Conf consumer_config;
   nlohmann::json consumer_conf_json;
