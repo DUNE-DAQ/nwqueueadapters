@@ -143,6 +143,7 @@ private:
 
   std::string m_queue_instance;
   std::string m_message_type_name;
+  bool m_is_subscriber_type;
   std::unique_ptr<NetworkToQueueBase> m_impl;
 
   networktoqueueinfo::Info m_opmon_info;

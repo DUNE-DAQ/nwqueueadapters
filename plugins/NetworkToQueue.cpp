@@ -22,6 +22,7 @@ namespace dunedaq::nwqueueadapters {
 NetworkToQueue::NetworkToQueue(const std::string& name)
   : appfwk::DAQModule(name)
   , m_thread(std::bind(&NetworkToQueue::do_work, this, std::placeholders::_1))
+  , m_is_subscriber_type(false)
   , m_impl(nullptr)
 {
   register_command("conf", &NetworkToQueue::do_configure);
@@ -39,6 +40,9 @@ NetworkToQueue::do_configure(const data_t& config_data)
 {
   auto conf = config_data.get<dunedaq::nwqueueadapters::networktoqueue::Conf>();
   m_message_type_name = conf.msg_type;
+  // Hacky string comparison to determine whether the receiver is a
+  // "subscriber" type, so dropping messages is OK
+  m_is_subscriber_type = (conf.receiver_config.ipm_plugin_type.find("Subscriber") != std::string::npos);
 
   {
     std::lock_guard<std::mutex> _(m_opmon_mutex);
@@ -46,7 +50,7 @@ NetworkToQueue::do_configure(const data_t& config_data)
     m_opmon_info.pushed_count = 0;
     m_opmon_info.push_failed_count = 0;
   }
-  
+
   try {
     m_impl = makeNetworkToQueueBase(conf.msg_module_name, conf.msg_type, m_queue_instance, conf.receiver_config);
   } catch (NoNetworkToQueueImpl& e) {
@@ -74,8 +78,15 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
       // It's not a problem if the receive times out
       continue;
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& e) {
-      ers::warning(NetworkToQueuePushTimeout(ERS_HERE, m_message_type_name, m_queue_instance, e));
-      
+
+      auto issue = NetworkToQueuePushTimeout(ERS_HERE, m_message_type_name, m_queue_instance, e);
+      if (m_is_subscriber_type) {
+        ers::warning(issue);
+      }
+      else {
+        TLOG_DEBUG(1) << issue;
+      }
+
       std::lock_guard<std::mutex> _(m_opmon_mutex);
       ++m_opmon_info.received_count;
       ++m_opmon_info.push_failed_count;
