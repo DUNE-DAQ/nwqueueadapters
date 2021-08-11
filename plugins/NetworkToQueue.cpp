@@ -80,11 +80,15 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
     } catch (const dunedaq::appfwk::QueueTimeoutExpired& e) {
 
       auto issue = NetworkToQueuePushTimeout(ERS_HERE, m_message_type_name, m_queue_instance, e);
+      // If we're connected to a "subscriber" type socket, it's ~OK to drop
+      // messages
       if (m_is_subscriber_type) {
+        TLOG_DEBUG(1) << get_name() << ": Push of message type " << m_message_type_name << " to queue "
+                      << m_queue_instance
+                      << " timed out. Ignoring because incoming socket is "
+                         "subscriber type";
+      } else {
         ers::warning(issue);
-      }
-      else {
-        TLOG_DEBUG(1) << issue;
       }
 
       std::lock_guard<std::mutex> _(m_opmon_mutex);
