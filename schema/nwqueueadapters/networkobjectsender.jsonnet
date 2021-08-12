@@ -15,9 +15,6 @@ local nos = {
   address: s.string("Address", doc="Address to send to"),
 
   topic: s.string("Topic", doc="A topic string for publisher-type senders"),
-
-  timeout : s.number("Count", "u8",
-                     doc="A number of milliseconds to wait for something"),
   
   conf: s.record("Conf",  [
     s.field("stype", self.stype, "msgpack",
@@ -27,8 +24,7 @@ local nos = {
     s.field("address", self.address, "inproc://default",
       doc="Address to send to"),
     s.field("topic", self.topic, "",
-      doc="topic for publisher-type senders"),
-    s.field("control_timeout", self.timeout, 1000, doc="Timeout for sending the initial control message")
+      doc="topic for publisher-type senders")
   ], doc="NetworkObjectSender Configuration"),
   
 };
