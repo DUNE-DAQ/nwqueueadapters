@@ -18,8 +18,6 @@
 #include "ipm/Receiver.hpp"
 
 #include <memory> // for shared_ptr
-#include <variant>
-
 namespace dunedaq::nwqueueadapters {
 
 /**
@@ -57,25 +55,10 @@ public:
     }
   }
 
-  /**
-   * @brief Receive a control message or object
-   *
-   * Incoming messages may be "control" messages consisting of a
-   * single byte, or serialized objects. In the former case, the
-   * returned std::variant holds a char with the content of the
-   * control message; in the latter case, the variant holds an object
-   * of class T deserialized from the message
-   **/
-  std::variant<char, T> recv(const dunedaq::ipm::Receiver::duration_t& timeout)
+  T recv(const dunedaq::ipm::Receiver::duration_t& timeout)
   {
     dunedaq::ipm::Receiver::Response recvd = m_receiver->receive(timeout);
-    // Messages consisting of a single byte are control messages; others are serialized objects
-    if (recvd.data.size()==1) {
-      return recvd.data[0];
-    }
-    else{
-      return serialization::deserialize<T>(recvd.data);
-    }
+    return serialization::deserialize<T>(recvd.data);
   }
 
 protected:
