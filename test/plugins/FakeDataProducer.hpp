@@ -17,7 +17,7 @@
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
-#include "appfwk/ThreadHelper.hpp"
+#include "toolbox/ThreadHelper.hpp"
 
 // Our command structures.
 #include "nwqueueadapters/fakedataproducer/Structs.hpp"
@@ -52,7 +52,7 @@ private:
   void do_stop(const data_t& data);
 
   // Threading
-  dunedaq::appfwk::ThreadHelper thread_;
+  dunedaq::toolbox::ThreadHelper thread_;
   void do_work(std::atomic<bool>& running_flag);
 
   // Configuration
