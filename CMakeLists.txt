@@ -43,7 +43,7 @@ daq_codegen(
 # We don't have a real library, but we want to create a
 # nwqueueadapters::nwqueueadapters target for dependents to be able to
 # depend on
-daq_add_library(LINK_LIBRARIES logging::logging ipm::ipm serialization::serialization)
+daq_add_library(LINK_LIBRARIES logging::logging ipm::ipm serialization::serialization appfwk::appfwk)
 
 ##############################################################################
 
