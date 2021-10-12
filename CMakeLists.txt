@@ -7,6 +7,7 @@ daq_setup_environment()
 
 find_package(appfwk REQUIRED)
 find_package(toolbox REQUIRED)
+find_package(networkmanager REQUIRED)
 find_package(logging REQUIRED)
 find_package(ipm REQUIRED)
 find_package(nlohmann_json REQUIRED)
@@ -44,7 +45,7 @@ daq_codegen(
 # We don't have a real library, but we want to create a
 # nwqueueadapters::nwqueueadapters target for dependents to be able to
 # depend on
-daq_add_library(LINK_LIBRARIES logging::logging ipm::ipm serialization::serialization appfwk::appfwk toolbox::toolbox)
+daq_add_library(LINK_LIBRARIES logging::logging ipm::ipm serialization::serialization appfwk::appfwk networkmanager::networkmanager toolbox::toolbox)
 
 ##############################################################################
 

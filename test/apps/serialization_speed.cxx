@@ -63,14 +63,20 @@ now_us()
 int
 main()
 {
+  dunedaq::networkmanager::nwmgr::Connections testConfig;
+  dunedaq::networkmanager::nwmgr::Connection testConn;
+  testConn.name = "foo";
+  testConn.address = "inproc://foo";
+  testConn.type = dunedaq::networkmanager::nwmgr::Type::Receiver;
+  testConfig.push_back(testConn);
+  dunedaq::networkmanager::NetworkManager::get().configure(testConfig);
+
   dunedaq::nwqueueadapters::networkobjectsender::Conf sender_conf;
-  sender_conf.ipm_plugin_type = "ZmqSender";
   sender_conf.stype = "msgpack";
-  sender_conf.address = "inproc://foo";
+  sender_conf.name = "foo";
 
   dunedaq::nwqueueadapters::networkobjectreceiver::Conf receiver_conf;
-  receiver_conf.ipm_plugin_type = "ZmqReceiver";
-  receiver_conf.address = "inproc://foo";
+  receiver_conf.name = "foo";
 
   const int N = 1000000;
   uint64_t start_time = now_us(); // NOLINT

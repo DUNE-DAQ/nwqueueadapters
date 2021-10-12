@@ -14,7 +14,9 @@
 #include "nwqueueadapters/networkobjectsender/Structs.hpp"
 #include "serialization/Serialization.hpp"
 
+#include "ipm/PluginInfo.hpp"
 #include "ipm/Sender.hpp"
+#include "networkmanager/NetworkManager.hpp"
 
 #include <memory> // for shared_ptr
 
@@ -46,10 +48,14 @@ class NetworkObjectSender
 public:
   explicit NetworkObjectSender(const dunedaq::nwqueueadapters::networkobjectsender::Conf& conf)
     : m_conf(conf)
-    , m_sender(dunedaq::ipm::make_ipm_sender(conf.ipm_plugin_type))
     , m_stype(dunedaq::serialization::from_string(conf.stype))
   {
-    m_sender->connect_for_sends({ { "connection_string", conf.address } });
+    auto is_subscriber = networkmanager::NetworkManager::get().is_subscriber(conf.name);
+    auto address = networkmanager::NetworkManager::get().get_connection_string(conf.name);
+    auto plugin_type =
+      ipm::get_recommended_plugin_name(is_subscriber ? ipm::IpmPluginType::Publisher : ipm::IpmPluginType::Sender);
+    m_sender = dunedaq::ipm::make_ipm_sender(plugin_type);
+    m_sender->connect_for_sends({ { "connection_string", address } });
   }
 
   /**
