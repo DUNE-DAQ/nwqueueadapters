@@ -48,7 +48,6 @@ BOOST_DATA_TEST_CASE(NetworkObjectSenderReceiver, boost::unit_test::data::make({
   dunedaq::networkmanager::nwmgr::Connection testConn;
   testConn.name = "foo";
   testConn.address = "inproc://foo";
-  testConn.type = dunedaq::networkmanager::nwmgr::Type::Receiver;
   testConfig.push_back(testConn);
   dunedaq::networkmanager::NetworkManager::get().configure(testConfig);
 

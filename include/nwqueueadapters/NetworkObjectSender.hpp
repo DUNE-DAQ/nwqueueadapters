@@ -50,7 +50,7 @@ public:
     : m_conf(conf)
     , m_stype(dunedaq::serialization::from_string(conf.stype))
   {
-    auto is_subscriber = networkmanager::NetworkManager::get().is_subscriber(conf.name);
+    auto is_subscriber = networkmanager::NetworkManager::get().is_pubsub_connection(conf.name);
     auto address = networkmanager::NetworkManager::get().get_connection_string(conf.name);
     auto plugin_type =
       ipm::get_recommended_plugin_name(is_subscriber ? ipm::IpmPluginType::Publisher : ipm::IpmPluginType::Sender);
