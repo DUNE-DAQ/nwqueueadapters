@@ -46,13 +46,14 @@ class NetworkObjectReceiver
 public:
   explicit NetworkObjectReceiver(const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& conf)
   {
-    auto is_subscriber = networkmanager::NetworkManager::get().is_subscriber(conf.name);
-    auto address = networkmanager::NetworkManager::get().get_connection_string(conf.name);
+    auto is_subscriber = networkmanager::NetworkManager::get().is_pubsub_connection(conf.name);
     auto plugin_type =
       ipm::get_recommended_plugin_name(is_subscriber ? ipm::IpmPluginType::Subscriber : ipm::IpmPluginType::Receiver);
     m_receiver = dunedaq::ipm::make_ipm_receiver(plugin_type);
 
-    m_receiver->connect_for_receives({ { "connection_string", address } });
+    nlohmann::json config_json;
+    config_json["connection_string"] = networkmanager::NetworkManager::get().get_connection_string(conf.name);
+    m_receiver->connect_for_receives(config_json);
 
     auto m_subscriber = std::dynamic_pointer_cast<ipm::Subscriber>(m_receiver);
     if (m_subscriber) {

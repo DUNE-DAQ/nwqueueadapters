@@ -34,7 +34,6 @@ main()
   dunedaq::networkmanager::nwmgr::Connection testConn;
   testConn.name = "default";
   testConn.address = "inproc://default";
-  testConn.type = dunedaq::networkmanager::nwmgr::Type::Receiver;
   testConfig.push_back(testConn);
   dunedaq::networkmanager::NetworkManager::get().configure(testConfig);
 
