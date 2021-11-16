@@ -78,7 +78,7 @@ QueueToNetwork::do_work(std::atomic<bool>& running_flag)
       continue;
     } catch (const dunedaq::ipm::SendTimeoutExpired& e) {
       ers::warning(QueueToNetworkSendTimeout(ERS_HERE, m_message_type_name, m_queue_instance, e));
-      
+
       std::lock_guard<std::mutex> _(m_opmon_mutex);
       ++m_opmon_info.popped_count;
       ++m_opmon_info.send_failed_count;
@@ -91,7 +91,8 @@ QueueToNetwork::do_work(std::atomic<bool>& running_flag)
   }
 }
 
-void QueueToNetwork::get_info(opmonlib::InfoCollector& ci, int)
+void
+QueueToNetwork::get_info(opmonlib::InfoCollector& ci, int)
 {
   std::lock_guard<std::mutex> _(m_opmon_mutex);
   ci.add(m_opmon_info);

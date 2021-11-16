@@ -100,12 +100,12 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
     std::lock_guard<std::mutex> _(m_opmon_mutex);
     ++m_opmon_info.received_count;
     ++m_opmon_info.pushed_count;
-
   }
   TLOG() << "Did " << recv_counter << " receives";
 }
 
-void NetworkToQueue::get_info(opmonlib::InfoCollector& ci, int)
+void
+NetworkToQueue::get_info(opmonlib::InfoCollector& ci, int)
 {
   std::lock_guard<std::mutex> _(m_opmon_mutex);
   ci.add(m_opmon_info);

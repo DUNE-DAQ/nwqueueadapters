@@ -13,12 +13,12 @@
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
-#include "toolbox/ThreadHelper.hpp"
 #include "appfwk/cmd/Nljs.hpp"
 #include "nwqueueadapters/Issues.hpp"
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "nwqueueadapters/networktoqueueinfo/InfoNljs.hpp"
 #include "serialization/Serialization.hpp"
+#include "toolbox/ThreadHelper.hpp"
 
 #include "boost/preprocessor.hpp"
 #include <cetlib/BasicPluginFactory.h>
@@ -124,7 +124,7 @@ public:
   void init(const data_t&) override;
 
   void get_info(opmonlib::InfoCollector& ci, int level) override;
-  
+
 private:
   // Commands
   void do_configure(const data_t&);
