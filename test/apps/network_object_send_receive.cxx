@@ -9,14 +9,13 @@
 #include "networkmanager/NetworkManager.hpp"
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "nwqueueadapters/NetworkObjectSender.hpp"
-// clang-format off
-#include <string> // NOLINT This is here to workaround moo issue #12
-#include "nwqueueadapters/fsd/MsgP.hpp" // NOLINT
-#include "nwqueueadapters/fsd/Nljs.hpp" // NOLINT
-#include "nwqueueadapters/fsd/Structs.hpp" // NOLINT
+
 #include "networkmanager/nwmgr/Structs.hpp"
-// clang-format on
-#include "logging/Logging.hpp" // NOLINT
+#include "nwqueueadapters/fsd/MsgP.hpp"
+#include "nwqueueadapters/fsd/Nljs.hpp"
+#include "nwqueueadapters/fsd/Structs.hpp"
+
+#include "logging/Logging.hpp"
 
 #include <iostream>
 
