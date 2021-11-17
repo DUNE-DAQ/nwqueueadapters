@@ -13,12 +13,12 @@
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
+#include "appfwk/ThreadHelper.hpp"
 #include "appfwk/cmd/Nljs.hpp"
 #include "nwqueueadapters/Issues.hpp"
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "nwqueueadapters/networktoqueueinfo/InfoNljs.hpp"
 #include "serialization/Serialization.hpp"
-#include "toolbox/ThreadHelper.hpp"
 
 #include "boost/preprocessor.hpp"
 #include <cetlib/BasicPluginFactory.h>
@@ -131,7 +131,7 @@ private:
   void do_scrap(const data_t&);
 
   // Threading
-  toolbox::ThreadHelper m_thread;
+  appfwk::ThreadHelper m_thread;
   void do_work(std::atomic<bool>& running_flag);
 
   std::string m_queue_instance;

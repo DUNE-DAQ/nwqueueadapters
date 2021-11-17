@@ -14,7 +14,7 @@
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSource.hpp"
-#include "toolbox/ThreadHelper.hpp"
+#include "appfwk/ThreadHelper.hpp"
 
 // Our command data structures
 #include "nwqueueadapters/fakedataconsumer/Nljs.hpp"
@@ -51,7 +51,7 @@ private:
 
   // Threading
   void do_work(std::atomic<bool>& running_flag);
-  dunedaq::toolbox::ThreadHelper thread_;
+  dunedaq::appfwk::ThreadHelper thread_;
 
   // Configuration (for validation)
   fakedataconsumer::Conf cfg_;
