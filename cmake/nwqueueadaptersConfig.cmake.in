@@ -7,6 +7,11 @@ find_dependency(appfwk)
 find_dependency(ipm)
 find_dependency(serialization)
 find_dependency(nlohmann_json)
+find_dependency(utilities)
+find_dependency(networkmanager)
+find_dependency(logging)
+find_dependency(opmonlib)
+find_dependency(ers)
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/@PROJECT_NAME@)
 

@@ -13,6 +13,7 @@ find_package(ipm REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(serialization REQUIRED)
 find_package(opmonlib REQUIRED)
+find_package(ers REQUIRED)
 
 ##############################################################################
 # Schema
