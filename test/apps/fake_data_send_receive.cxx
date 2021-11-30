@@ -15,6 +15,7 @@
 #include "appfwk/QueueRegistry.hpp"
 #include "appfwk/app/Nljs.hpp"
 #include "ipm/ZmqContext.hpp"
+#include "networkmanager/NetworkManager.hpp"
 
 #include "logging/Logging.hpp" // NOLINT
 
@@ -29,6 +30,13 @@ using namespace dunedaq::nwqueueadapters;
 int
 main()
 {
+  dunedaq::networkmanager::nwmgr::Connections testConfig;
+  dunedaq::networkmanager::nwmgr::Connection testConn;
+  testConn.name = "default";
+  testConn.address = "inproc://default";
+  testConfig.push_back(testConn);
+  dunedaq::networkmanager::NetworkManager::get().configure(testConfig);
+
   TLOG() << "Creating Module instances...";
   std::shared_ptr<DAQModule> fake_data_producer = make_module("FakeDataProducer", "producer");
   std::shared_ptr<DAQModule> fake_data_sender = make_module("QueueToNetwork", "sender");

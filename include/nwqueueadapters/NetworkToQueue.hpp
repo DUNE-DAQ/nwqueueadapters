@@ -124,7 +124,7 @@ public:
   void init(const data_t&) override;
 
   void get_info(opmonlib::InfoCollector& ci, int level) override;
-  
+
 private:
   // Commands
   void do_configure(const data_t&);

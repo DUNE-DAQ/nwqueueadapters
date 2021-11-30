@@ -6,6 +6,8 @@
  * received with this code.
  */
 
+#include "networkmanager/NetworkManager.hpp"
+#include "networkmanager/nwmgr/Structs.hpp"
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
 #include "nwqueueadapters/NetworkObjectSender.hpp"
 #include "serialization/Serialization.hpp"
@@ -42,14 +44,19 @@ BOOST_DATA_TEST_CASE(NetworkObjectSenderReceiver, boost::unit_test::data::make({
   // use" error. Hack around that by just sleeping here
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
+  dunedaq::networkmanager::nwmgr::Connections testConfig;
+  dunedaq::networkmanager::nwmgr::Connection testConn;
+  testConn.name = "foo";
+  testConn.address = "inproc://foo";
+  testConfig.push_back(testConn);
+  dunedaq::networkmanager::NetworkManager::get().configure(testConfig);
+
   dunedaq::nwqueueadapters::networkobjectsender::Conf sender_conf;
-  sender_conf.ipm_plugin_type = "ZmqSender";
   sender_conf.stype = sample;
-  sender_conf.address = "inproc://foo";
+  sender_conf.name = "foo";
 
   dunedaq::nwqueueadapters::networkobjectreceiver::Conf receiver_conf;
-  receiver_conf.ipm_plugin_type = "ZmqReceiver";
-  receiver_conf.address = "inproc://foo";
+  receiver_conf.name = "foo";
 
   dunedaq::nwqueueadapters::NetworkObjectSender<MyTypeIntrusive> sender(sender_conf);
   dunedaq::nwqueueadapters::NetworkObjectReceiver<MyTypeIntrusive> receiver(receiver_conf);
@@ -66,6 +73,8 @@ BOOST_DATA_TEST_CASE(NetworkObjectSenderReceiver, boost::unit_test::data::make({
   BOOST_CHECK_EQUAL(m_recv.count, m.count);
   BOOST_CHECK_EQUAL(m_recv.name, m.name);
   BOOST_CHECK_EQUAL_COLLECTIONS(m_recv.values.begin(), m_recv.values.end(), m.values.begin(), m.values.end());
+
+  dunedaq::networkmanager::NetworkManager::get().reset();
 }
 
 BOOST_AUTO_TEST_SUITE_END()
