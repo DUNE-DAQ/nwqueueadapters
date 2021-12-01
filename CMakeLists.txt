@@ -14,7 +14,7 @@ find_package(nlohmann_json REQUIRED)
 find_package(serialization REQUIRED)
 find_package(opmonlib REQUIRED)
 find_package(ers REQUIRED)
-find_package(Boost COMPONENTS unit_test_framework program_options REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 ##############################################################################
 # Schema
