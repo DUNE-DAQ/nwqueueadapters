@@ -42,7 +42,7 @@ NetworkToQueue::do_configure(const data_t& config_data)
   m_message_type_name = conf.msg_type;
   // Hacky string comparison to determine whether the receiver is a
   // "subscriber" type, so dropping messages is OK
-  m_is_subscriber_type = (conf.receiver_config.ipm_plugin_type.find("Subscriber") != std::string::npos);
+  m_is_subscriber_type = networkmanager::NetworkManager::get().is_pubsub_connection(conf.receiver_config.name);
 
   {
     std::lock_guard<std::mutex> _(m_opmon_mutex);
@@ -100,12 +100,12 @@ NetworkToQueue::do_work(std::atomic<bool>& running_flag)
     std::lock_guard<std::mutex> _(m_opmon_mutex);
     ++m_opmon_info.received_count;
     ++m_opmon_info.pushed_count;
-
   }
   TLOG() << "Did " << recv_counter << " receives";
 }
 
-void NetworkToQueue::get_info(opmonlib::InfoCollector& ci, int)
+void
+NetworkToQueue::get_info(opmonlib::InfoCollector& ci, int)
 {
   std::lock_guard<std::mutex> _(m_opmon_mutex);
   ci.add(m_opmon_info);

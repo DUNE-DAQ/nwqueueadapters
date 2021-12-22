@@ -10,7 +10,9 @@
 #ifndef NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKOBJECTRECEIVER_HPP_
 #define NWQUEUEADAPTERS_INCLUDE_NWQUEUEADAPTERS_NETWORKOBJECTRECEIVER_HPP_
 
+#include "ipm/PluginInfo.hpp"
 #include "ipm/Subscriber.hpp"
+#include "networkmanager/NetworkManager.hpp"
 #include "nwqueueadapters/networkobjectreceiver/Nljs.hpp"
 #include "nwqueueadapters/networkobjectreceiver/Structs.hpp"
 #include "serialization/Serialization.hpp"
@@ -43,9 +45,15 @@ class NetworkObjectReceiver
 {
 public:
   explicit NetworkObjectReceiver(const dunedaq::nwqueueadapters::networkobjectreceiver::Conf& conf)
-    : m_receiver(dunedaq::ipm::make_ipm_receiver(conf.ipm_plugin_type))
   {
-    m_receiver->connect_for_receives({ { "connection_string", conf.address } });
+    auto is_subscriber = networkmanager::NetworkManager::get().is_pubsub_connection(conf.name);
+    auto plugin_type =
+      ipm::get_recommended_plugin_name(is_subscriber ? ipm::IpmPluginType::Subscriber : ipm::IpmPluginType::Receiver);
+    m_receiver = dunedaq::ipm::make_ipm_receiver(plugin_type);
+
+    nlohmann::json config_json;
+    config_json["connection_string"] = networkmanager::NetworkManager::get().get_connection_string(conf.name);
+    m_receiver->connect_for_receives(config_json);
 
     auto m_subscriber = std::dynamic_pointer_cast<ipm::Subscriber>(m_receiver);
     if (m_subscriber) {

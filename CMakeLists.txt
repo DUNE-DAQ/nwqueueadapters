@@ -1,16 +1,20 @@
 cmake_minimum_required(VERSION 3.12)
-project(nwqueueadapters VERSION 1.4.0)
+project(nwqueueadapters VERSION 1.5.0)
 
 find_package(daq-cmake REQUIRED)
 
 daq_setup_environment()
 
 find_package(appfwk REQUIRED)
+find_package(utilities REQUIRED)
+find_package(networkmanager REQUIRED)
 find_package(logging REQUIRED)
 find_package(ipm REQUIRED)
 find_package(nlohmann_json REQUIRED)
 find_package(serialization REQUIRED)
 find_package(opmonlib REQUIRED)
+find_package(ers REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 ##############################################################################
 # Schema
@@ -43,7 +47,7 @@ daq_codegen(
 # We don't have a real library, but we want to create a
 # nwqueueadapters::nwqueueadapters target for dependents to be able to
 # depend on
-daq_add_library(LINK_LIBRARIES logging::logging ipm::ipm serialization::serialization)
+daq_add_library(LINK_LIBRARIES logging::logging ipm::ipm serialization::serialization appfwk::appfwk networkmanager::networkmanager utilities::utilities)
 
 ##############################################################################
 
