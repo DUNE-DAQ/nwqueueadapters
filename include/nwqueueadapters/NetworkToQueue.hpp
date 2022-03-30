@@ -13,7 +13,7 @@
 
 #include "appfwk/DAQModule.hpp"
 #include "appfwk/DAQSink.hpp"
-#include "appfwk/ThreadHelper.hpp"
+#include "utilities/WorkerThread.hpp"
 #include "appfwk/cmd/Nljs.hpp"
 #include "nwqueueadapters/Issues.hpp"
 #include "nwqueueadapters/NetworkObjectReceiver.hpp"
@@ -131,7 +131,7 @@ private:
   void do_scrap(const data_t&);
 
   // Threading
-  appfwk::ThreadHelper m_thread;
+  utilities::WorkerThread m_thread;
   void do_work(std::atomic<bool>& running_flag);
 
   std::string m_queue_instance;
