@@ -83,44 +83,44 @@ main()
   fakedataproducer::Conf producer_config;
   nlohmann::json producer_conf_json;
   to_json(producer_conf_json, producer_config);
-  fake_data_producer->execute_command("conf", producer_conf_json);
+  fake_data_producer->execute_command("conf", "INITIAL", producer_conf_json);
 
   queuetonetwork::Conf sender_config;
   sender_config.msg_type = "dunedaq::nwqueueadapters::fsd::FakeData";
   sender_config.msg_module_name = "FakeData";
   nlohmann::json sender_conf_json;
   to_json(sender_conf_json, sender_config);
-  fake_data_sender->execute_command("conf", sender_conf_json);
+  fake_data_sender->execute_command("conf", "INITIAL", sender_conf_json);
 
   networktoqueue::Conf receiver_config;
   receiver_config.msg_type = "dunedaq::nwqueueadapters::fsd::FakeData";
   receiver_config.msg_module_name = "FakeData";
   nlohmann::json receiver_conf_json;
   to_json(receiver_conf_json, receiver_config);
-  fake_data_receiver->execute_command("conf", receiver_conf_json);
+  fake_data_receiver->execute_command("conf", "INITIAL", receiver_conf_json);
 
   fakedataconsumer::Conf consumer_config;
   nlohmann::json consumer_conf_json;
   to_json(consumer_conf_json, consumer_config);
-  fake_data_consumer->execute_command("conf", consumer_conf_json);
+  fake_data_consumer->execute_command("conf", "INITIAL", consumer_conf_json);
 
   // Start
   TLOG() << "Calling start on modules...";
-  fake_data_consumer->execute_command("start");
-  fake_data_producer->execute_command("start");
+  fake_data_consumer->execute_command("start", "CONFIGURED");
+  fake_data_producer->execute_command("start", "CONFIGURED");
 
   TLOG() << "Waiting for 10 seconds...";
   sleep(10);
 
   // Stop
   TLOG() << "Calling stop on modules...";
-  fake_data_producer->execute_command("stop");
-  fake_data_consumer->execute_command("stop");
+  fake_data_producer->execute_command("stop", "RUNNING");
+  fake_data_consumer->execute_command("stop", "RUNNING");
 
   // Scrap
   TLOG() << "Calling scrap on modules...";
-  fake_data_sender->execute_command("scrap");
-  fake_data_receiver->execute_command("scrap");
+  fake_data_sender->execute_command("scrap", "CONFIGURED");
+  fake_data_receiver->execute_command("scrap", "CONFIGURED");
 
   TLOG() << "Test complete";
 }
