@@ -60,7 +60,7 @@ daq_add_plugin( NetworkToQueue duneDAQModule LINK_LIBRARIES nwqueueadapters )
 
 daq_add_plugin( FakeData duneNetworkQueue TEST LINK_LIBRARIES nwqueueadapters )
 
-daq_add_application( fake_data_send_receive fake_data_send_receive.cxx TEST LINK_LIBRARIES nwqueueadapters )
+#daq_add_application( fake_data_send_receive fake_data_send_receive.cxx TEST LINK_LIBRARIES nwqueueadapters )
 daq_add_application( network_object_send_receive network_object_send_receive.cxx TEST LINK_LIBRARIES nwqueueadapters )
 daq_add_application( serialization_speed serialization_speed.cxx TEST LINK_LIBRARIES nwqueueadapters )
 

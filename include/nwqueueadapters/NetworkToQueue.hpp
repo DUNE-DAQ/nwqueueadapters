@@ -28,6 +28,8 @@
 #include <string>
 #include <vector>
 
+#pragma message("NetworkToQueue is deprecated! Please remove your NQ classes, as they are no longer needed!")
+
 #ifndef EXTERN_C_FUNC_DECLARE_START
 // NOLINTNEXTLINE(build/define_used)
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
